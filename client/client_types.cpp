@@ -37,10 +37,6 @@
 #include <cstring>
 #endif
 
-#ifdef _MSC_VER
-#define snprintf _snprintf
-#endif
-
 #include "error_numbers.h"
 #include "filesys.h"
 #include "log_flags.h"
@@ -74,24 +70,37 @@ bool FILE_XFER_BACKOFF::ok_to_transfer() {
     return (dt <= 0);
 }
 
+// A transfer has failed.
+// Back off transfers (project-wide) if needed.
+//
 void FILE_XFER_BACKOFF::file_xfer_failed(PROJECT* p) {
+    // If we're already backed off, ignore this failure.
+    // If we start several transfers at once
+    // (say, N output files of a job) and they all fail,
+    // we don't want to back off N times, which could be hours.
+    //
+    if (gstate.now < next_xfer_time) {
+        return;
+    }
+
     file_xfer_failures++;
     if (file_xfer_failures < FILE_XFER_FAILURE_LIMIT) {
         next_xfer_time = 0;
-    } else {
-        double backoff = calculate_exponential_backoff(
-            file_xfer_failures,
-            gstate.pers_retry_delay_min,
-            gstate.pers_retry_delay_max
-        );
-        if (log_flags.file_xfer_debug) {
-            msg_printf(p, MSG_INFO,
-                "[file_xfer] project-wide xfer delay for %f sec",
-                backoff
-            );
-        }
-        next_xfer_time = gstate.now + backoff;
+        return;
     }
+    double backoff = calculate_exponential_backoff(
+        file_xfer_failures,
+        gstate.pers_retry_delay_min,
+        gstate.pers_retry_delay_max
+    );
+    if (log_flags.file_xfer_debug) {
+        msg_printf(p, MSG_INFO,
+            "[file_xfer] project-wide %s delay for %f sec",
+            is_upload?"upload":"download",
+            backoff
+        );
+    }
+    next_xfer_time = gstate.now + backoff;
 }
 
 void FILE_XFER_BACKOFF::file_xfer_succeeded() {
@@ -133,6 +142,7 @@ int APP::parse(XML_PARSER& xp) {
     safe_strcpy(user_friendly_name, "");
     project = NULL;
     non_cpu_intensive = false;
+    sporadic = false;
     while (!xp.get_tag()) {
         if (xp.match_tag("/app")) {
             if (!strlen(user_friendly_name)) {
@@ -143,7 +153,12 @@ int APP::parse(XML_PARSER& xp) {
         if (xp.parse_str("name", name, sizeof(name))) continue;
         if (xp.parse_str("user_friendly_name", user_friendly_name, sizeof(user_friendly_name))) continue;
         if (xp.parse_bool("non_cpu_intensive", non_cpu_intensive)) continue;
+        if (xp.parse_bool("sporadic", sporadic)) continue;
         if (xp.parse_bool("fraction_done_exact", fraction_done_exact)) continue;
+        if (xp.parse_bool("sporadic", sporadic)) {
+            if (sporadic) gstate.have_sporadic_app = true;
+            continue;
+        }
 #ifdef SIM
         if (xp.parse_double("latency_bound", latency_bound)) continue;
         if (xp.parse_double("fpops_est", fpops_est)) continue;
@@ -228,7 +243,7 @@ FILE_INFO::~FILE_INFO() {
 void FILE_INFO::reset() {
     status = FILE_NOT_PRESENT;
     delete_file();
-    error_msg = "";
+    error_msg.clear();
 }
 
 // Set file ownership if using account-based sandbox;
@@ -304,7 +319,7 @@ int FILE_INFO::parse(XML_PARSER& xp) {
         if (xp.match_tag("/file_info") || xp.match_tag("/file")) {
             if (!strlen(name)) return ERR_BAD_FILENAME;
             if (strstr(name, "..")) return ERR_BAD_FILENAME;
-            if (strstr(name, "%")) return ERR_BAD_FILENAME;
+            if (strchr(name, '%')) return ERR_BAD_FILENAME;
             if (gzipped_urls.size() > 0) {
                 download_urls.clear();
                 download_urls.urls = gzipped_urls;
@@ -393,13 +408,13 @@ int FILE_INFO::parse(XML_PARSER& xp) {
             retval = pfxp->parse(xp);
 #ifdef SIM
             delete pfxp;
-            continue;
-#endif
+#else
             if (!retval) {
                 pers_file_xfer = pfxp;
             } else {
                 delete pfxp;
             }
+#endif
             continue;
         }
         if (xp.match_tag("file_xfer")) {
@@ -676,7 +691,7 @@ bool FILE_INFO::had_failure(int& failnum) {
 
 void FILE_INFO::failure_message(string& s) {
     char buf[1024];
-    snprintf(buf, sizeof(buf), 
+    snprintf(buf, sizeof(buf),
         "<file_xfer_error>\n"
         "  <file_name>%s</file_name>\n"
         "  <error_code>%d (%s)</error_code>\n",
@@ -784,6 +799,7 @@ void APP_VERSION::init() {
     app = NULL;
     project = NULL;
     ref_cnt = 0;
+    graphics_exec_fip = NULL;
     safe_strcpy(graphics_exec_path,"");
     safe_strcpy(graphics_exec_file, "");
     max_working_set_size = 0;
@@ -1043,18 +1059,45 @@ bool APP_VERSION::api_version_at_least(int major, int minor) {
     return min >= minor;
 }
 
+// If app version has a graphics program,
+// see whether the exec is present and can be run.
+// If so fill in the file name and path.
+// Called from GUI RPC handler.
+//
+void APP_VERSION::check_graphics_exec() {
+    if (!graphics_exec_fip) return;
+    if (strlen(graphics_exec_path)) return;
+    if (graphics_exec_fip->status < 0) {
+        // download or verify of graphics exec failed; don't check again
+        //
+        graphics_exec_fip = NULL;
+        return;
+    }
+    if (graphics_exec_fip->status != FILE_PRESENT) return;
+
+    char relpath[MAXPATHLEN], path[MAXPATHLEN];
+    get_pathname(graphics_exec_fip, relpath, sizeof(relpath));
+    relative_to_absolute(relpath, path);
+#ifdef __APPLE__
+    if (!can_run_on_this_CPU(path)) {
+        // if can't run this exec, don't check again
+        //
+        graphics_exec_fip = NULL;
+        return;
+    }
+#endif
+    safe_strcpy(graphics_exec_path, path);
+    safe_strcpy(graphics_exec_file, graphics_exec_fip->name);
+}
+
 int FILE_REF::parse(XML_PARSER& xp) {
     bool temp;
 
-    safe_strcpy(file_name, "");
-    safe_strcpy(open_name, "");
-    main_program = false;
-    copy_file = false;
-    optional = false;
+    clear();
     while (!xp.get_tag()) {
         if (xp.match_tag("/file_ref")) {
             if (strstr(open_name, "..")) return ERR_BAD_FILENAME;
-            if (strstr(open_name, "%")) return ERR_BAD_FILENAME;
+            if (strchr(open_name, '%')) return ERR_BAD_FILENAME;
             return 0;
         }
         if (xp.parse_str("file_name", file_name, sizeof(file_name))) continue;
@@ -1106,7 +1149,7 @@ int WORKUNIT::parse(XML_PARSER& xp) {
     safe_strcpy(name, "");
     safe_strcpy(app_name, "");
     version_num = 0;
-    command_line = "";
+    command_line.clear();
     //strcpy(env_vars, "");
     app = NULL;
     project = NULL;
@@ -1308,3 +1351,92 @@ double RUN_MODE::delay() {
         return 0;
     }
 }
+
+int USER_CPID::parse(XML_PARSER& xp) {
+    clear();
+    while (!xp.get_tag()) {
+        if (xp.match_tag("/user_cpid")) {
+            if (!strlen(email_hash) || !strlen(cpid) || !time) {
+                msg_printf(0, MSG_INTERNAL_ERROR, "USER_CPID::parse() failed");
+                return ERR_XML_PARSE;
+            }
+            break;
+        }
+        if (xp.parse_str("email_hash", email_hash, sizeof(email_hash))) continue;
+        if (xp.parse_str("cpid", cpid, sizeof(cpid))) continue;
+        if (xp.parse_double("time", time)) continue;
+    }
+    return 0;
+}
+
+int USER_CPID::write(MIOFILE& out) {
+    out.printf(
+        "   <user_cpid>\n"
+        "      <email_hash>%s</email_hash>\n"
+        "      <cpid>%s</cpid>\n"
+        "      <time>%f</time>\n"
+        "   </user_cpid>\n",
+        email_hash, cpid, time
+    );
+    return 0;
+}
+
+int USER_CPIDS::parse(XML_PARSER& xp) {
+    while (!xp.get_tag()) {
+        if (xp.match_tag("/user_cpids")) {
+            break;
+        }
+        if (xp.match_tag("user_cpid")) {
+            USER_CPID uc;
+            int retval = uc.parse(xp);
+            if (retval) continue;
+            cpids.push_back(uc);
+        }
+    }
+    return 0;
+}
+
+int USER_CPIDS::write(MIOFILE& out) {
+    out.printf("<user_cpids>\n");
+    for (USER_CPID &cpid: cpids) {
+        cpid.write(out);
+    }
+    out.printf("</user_cpids>\n");
+    return 0;
+}
+
+USER_CPID* USER_CPIDS::lookup(const char* email_hash) {
+    for (USER_CPID &cpid: cpids) {
+        if (!strcmp(cpid.email_hash, email_hash)) {
+            return &cpid;
+        }
+    }
+    return NULL;
+}
+
+// if empty, initialize from projects
+// (should get done once, when updating to this client version)
+//
+void USER_CPIDS::init_from_projects() {
+    for (PROJECT *p: gstate.projects) {
+        if (!strlen(p->email_hash) || !strlen(p->cross_project_id) || !p->user_create_time) {
+            continue;
+        }
+        USER_CPID* ucp = lookup(p->email_hash);
+        if (ucp) {
+            if (p->user_create_time < ucp->time) {
+                strcpy(ucp->cpid, p->cross_project_id);
+                ucp->time = p->user_create_time;
+            }
+        } else {
+            USER_CPID uc;
+            strcpy(uc.email_hash, p->email_hash);
+            strcpy(uc.cpid, p->cross_project_id);
+            uc.time = p->user_create_time;
+            cpids.push_back(uc);
+
+        }
+    }
+}
+
+USER_CPIDS user_cpids;

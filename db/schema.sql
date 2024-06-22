@@ -114,14 +114,15 @@ create table user (
     posts                   smallint        not null,
         -- reused: salt for weak auth
 
-    -- the following 4 not used by BOINC
     seti_id                 integer         not null,
+        -- reused as 'run jobs on my hosts' flag from remote job submission
+    -- the following 3 not used by BOINC
     seti_nresults           integer         not null,
     seti_last_result_time   integer     not null,
     seti_total_cpu          double          not null,
 
     signature               varchar(254),
-        -- deprecated
+        -- stores invite code, if any, for users created via RPC
     has_profile             smallint        not null,
     cross_project_id        varchar(254)    not null,
     passwd_hash             varchar(254)    not null,
@@ -156,7 +157,7 @@ create table team (
     joinable                tinyint         not null default 1,
     mod_time                timestamp default current_timestamp on update current_timestamp,
     primary key (id)
-) engine=MyISAM;  
+) engine=InnoDB;
 
 create table host (
     id                      integer         not null auto_increment,
@@ -370,7 +371,7 @@ create table user_submit_app (
     app_id                  integer         not null,
     manage                  tinyint         not null,
         -- can
-        --   create/deprecated app versions of this app
+        --   create/deprecate app versions of this app
         --   grant/revoke permissions (except admin) this app
         --   abort their jobs
     primary key (user_id, app_id)
@@ -444,7 +445,7 @@ create table profile (
     verification            integer         not null,
         -- UOD screening status: -1 denied, 0 unrated, 1 approved
     primary key (userid)
-) engine=MyISAM;
+) engine=InnoDB;
 
 -- message board category
 -- help desk is a group of categories that are handled separately
@@ -520,7 +521,7 @@ create table thread (
     sticky                  tinyint         not null default 0,
     locked                  tinyint         not null default 0,
     primary key (id)
-) engine=MyISAM;
+) engine=InnoDB;
 
 -- postings in a thread (or answers)
 -- Each thread has an initial post
@@ -542,7 +543,7 @@ create table post (
     hidden                  integer         not null,
         -- nonzero if hidden by moderators
     primary key (id)
-) engine=MyISAM;
+) engine=InnoDB;
 
 -- subscription to a thread
 --
@@ -588,7 +589,7 @@ create table forum_preferences (
         -- 2 = digest email
     highlight_special       tinyint         not null default 1,
     primary key (userid)
-) engine=MyISAM; 
+) engine=InnoDB;
 
 -- keep track of last time a user read a thread
 create table forum_logging (
@@ -596,14 +597,14 @@ create table forum_logging (
     threadid                integer         not null default 0,
     timestamp               integer         not null default 0,
     primary key (userid,threadid)
-) engine=MyISAM;
+) engine=InnoDB;
 
 create table post_ratings (
     post                    integer         not null,
     user                    integer         not null,
     rating                  tinyint         not null,
     primary key(post, user)
-) engine=MyISAM;
+) engine=InnoDB;
 
 create table sent_email (
     userid                  integer         not null,
@@ -617,7 +618,7 @@ create table sent_email (
         -- 5 = forum ban
         -- 6 = fundraising appeal
     primary key(userid)
-) engine=MyISAM;
+) engine=InnoDB;
 
 create table private_messages (
     id                      integer         not null auto_increment,
@@ -628,12 +629,12 @@ create table private_messages (
     subject                 varchar(255)    not null,
     content                 text            not null,
     primary key(id)
-) engine=MyISAM;
+) engine=InnoDB;
 
 create table credited_job (
     userid                  integer         not null,
     workunitid              bigint          not null
-) engine=MyISAM;
+) engine=InnoDB;
 
 create table donation_items (
     id                      integer         not null auto_increment,
@@ -642,7 +643,7 @@ create table donation_items (
     description             varchar(255)    not null,
     required                double          not null default '0',
     PRIMARY KEY(id)
-) engine=MyISAM;
+) engine=InnoDB;
 
 create table donation_paypal (
     id                      integer         not null auto_increment,
@@ -663,7 +664,7 @@ create table donation_paypal (
     payer_email             varchar(255)    not null,
     payer_name              varchar(255)    not null,
     PRIMARY KEY(id)
-) engine=MyISAM;
+) engine=InnoDB;
 
 -- record changes in team membership
 create table team_delta (
@@ -672,7 +673,7 @@ create table team_delta (
     timestamp               integer         not null,
     joining                 tinyint         not null,
     total_credit            double          not null
-) engine=MyISAM;
+) engine=InnoDB;
 
 -- tables for moderator banishment votes
 create table banishment_vote (
@@ -681,7 +682,7 @@ create table banishment_vote (
     modid                   integer         not null,
     start_time              integer         not null,
     end_time                integer         not null
-) engine=MyISAM;
+) engine=InnoDB;
 
 create table banishment_votes (
     id                      serial          primary key,
@@ -689,14 +690,14 @@ create table banishment_votes (
     modid                   integer         not null,
     time                    integer         not null,
     yes                     tinyint         not null
-) engine=MyISAM;
+) engine=InnoDB;
 
 create table team_admin (
     teamid                  integer         not null,
     userid                  integer         not null,
     create_time             integer         not null,
     rights                  integer         not null
-) engine=MyISAM;
+) engine=InnoDB;
 
 -- A friendship request.
 -- The friendship exists if (x,y) and (y,x)
@@ -816,7 +817,6 @@ create table consent (
     primary key (id)
 ) engine=InnoDB;
 
--- @todo - change 'protect' to 'project_specific'
 create table consent_type (
     id                      integer         not null auto_increment,
     shortname               varchar(255)    not null,

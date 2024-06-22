@@ -1,7 +1,7 @@
 <?php
 // This file is part of BOINC.
 // http://boinc.berkeley.edu
-// Copyright (C) 2008 University of California
+// Copyright (C) 2021 University of California
 //
 // BOINC is free software; you can redistribute it and/or modify it
 // under the terms of the GNU Lesser General Public License
@@ -151,6 +151,9 @@ function do_read($logged_in_user) {
 function do_new($logged_in_user) {
     global $replyto, $userid;
     check_banished($logged_in_user);
+    if (VALIDATE_EMAIL_TO_POST) {
+        check_validated_email($logged_in_user);
+    }
     pm_form($replyto, $userid);
 }
 
@@ -207,6 +210,9 @@ function do_send_team($logged_in_user) {
 function do_send($logged_in_user) {
     global $replyto, $userid;
     check_banished($logged_in_user);
+    if (VALIDATE_EMAIL_TO_POST) {
+        check_validated_email($logged_in_user);
+    }
     check_tokens($logged_in_user->authenticator);
 
     $to = sanitize_tags(post_str("to", true));
@@ -251,7 +257,17 @@ function do_send($logged_in_user) {
         }
         BoincForumPrefs::lookup($user);
         if (is_ignoring($user, $logged_in_user)) {
-            pm_form($replyto, $userid, tra("User %1 (ID: %2) is not accepting private messages from you.", $user->name, $user->id));
+            pm_form(
+                $replyto, $userid,
+                UNIQUE_USER_NAME
+                ?tra("User %1 is not accepting private messages from you.",
+                    $user->name
+                )
+                :tra("User %1 (ID: %2) is not accepting private messages from you.",
+                    $user->name,
+                    $user->id
+                )
+            );
         }
         if (!isset($userids[$user->id])) {
             $userlist[] = $user;

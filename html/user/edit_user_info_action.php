@@ -35,13 +35,21 @@ if (strlen($name) == 0) {
 }
 $name = BoincDb::escape_string($name);
 
+$u = BoincUser::lookup(sprintf("name='%s'", $name));
+if ($u && ($u->id != $user->id)) {
+    error_page('That name is in use - go back and try another.');
+}
+
 $url = "";
 $country = "";
 $postal_code = "";
 if (USER_URL) {
     $url = post_str("url", true);
-    $url = sanitize_tags($url);
-    $url = BoincDb::escape_string($url);
+    $x = sanitize_user_url($url);
+    if ($x != $url) {
+        error_page("Invalid URL");
+    }
+    $url = BoincDb::escape_string($x);
 }
 if (USER_COUNTRY) {
     $country = post_str("country");
@@ -58,7 +66,7 @@ $result = $user->update(
     "name='$name', url='$url', country='$country', postal_code='$postal_code'"
 );
 if ($result) {
-    Header("Location: ".USER_HOME);
+    Header("Location: ".HOME_PAGE);
 } else {
     error_page(tra("Couldn't update user info."));
 }

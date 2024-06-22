@@ -17,9 +17,6 @@ function boinc_standard_ctools_plugin_api() {
   elseif ($module == "strongarm" && $api == "strongarm") {
     return array("version" => 1);
   }
-  elseif ($module == "wysiwyg" && $api == "wysiwyg") {
-    return array("version" => 2);
-  }
 }
 
 /**
@@ -706,7 +703,7 @@ function boinc_standard_rules_defaults() {
             '#settings' => array(
               'from' => '',
               'subject' => '[subject_tag:string] Circular host merging error',
-              'message' => 'User tried to merge a host (old_host) into a target host where the target host\'s rpc_seqno is equal to the old_host\'s id. 
+              'message' => 'User tried to merge a host (old_host) into a target host where the target host\'s rpc_seqno is equal to the old_host\'s id.
 
 Information about this host merge attempt:
 <?php
@@ -772,7 +769,7 @@ print "Drupal UID: " . $user->uid . "\\n";
             '#settings' => array(
               'from' => '',
               'subject' => '[subject_tag:string] Zombie host merging error',
-              'message' => 'User tried to merge a host (old_host) into a target host where the target host\'s userid is equal to 0, a zombie host. 
+              'message' => 'User tried to merge a host (old_host) into a target host where the target host\'s userid is equal to 0, a zombie host.
 I.e., $target_host->userid == 0
 
 Information about this host merge attempt:
@@ -1144,7 +1141,7 @@ asdf jkl;',
             '#settings' => array(
               'from' => '',
               'subject' => 'Report of hostile language in [node:type] comment at [:global:site-name]',
-              'message' => '[flagging_user:display-name] has reported the following comment on [node:type] content as 
+              'message' => '[flagging_user:display-name] has reported the following comment on [node:type] content as
 containing hostile language for the [:global:site-name] site:
 
 <?php print url(\'<front>\', array(\'absolute\' => TRUE, \'language\' => \'en\')); ?>/goto/comment/[comment:comment-cid]
@@ -1204,7 +1201,7 @@ Total reports of this comment: [comment:flag-abuse-comment-meta-count]',
             '#settings' => array(
               'from' => '',
               'subject' => 'Report of inappropriate link in  [node:type] comment at [:global:site-name]',
-              'message' => '[flagging_user:display-name] has reported the following comment on [node:type] content as 
+              'message' => '[flagging_user:display-name] has reported the following comment on [node:type] content as
 containing an offensive or inappropriate link for the [:global:site-name] site:
 
 <?php print url(\'<front>\', array(\'absolute\' => TRUE, \'language\' => \'en\')); ?>/goto/comment/[comment:comment-cid]
@@ -1264,7 +1261,7 @@ Total reports of this comment: [comment:flag-abuse-comment-meta-count]',
             '#settings' => array(
               'from' => '',
               'subject' => 'Report of non Kid-friendly language in [node:type] comment at [:global:site-name]',
-              'message' => '[flagging_user:display-name] has reported the following comment on [node:type] content as 
+              'message' => '[flagging_user:display-name] has reported the following comment on [node:type] content as
 containing non Kid-friendly language for the [:global:site-name] site:
 
 <?php print url(\'<front>\', array(\'absolute\' => TRUE, \'language\' => \'en\')); ?>/goto/comment/[comment:comment-cid]
@@ -1324,7 +1321,7 @@ Total reports of this comment: [comment:flag-abuse-comment-meta-count]',
             '#settings' => array(
               'from' => '',
               'subject' => 'Report of offensive [node:type] comment at [:global:site-name]',
-              'message' => '[flagging_user:display-name] has reported the following comment on [node:type] content as 
+              'message' => '[flagging_user:display-name] has reported the following comment on [node:type] content as
 being offensive or inappropriate for the [:global:site-name] site, with reason \'Other\':
 
 <?php print url(\'<front>\', array(\'absolute\' => TRUE, \'language\' => \'en\')); ?>/goto/comment/[comment:comment-cid]
@@ -1384,7 +1381,7 @@ Total reports of this comment: [comment:flag-abuse-comment-meta-count]',
             '#settings' => array(
               'from' => '',
               'subject' => 'Report of SPAM [node:type] comment at [:global:site-name]',
-              'message' => '[flagging_user:display-name] has reported the following comment on [node:type] content 
+              'message' => '[flagging_user:display-name] has reported the following comment on [node:type] content
 as being SPAM for the [:global:site-name] site:
 
 <?php print url(\'<front>\', array(\'absolute\' => TRUE, \'language\' => \'en\')); ?>/goto/comment/[comment:comment-cid]
@@ -1444,7 +1441,7 @@ Total reports of this comment: [comment:flag-abuse-comment-meta-count]',
             '#settings' => array(
               'from' => '',
               'subject' => 'Report of hostile language in [node:type] content at [:global:site-name]',
-              'message' => '[flagging_user:display-name] has reported the following [node:type] content 
+              'message' => '[flagging_user:display-name] has reported the following [node:type] content
 as hostile language for the [:global:site-name] site:
 
 <?php print url(\'node/\' . \\$node->nid, array(\'absolute\' => TRUE, \'language\' => \'en\')); ?>
@@ -1505,7 +1502,7 @@ Total reports of this content: [node:flag-abuse-node-meta-count]',
             '#settings' => array(
               'from' => '',
               'subject' => 'Report of inappropriate link in [node:type] content at [:global:site-name]',
-              'message' => '[flagging_user:display-name] has reported the following [node:type] content 
+              'message' => '[flagging_user:display-name] has reported the following [node:type] content
 as containing an offensive or inappropriate link for the [:global:site-name] site:
 
 <?php print url(\'node/\' . \\$node->nid, array(\'absolute\' => TRUE, \'language\' => \'en\')); ?>
@@ -1566,7 +1563,7 @@ Total reports of this content: [node:flag-abuse-node-meta-count]',
             '#settings' => array(
               'from' => '',
               'subject' => 'Report of non Kid-friendly language in [node:type] content at [:global:site-name]',
-              'message' => '[flagging_user:display-name] has reported the following [node:type] content 
+              'message' => '[flagging_user:display-name] has reported the following [node:type] content
 as containing non Kid-friendly language for the [:global:site-name] site:
 
 <?php print url(\'node/\' . \\$node->nid, array(\'absolute\' => TRUE, \'language\' => \'en\')); ?>
@@ -1627,7 +1624,7 @@ Total reports of this content: [node:flag-abuse-node-meta-count]',
             '#settings' => array(
               'from' => '',
               'subject' => 'Report of offensive [node:type] content at [:global:site-name]',
-              'message' => '[flagging_user:display-name] has reported the following [node:type] content 
+              'message' => '[flagging_user:display-name] has reported the following [node:type] content
 as being offensive or inappropriate for the [:global:site-name] site:
 
 <?php print url(\'node/\' . \\$node->nid, array(\'absolute\' => TRUE, \'language\' => \'en\')); ?>
@@ -1688,7 +1685,7 @@ Total reports of this content: [node:flag-abuse-node-meta-count]',
             '#settings' => array(
               'from' => '',
               'subject' => 'Report of SPAM [node:type] content at [:global:site-name]',
-              'message' => '[flagging_user:display-name] has reported the following [node:type] content 
+              'message' => '[flagging_user:display-name] has reported the following [node:type] content
 as being SPAM for the [:global:site-name] site:
 
 <?php print url(\'node/\' . \\$node->nid, array(\'absolute\' => TRUE, \'language\' => \'en\')); ?>
@@ -1749,7 +1746,7 @@ Total reports of this content: [node:flag-abuse-node-meta-count]',
             '#settings' => array(
               'from' => '',
               'subject' => 'Report of inappropriate link in user profile at [:global:site-name]',
-              'message' => '[flagging_user:display-name] has reported [account:display-name] for 
+              'message' => '[flagging_user:display-name] has reported [account:display-name] for
 inappropriate link in a user profile:
 
 <?php print url(\\\'<front>\\\', array(\\\'absolute\\\' => TRUE, \\\'language\\\' => \\\'en\\\')); ?>/account/[account:uid]
@@ -1807,7 +1804,7 @@ Total current reports of this user: [account:flag-abuse-user-meta-count]',
             '#settings' => array(
               'from' => '',
               'subject' => 'Report of hostile language in user profile at [:global:site-name]',
-              'message' => '[flagging_user:display-name] has reported [account:display-name] for 
+              'message' => '[flagging_user:display-name] has reported [account:display-name] for
 hostile language in a user profile:
 
 <?php print url(\\\'<front>\\\', array(\\\'absolute\\\' => TRUE, \\\'language\\\' => \\\'en\\\')); ?>/account/[account:uid]
@@ -1865,7 +1862,7 @@ Total current reports of this user: [account:flag-abuse-user-meta-count]',
             '#settings' => array(
               'from' => '',
               'subject' => 'Report of offensive user at [:global:site-name]',
-              'message' => '[flagging_user:display-name] has reported [account:display-name] for 
+              'message' => '[flagging_user:display-name] has reported [account:display-name] for
 inappropriate behavior:
 
 <?php print url(\\\'<front>\\\', array(\\\'absolute\\\' => TRUE, \\\'language\\\' => \\\'en\\\')); ?>/account/[account:uid]
@@ -1923,7 +1920,7 @@ Total current reports of this user: [account:flag-abuse-user-meta-count]',
             '#settings' => array(
               'from' => '',
               'subject' => 'Report of SPAM user at [:global:site-name]',
-              'message' => '[flagging_user:display-name] has reported [account:display-name] for 
+              'message' => '[flagging_user:display-name] has reported [account:display-name] for
 a SPAM user profile:
 
 <?php print url(\\\'<front>\\\', array(\\\'absolute\\\' => TRUE, \\\'language\\\' => \\\'en\\\')); ?>/account/[account:uid]

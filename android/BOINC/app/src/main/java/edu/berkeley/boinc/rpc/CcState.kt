@@ -18,24 +18,24 @@
  */
 package edu.berkeley.boinc.rpc
 
-import java.util.ArrayList
-
-data class CcState(
+data class CcState
+@JvmOverloads // generates overloaded constructors
+constructor(
         var versionInfo: VersionInfo? = null,
         var hostInfo: HostInfo? = null,
         var haveAti: Boolean = false,
         var haveCuda: Boolean = false,
-        val projects: MutableList<Project> = ArrayList(),
-        val apps: MutableList<App> = ArrayList(),
-        val appVersions: MutableList<AppVersion> = ArrayList(),
-        val workunits: MutableList<Workunit> = ArrayList(),
-        val results: MutableList<Result> = ArrayList()
+        val projects: MutableList<Project> = mutableListOf(),
+        val apps: MutableList<App> = mutableListOf(),
+        val appVersions: MutableList<AppVersion> = mutableListOf(),
+        val workUnits: MutableList<WorkUnit> = mutableListOf(),
+        val results: MutableList<Result> = mutableListOf()
 ) {
     fun clearArrays() {
         projects.clear()
         apps.clear()
         appVersions.clear()
-        workunits.clear()
+        workUnits.clear()
         results.clear()
     }
 
@@ -44,8 +44,8 @@ data class CcState(
                 .firstOrNull { it.name.equals(appName, ignoreCase = true) }
     }
 
-    fun lookupWorkUnit(project: Project?, workUnitName: String?): Workunit? {
-        return workunits.filter { it.project == project }
+    fun lookupWorkUnit(project: Project?, workUnitName: String?): WorkUnit? {
+        return workUnits.filter { it.project == project }
                 .firstOrNull { it.name.equals(workUnitName, ignoreCase = true) }
     }
 
@@ -55,8 +55,8 @@ data class CcState(
         return appVersions.asSequence()
                 .filter { it.project == project } //Check if projects match
                 .filter { it.app == app } //Check if app matches
-                .filter { it.version_num == versionNum } //Check version_num
-                .firstOrNull { it.plan_class.equals(planClass, ignoreCase = true) } //Check plan class
+                .filter { it.versionNum == versionNum } //Check version_num
+                .firstOrNull { it.planClass.equals(planClass, ignoreCase = true) } //Check plan class
     }
 
     object Fields {

@@ -28,6 +28,7 @@ function pm_header() {
 }
 
 function pm_rules() {
+    if (defined('PM_RULES')) return PM_RULES;
     $x = "<table><tr><td align=left><small>";
     $x .= tra("
         <ul>
@@ -72,7 +73,7 @@ function pm_team_form($user, $teamid, $error=null) {
     if ($error) {
         echo "<p class=\"text-danger\">".$error."</p>\n";
     }
-    
+
     echo "<form action=\"pm.php\" method=\"post\" name=\"post\" onsubmit=\"return checkForm(this)\">\n";
     echo "<input type=\"hidden\" name=\"action\" value=\"send\">\n";
     echo "<input type=\"hidden\" name=\"teamid\" value=\"$teamid\">\n";
@@ -83,7 +84,7 @@ function pm_team_form($user, $teamid, $error=null) {
         "<input type=\"text\" class=\"form-control\" name=\"subject\" value=\"$subject\">",
         null, '20%'
     );
-    row2_init(tra("Message")."<small>".bbcode_info()."</small>", "", '20%');
+    row2_init(tra("Message")."<small>".bbcode_info()."</small>", '20%');
     start_table();
     echo $bbcode_html;
     echo "<tr><td>\n";
@@ -103,7 +104,7 @@ function pm_form($replyto, $userid, $error = null) {
     global $bbcode_html, $bbcode_js;
     global $g_logged_in_user;
     page_head(tra("Send private message"),'','','', $bbcode_js);
-    
+
     if (post_str("preview", true) == tra("Preview")) {
         $content = post_str("content", true);
         panel(tra('Preview'),
@@ -112,9 +113,9 @@ function pm_form($replyto, $userid, $error = null) {
             }
         );
     }
-    
-    $subject = null;
-    $content = null;
+
+    $subject = '';
+    $content = '';
     if ($replyto) {
         $message = BoincPrivateMessage::lookup_id($replyto);
         if (!$message || $message->userid != $g_logged_in_user->id) {
@@ -126,7 +127,7 @@ function pm_form($replyto, $userid, $error = null) {
         if (!$user) {
             error_page("Sender no longer exists");
         }
-        $writeto = $userid." (".$user->name.")";
+        $writeto = UNIQUE_USER_NAME?$user->name:$userid." (".$user->name.")";
         $subject = $message->subject;
         if (substr($subject, 0, 3) != "re:") {
             $subject = "re: ".$subject;
@@ -136,25 +137,31 @@ function pm_form($replyto, $userid, $error = null) {
         if (!$user) {
             error_page("Sender no longer exists");
         }
-        $writeto = $userid." (".$user->name.")";
+        $writeto = UNIQUE_USER_NAME?$user->name:$userid." (".$user->name.")";
     } else {
         $writeto = sanitize_tags(post_str("to", true));
         $subject = post_str("subject", true);
         $content = post_str("content", true);
     }
-    
+
     $content = htmlspecialchars($content);
     $subject = htmlspecialchars($subject);
-    
+
     if ($error != null) {
         echo "<p class=\"text-danger\">".$error."</p>\n";
     }
-    
+
     echo "<form action=\"pm.php\" method=\"post\" name=\"post\" onsubmit=\"return checkForm(this)\">\n";
     echo "<input type=\"hidden\" name=\"action\" value=\"send\">\n";
     echo form_tokens($g_logged_in_user->authenticator);
     start_table();
-    row2(tra("To")."<br /><small>".tra("User IDs or unique usernames, separated with commas")."</small>",
+    row2(
+        sprintf('%s <br><small>%s</small>',
+            tra("To"),
+            UNIQUE_USER_NAME
+                ?tra('User names, separated with commas')
+                :tra("User IDs or unique usernames, separated with commas")
+        ),
         "<input type=\"text\" class=\"form-control\" name=\"to\" value=\"$writeto\">",
         null, '20%'
     );
@@ -165,7 +172,6 @@ function pm_form($replyto, $userid, $error = null) {
     );
     row2_init(
         tra("Message")."<small>".bbcode_info().pm_rules()."</small>",
-        "",
         '20%'
     );
     start_table();
@@ -176,7 +182,7 @@ function pm_form($replyto, $userid, $error = null) {
     end_table();
     echo "<tr><td></td><td><input class=\"btn btn-primary\" type=\"submit\" name=\"preview\" value=\"".tra("Preview")."\"> <input class=\"btn btn-success\" type=\"submit\" value=\"".tra("Send message")."\"></td></tr>\n";
     end_table();
-    
+
     page_tail();
     exit();
 }
@@ -267,7 +273,7 @@ function check_pm_count($userid) {
 function pm_notification($user) {
     $output = "";
     $unread = BoincPrivateMessage::count("userid=$user->id AND opened=0");
-    
+
     $output .= "<a href=\"pm.php?action=inbox\">".tra("Inbox")."</a>";
     if ($unread) {
         $output .= "<span class=\"inboxunread\"> ($unread ".tra("unread").")</span>\n";

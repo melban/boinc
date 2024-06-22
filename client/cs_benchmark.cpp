@@ -54,10 +54,6 @@
 #include <ctime>
 #endif
 
-#ifdef _MSC_VER
-#define snprintf _snprintf
-#endif
-
 #include "error_numbers.h"
 #include "file_names.h"
 #include "filesys.h"
@@ -177,19 +173,23 @@ int cpu_benchmarks(BENCHMARK_DESC* bdp) {
     bdp->error_str[0] = '\0';
 
 #if defined(ANDROID) && defined(__arm__)
+#if defined(ARMV6)
+    retval = whetstone(host_info.p_fpops, fp_time, MIN_CPU_TIME);
+#else
     // check for FP accelerator: VFP, Neon, or none;
     // run the appropriate version of Whetstone
     // (separated using namespaces)
     //
-    if (strstr(gstate.host_info.p_features, " neon ")) { 
+    if (strstr(gstate.host_info.p_features, " neon ")) {
         // have ARM neon FP capabilities
         retval = android_neon::whetstone(host_info.p_fpops, fp_time, MIN_CPU_TIME);
-    } else if (strstr(gstate.host_info.p_features, " vfp ")) { 
+    } else if (strstr(gstate.host_info.p_features, " vfp ")) {
         // have ARM vfp FP capabilities
         retval = android_vfp::whetstone(host_info.p_fpops, fp_time, MIN_CPU_TIME);
     } else { // just run normal test
         retval = whetstone(host_info.p_fpops, fp_time, MIN_CPU_TIME);
     }
+#endif
 #else
     retval = whetstone(host_info.p_fpops, fp_time, MIN_CPU_TIME);
 #endif
@@ -262,9 +262,9 @@ void CLIENT_STATE::start_cpu_benchmarks(bool force) {
     cpu_benchmarks_start = dtime();
 
     benchmark_descs.clear();
-    benchmark_descs.resize(ncpus);
+    benchmark_descs.resize(n_usable_cpus);
 
-    bm_ncpus = ncpus;
+    bm_ncpus = n_usable_cpus;
     benchmarks_running = true;
 
     for (i=0; i<bm_ncpus; i++) {
@@ -278,7 +278,7 @@ void CLIENT_STATE::start_cpu_benchmarks(bool force) {
         );
         int n = host_info.p_ncpus;
         int j = (i >= n/2)? 2*i+1-n : 2*i;
-        SetThreadAffinityMask(benchmark_descs[i].handle, 1<<j);
+        SetThreadAffinityMask(benchmark_descs[i].handle, 1ull<<j);
         SetThreadPriority(benchmark_descs[i].handle, THREAD_PRIORITY_IDLE);
 #else
         sprintf(benchmark_descs[i].filename, "%s_%d.xml", CPU_BENCHMARKS_FILE_NAME, i);

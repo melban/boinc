@@ -42,12 +42,6 @@ using std::string;
 void LOG_FLAGS::init() {
     static const LOG_FLAGS x;
     *this = x;
-
-    // on by default (others are off by default)
-    //
-    task = true;
-    file_xfer = true;
-    sched_ops = true;
 }
 
 // Parse log flag preferences
@@ -94,6 +88,7 @@ int LOG_FLAGS::parse(XML_PARSER& xp) {
         if (xp.parse_bool("sched_op_debug", sched_op_debug)) continue;
         if (xp.parse_bool("scrsave_debug", scrsave_debug)) continue;
         if (xp.parse_bool("slot_debug", slot_debug)) continue;
+        if (xp.parse_bool("sporadic_debug", sporadic_debug)) continue;
         if (xp.parse_bool("state_debug", state_debug)) continue;
         if (xp.parse_bool("statefile_debug", statefile_debug)) continue;
         if (xp.parse_bool("suspend_debug", suspend_debug)) continue;
@@ -144,6 +139,7 @@ int LOG_FLAGS::write(MIOFILE& out) {
         "        <sched_op_debug>%d</sched_op_debug>\n"
         "        <scrsave_debug>%d</scrsave_debug>\n"
         "        <slot_debug>%d</slot_debug>\n"
+        "        <sporadic_debug>%d</sporadic_debug>\n"
         "        <state_debug>%d</state_debug>\n"
         "        <statefile_debug>%d</statefile_debug>\n"
         "        <suspend_debug>%d</suspend_debug>\n"
@@ -187,6 +183,7 @@ int LOG_FLAGS::write(MIOFILE& out) {
         sched_op_debug ? 1 : 0,
         scrsave_debug ? 1 : 0,
         slot_debug ? 1 : 0,
+        sporadic_debug ? 1 : 0,
         state_debug ? 1 : 0,
         statefile_debug ? 1 : 0,
         suspend_debug ? 1 : 0,
@@ -215,7 +212,6 @@ void CC_CONFIG::defaults() {
     disallow_attach = false;
     dont_check_file_sizes = false;
     dont_contact_ref_site = false;
-    lower_client_priority = false;
     dont_suspend_nci = false;
     dont_use_vbox = false;
     dont_use_wsl = false;
@@ -234,6 +230,8 @@ void CC_CONFIG::defaults() {
     for (int i=1; i<NPROC_TYPES; i++) {
         ignore_gpu_instance[i].clear();
     }
+    ignore_tty.clear();
+    lower_client_priority = false;
     max_event_log_lines = DEFAULT_MAX_EVENT_LOG_LINES;
     max_file_xfers = 8;
     max_file_xfers_per_project = 2;
@@ -246,9 +244,10 @@ void CC_CONFIG::defaults() {
     no_info_fetch = false;
     no_opencl = false;
     no_priority_change = false;
+    no_rdp_check = false;
     os_random_only = false;
-    process_priority = -1;
-    process_priority_special = -1;
+    process_priority = CONFIG_PRIORITY_UNSPECIFIED;
+    process_priority_special = CONFIG_PRIORITY_UNSPECIFIED;
     proxy_info.clear();
     rec_half_life = 10*86400;
 #ifdef ANDROID
@@ -268,7 +267,6 @@ void CC_CONFIG::defaults() {
     use_certs = false;
     use_certs_only = false;
     vbox_window = false;
-    ignore_tty.clear();
 }
 
 int EXCLUDE_GPU::parse(XML_PARSER& xp) {
@@ -280,6 +278,9 @@ int EXCLUDE_GPU::parse(XML_PARSER& xp) {
         if (!xp.is_tag) continue;
         if (xp.match_tag("/exclude_gpu")) {
             if (!found_url) return ERR_XML_PARSE;
+            if (device_num >= MAX_COPROC_INSTANCES) {
+                return ERR_XML_PARSE;
+            }
             return 0;
         }
         if (xp.parse_string("url", url)) {
@@ -406,6 +407,7 @@ int CC_CONFIG::parse_options(XML_PARSER& xp) {
         if (xp.parse_bool("no_info_fetch", no_info_fetch)) continue;
         if (xp.parse_bool("no_opencl", no_opencl)) continue;
         if (xp.parse_bool("no_priority_change", no_priority_change)) continue;
+        if (xp.parse_bool("no_rdp_check", no_rdp_check)) continue;
         if (xp.parse_bool("os_random_only", os_random_only)) continue;
         if (xp.parse_int("process_priority", process_priority)) continue;
         if (xp.parse_int("process_priority_special", process_priority_special)) continue;
@@ -437,11 +439,13 @@ int CC_CONFIG::parse_options(XML_PARSER& xp) {
             ignore_tty.push_back(s);
             continue;
         }
+        if (xp.parse_string("device_name", device_name)) continue;
 
-        // The following 3 tags have been moved to nvc_config and
-        // NVC_CONFIG_FILE, but CC_CONFIG::write() in older clients 
-        // may have written their default values to CONFIG_FILE. 
+        // The following tags have been moved to nvc_config and NVC_CONFIG_FILE,
+        // but CC_CONFIG::write() in older clients
+        // may have written their default values to CONFIG_FILE.
         // Silently skip them if present.
+        //
         if (xp.parse_string("client_download_url", s)) continue;
         if (xp.parse_string("client_new_version_text", s)) continue;
         if (xp.parse_string("client_version_check_url", s)) continue;
@@ -638,6 +642,7 @@ int CC_CONFIG::write(MIOFILE& out, LOG_FLAGS& log_flags) {
         "        <no_info_fetch>%d</no_info_fetch>\n"
         "        <no_opencl>%d</no_opencl>\n"
         "        <no_priority_change>%d</no_priority_change>\n"
+        "        <no_rdp_check>%d</no_rdp_check>\n"
         "        <os_random_only>%d</os_random_only>\n"
         "        <process_priority>%d</process_priority>\n"
         "        <process_priority_special>%d</process_priority_special>\n",
@@ -653,6 +658,7 @@ int CC_CONFIG::write(MIOFILE& out, LOG_FLAGS& log_flags) {
         no_info_fetch,
         no_opencl,
         no_priority_change,
+        no_rdp_check,
         os_random_only,
         process_priority,
         process_priority_special
@@ -835,7 +841,7 @@ int APP_CONFIGS::parse(XML_PARSER& xp, MSG_VEC& mv, LOG_FLAGS& log_flags) {
             continue;
         }
         if (xp.parse_int("project_max_concurrent", n)) {
-            if (n >= 0) {
+            if (n > 0) {
                 have_max_concurrent = true;
                 project_has_mc = true;
                 project_max_concurrent = n;
@@ -868,19 +874,21 @@ int APP_CONFIGS::parse_file(FILE* f, MSG_VEC& mv, LOG_FLAGS& log_flags) {
 
 void APP_CONFIGS::write(MIOFILE& out) {
     out.printf(
-        "   <app_config>\n"
+        "<app_config>\n"
     );
     for (unsigned int i=0; i<app_configs.size(); i++) {
         APP_CONFIG& ac = app_configs[i];
         out.printf(
-            "       <app>\n"
-            "           <name>%s</name>\n"
-            "           <max_concurrent>%d</max_concurrent>\n"
-            "           <gpu_gpu_usage>%f</gpu_gpu_usage>\n"
-            "           <gpu_cpu_usage>%f</gpu_cpu_usage>\n"
-            "           <fraction_done_exact>%d</fraction_done_exact>\n"
-            "           <report_results_immediately>%d</report_results_immediately>\n"
-            "       </app>\n",
+            "    <app>\n"
+            "        <name>%s</name>\n"
+            "        <max_concurrent>%d</max_concurrent>\n"
+            "        <gpu_versions>\n"
+            "            <gpu_usage>%f</gpu_usage>\n"
+            "            <cpu_usage>%f</cpu_usage>\n"
+            "        </gpu_versions>\n"
+            "        <fraction_done_exact>%d</fraction_done_exact>\n"
+            "        <report_results_immediately>%d</report_results_immediately>\n"
+            "    </app>\n",
             ac.name,
             ac.max_concurrent,
             ac.gpu_gpu_usage,
@@ -892,13 +900,13 @@ void APP_CONFIGS::write(MIOFILE& out) {
     for (unsigned int i=0; i<app_version_configs.size(); i++) {
         APP_VERSION_CONFIG& avc = app_version_configs[i];
         out.printf(
-            "       <app_version>\n"
-            "           <app_name>%s</app_name>\n"
-            "           <plan_class>%s</plan_class>\n"
-            "           <cmdline>%s</cmdline>\n"
-            "           <avg_ncpus>%f</avg_ncpus>\n"
-            "           <ngpus>%f</ngpus>\n"
-            "       </app_version>\n",
+            "    <app_version>\n"
+            "        <app_name>%s</app_name>\n"
+            "        <plan_class>%s</plan_class>\n"
+            "        <cmdline>%s</cmdline>\n"
+            "        <avg_ncpus>%f</avg_ncpus>\n"
+            "        <ngpus>%f</ngpus>\n"
+            "    </app_version>\n",
             avc.app_name,
             avc.plan_class,
             avc.cmdline,
@@ -907,9 +915,9 @@ void APP_CONFIGS::write(MIOFILE& out) {
         );
     }
     out.printf(
-        "       <project_max_concurrent>%d</project_max_concurrent>\n"
-        "       <report_results_immediately>%d</report_results_immediately>\n"
-        "   </app_config>\n",
+        "    <project_max_concurrent>%d</project_max_concurrent>\n"
+        "    <report_results_immediately>%d</report_results_immediately>\n"
+        "</app_config>\n",
         project_max_concurrent,
         report_results_immediately?1:0
     );

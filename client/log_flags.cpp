@@ -19,10 +19,6 @@
 
 #ifdef _WIN32
 #include "boinc_win.h"
-#ifdef _MSC_VER
-#define chdir    _chdir
-#define snprintf _snprintf
-#endif
 #else
 #include "config.h"
 #include <cstdio>
@@ -37,6 +33,7 @@
 #include "parse.h"
 #include "str_replace.h"
 #include "str_util.h"
+#include "url.h"
 
 #include "client_state.h"
 #include "client_msgs.h"
@@ -99,6 +96,7 @@ void LOG_FLAGS::show() {
     show_flag(buf, sizeof(buf), sched_op_debug, "sched_op_debug");
     show_flag(buf, sizeof(buf), scrsave_debug, "scrsave_debug");
     show_flag(buf, sizeof(buf), slot_debug, "slot_debug");
+    show_flag(buf, sizeof(buf), sporadic_debug, "sporadic_debug");
     show_flag(buf, sizeof(buf), state_debug, "state_debug");
     show_flag(buf, sizeof(buf), statefile_debug, "statefile_debug");
     show_flag(buf, sizeof(buf), task_debug, "task_debug");
@@ -268,6 +266,9 @@ void CC_CONFIG::show() {
     if (no_priority_change) {
         msg_printf(NULL, MSG_INFO, "Config: run apps at regular priority");
     }
+    if (no_rdp_check) {
+        msg_printf(NULL, MSG_INFO, "Config: allow GPU apps when using remote desktop");
+    }
     if (report_results_immediately) {
         msg_printf(NULL, MSG_INFO, "Config: report completed tasks immediately");
     }
@@ -294,6 +295,9 @@ void CC_CONFIG::show() {
         msg_printf(NULL, MSG_INFO,
             "Config: ignore tty: %s", ignore_tty[i].c_str()
         );
+    }
+    if (!device_name.empty()) {
+        msg_printf(NULL, MSG_INFO, "Config: device name is %s", device_name.c_str());
     }
 }
 
@@ -416,6 +420,10 @@ int CC_CONFIG::parse_options_client(XML_PARSER& xp) {
             ignore_gpu_instance[PROC_TYPE_INTEL_GPU].push_back(n);
             continue;
         }
+        if (xp.parse_int("ignore_apple_dev", n)) {
+            ignore_gpu_instance[PROC_TYPE_APPLE_GPU].push_back(n);
+            continue;
+        }
         if (xp.parse_int("max_event_log_lines", max_event_log_lines)) continue;
         if (xp.parse_int("max_file_xfers", max_file_xfers)) continue;
         if (xp.parse_int("max_file_xfers_per_project", max_file_xfers_per_project)) continue;
@@ -428,6 +436,7 @@ int CC_CONFIG::parse_options_client(XML_PARSER& xp) {
         if (xp.parse_bool("no_info_fetch", no_info_fetch)) continue;
         if (xp.parse_bool("no_opencl", no_opencl)) continue;
         if (xp.parse_bool("no_priority_change", no_priority_change)) continue;
+        if (xp.parse_bool("no_rdp_check", no_rdp_check)) continue;
         if (xp.parse_bool("os_random_only", os_random_only)) continue;
         if (xp.parse_int("process_priority", process_priority)) continue;
         if (xp.parse_int("process_priority_special", process_priority_special)) continue;
@@ -462,11 +471,13 @@ int CC_CONFIG::parse_options_client(XML_PARSER& xp) {
             ignore_tty.push_back(s);
             continue;
         }
+        if (xp.parse_string("device_name", device_name)) continue;
 
-        // The following 3 tags have been moved to nvc_config and
-        // NVC_CONFIG_FILE, but CC_CONFIG::write() in older clients 
-        // may have written their default values to CONFIG_FILE. 
+        // The following tags have been moved to nvc_config and NVC_CONFIG_FILE,
+        // but CC_CONFIG::write() in older clients
+        // may have written their default values to CONFIG_FILE.
         // Silently skip them if present.
+        //
         if (xp.parse_string("client_download_url", s)) continue;
         if (xp.parse_string("client_new_version_text", s)) continue;
         if (xp.parse_string("client_version_check_url", s)) continue;
@@ -676,7 +687,7 @@ void process_gpu_exclusions() {
             for (j=0; j<cc_config.exclude_gpus.size(); j++) {
                 EXCLUDE_GPU& eg = cc_config.exclude_gpus[j];
                 if (!eg.type.empty() && (eg.type != cp.type)) continue;
-                if (strcmp(eg.url.c_str(), p->master_url)) continue;
+                if (!urls_match(eg.url.c_str(), p->master_url)) continue;
                 COPROC_INSTANCE_BITMAP mask;
                 if (eg.device_num >= 0) {
                     int index = cp.device_num_index(eg.device_num);
@@ -770,7 +781,7 @@ bool gpu_excluded(APP* app, COPROC& cp, int ind) {
     PROJECT* p = app->project;
     for (unsigned int i=0; i<cc_config.exclude_gpus.size(); i++) {
         EXCLUDE_GPU& eg = cc_config.exclude_gpus[i];
-        if (strcmp(eg.url.c_str(), p->master_url)) continue;
+        if (!urls_match(eg.url.c_str(), p->master_url)) continue;
         if (!eg.type.empty() && (eg.type != cp.type)) continue;
         if (!eg.appname.empty() && (eg.appname != app->name)) continue;
         if (eg.device_num >= 0 && eg.device_num != cp.device_nums[ind]) continue;

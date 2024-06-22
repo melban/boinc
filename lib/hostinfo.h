@@ -1,6 +1,6 @@
 // This file is part of BOINC.
 // http://boinc.berkeley.edu
-// Copyright (C) 2018 University of California
+// Copyright (C) 2023 University of California
 //
 // BOINC is free software; you can redistribute it and/or modify it
 // under the terms of the GNU Lesser General Public License
@@ -50,7 +50,7 @@ const char file_redhatrelease[] = "/etc/redhat-release";
 
 // if you add fields, update clear_host_info()
 
-#define P_FEATURES_SIZE 1024
+#define P_FEATURES_SIZE 8192
 
 class HOST_INFO {
 public:
@@ -150,12 +150,14 @@ public:
 extern void make_secure_random_string(char*);
 
 #ifdef _WIN64
-int get_wsl_information(bool& wsl_available, WSLS& wsls);
-int get_processor_group(HANDLE);
+extern int get_wsl_information(bool& wsl_available, WSLS& wsls);
+extern int get_processor_group(HANDLE);
 #endif
 
 #ifdef __APPLE__
-    int get_system_uptime();
+extern int get_system_uptime();
+extern bool can_run_on_this_CPU(char* exec_path);
+    // can the app run on this CPU architecture?
 
 #ifdef __cplusplus
 extern "C" {
@@ -165,7 +167,7 @@ extern "C" {
 #include <IOKit/hidsystem/IOHIDParameter.h>
 #include <IOKit/hidsystem/event_status_driver.h>
 
-bool isDualGPUMacBook();
+extern bool isDualGPUMacBook();
 
 // Apple has removed NxIdleTime() beginning with OS 10.6, so we must try
 // loading it at run time to avoid a link error.  For details, please see
