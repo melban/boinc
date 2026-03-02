@@ -29,20 +29,24 @@ require_once("../inc/translation.inc");
 require_once("../inc/profile.inc");
 require_once("../inc/bootstrap.inc");
 
-// parse config.xml (do it here for efficiency)
-//
-$config = get_config();
-global $master_url;
-$master_url = parse_config($config , "<master_url>");
-$recaptcha_public_key = parse_config($config, "<recaptcha_public_key>");
-$recaptcha_private_key = parse_config($config, "<recaptcha_private_key>");
+define('JQUERY_URL', 'https://code.jquery.com/jquery-3.7.1.slim.min.js');
+
+function master_url() {
+    return parse_config(get_config() , "<master_url>");
+}
+function recaptcha_public_key() {
+    return parse_config(get_config(), "<recaptcha_public_key>");
+}
+function recaptcha_private_key() {
+    return parse_config(get_config(), "<recaptcha_private_key>");
+}
 
 // Set parameters to defaults if not defined in config.xml
 
-$x = parse_config($config, "<user_country>");
+$x = parse_config(get_config(), "<user_country>");
 define('USER_COUNTRY', ($x===null)?1:(int)$x);
 
-$x = parse_config($config, "<user_url>");
+$x = parse_config(get_config(), "<user_url>");
 define('USER_URL', ($x===null)?1:(int)$x);
 
 // Set parameters to defaults if not defined in project.inc
@@ -99,7 +103,7 @@ if (!defined('HOME_PAGE')) {
     define('HOME_PAGE', 'home.php');
 }
 
-// the page showing another user.
+// the page showing another user ('userid' arg).
 // Link to here wherever we show a user name.
 //
 if (!defined('SHOW_USER_PAGE')) {
@@ -109,8 +113,10 @@ if (!defined('SHOW_USER_PAGE')) {
 if (!defined('POST_MAX_LINKS')) {
     define('POST_MAX_LINKS', 0);
 }
+
+// support dark mode if user has selected it
 if (!defined('DARK_MODE')) {
-    define('DARK_MODE', false);
+    define('DARK_MODE', true);
 }
 if (!defined('VALIDATE_EMAIL_TO_POST')) {
     define('VALIDATE_EMAIL_TO_POST', false);
@@ -134,11 +140,6 @@ $caching = false;
     // if set, we're writing to a file rather than to client
 $did_page_head = false;
 
-define('KILO', 1024);
-define('MEGA', 1024*KILO);
-define('GIGA', 1024*MEGA);
-define('TERA', 1024*GIGA);
-
 // return true if this page is HTTPS
 //
 function is_https() {
@@ -155,23 +156,24 @@ function url_base() {
 }
 
 function send_cookie($name, $value, $permanent, $ops=false) {
-    global $master_url;
-
     // the following allows independent login for projects on the same server
     //
-    $url = parse_url($master_url);
+    $url = parse_url(master_url());
     $path = $url['path'];
     if ($ops) {
         $path = substr($path, 0, -1);
         $path .= "_ops/";
     }
     $expire = $permanent?time()+3600*24*365:0;
-    setcookie($name, $value, $expire, $path);
+    setcookie($name, $value, $expire, $path,
+        '',
+        is_https(),     // if this page is secure, make cookie secure
+        true            // use cookie for HTTP only; no JS access
+    );
 }
 
 function clear_cookie($name, $ops=false) {
-    global $master_url;
-    $url = parse_url($master_url);
+    $url = parse_url(master_url());
     $path = $url['path'];
     if ($ops) {
         $path = substr($path, 0, -1);
@@ -240,7 +242,7 @@ $is_login_page = false;
 //
 // Page_head() is overridable so that projects that want to integrate BOINC
 // with an existing web framework can more easily do so.
-// To do so, define page_head() in the project include file.
+// To do so, define page_head() in html/project/project.inc
 //
 if (!function_exists("page_head")){
 function page_head(
@@ -292,6 +294,8 @@ function page_head(
         <html lang="en">
         <head>
     ';
+    echo sprintf('<script src="%s"></script>', JQUERY_URL);
+
     if (defined('GLOBAL_HEAD_EXTRA')) {
         echo GLOBAL_HEAD_EXTRA;
     }
@@ -358,7 +362,6 @@ EOT;
         $body_attrs .= ' style="padding-top:70px"';
     }
     echo "<body $body_attrs>";
-    display_cvs_versions();
     echo '<div class="container-fluid">
     ';
 
@@ -389,21 +392,12 @@ function page_tail(
     echo "<br>\n";
     project_footer($is_main, $show_date, $url_prefix);
     echo '
-        <script src="'.secure_url_base().'/jquery.min.js"></script>
         <script src="'.secure_url_base().'/bootstrap.min.js"></script>
         </div>
         </body>
         </html>
     ';
 }
-}
-
-function display_cvs_versions(){
-    global $cvs_version_tracker;
-    echo "\n<!-- SVN VERSIONS -->\n";
-    for ($i=0;$i<sizeof($cvs_version_tracker);$i++) {
-        echo "<!-- ".$cvs_version_tracker[$i]." -->\n";
-    }
 }
 
 function db_error_page() {
@@ -421,52 +415,6 @@ function error_page($msg) {
     echo $msg;
     page_tail();
     exit();
-}
-
-// convert time interval in seconds to a string of the form
-// 'D days h hours m min s sec'.
-
-function time_diff($x, $res=3) {
-    $x = (int)$x;
-    $days    = (int)($x/86400);
-    $hours   = (int)(($x-$days*86400)/3600);
-    $minutes = (int)(($x-$days*86400-$hours*3600)/60);
-    $seconds = $x % 60;
-
-    $s = "";
-    if ($days) {
-        $s .= "$days ".tra("days")." ";
-    }
-    if ($res>0 && ($hours || strlen($s))) {
-        $s .= "$hours ".tra("hours")." ";
-    }
-    if ($res>1 && ($minutes || strlen($s))) {
-        $s .= "$minutes ".tra("min")." ";
-    }
-    if ($res>2) {
-        $s .= "$seconds ".tra("sec")." ";
-    }
-    return $s;
-}
-
-
-function date_str($x) {
-    if ($x == 0) return "---";
-    return gmdate('j M Y', (int)$x);
-}
-
-function time_str($x) {
-    if ($x == 0) return "---";
-    return gmdate('j M Y, G:i:s', (int)$x) . " UTC";
-}
-
-function local_time_str($x) {
-    if ($x == 0) return "---";
-    return date('j M Y, H:i T', (int)$x);
-}
-
-function pretty_time_str($x) {
-    return time_str($x);
 }
 
 function start_table_str($class="", $style="") {
@@ -896,10 +844,7 @@ function strip_bbcode($string){
 }
 
 function current_url() {
-    $url = "http";
-    if (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] == "on") {
-        $url .= "s";
-    }
+    $url = is_https()?'https':'http';
     $url .= "://";
     $url .= $_SERVER['SERVER_NAME'];
     $url .= ":".$_SERVER['SERVER_PORT'];
@@ -913,24 +858,46 @@ function current_url() {
     return $url;
 }
 
-// Show a single link formatted to look like a button.
-// @param url The destination URL of the button
-// @param text The text to display on the button
-// @param desc The title of the destination - typically used as a popup
-// @param class The optional CSS class of the button. Defaults to a standard button
-// @params extra Additional text in href tag
+// return style for a button
+// the colors for bootstrap's btn-success are almost illegible;
+// the green is too light.  Use a darker green.
 //
-
+function button_style($color='green', $font_size=null) {
+    $fs = '';
+    if ($font_size) {
+        $fs = sprintf('; font-size:%dpx', $font_size);
+    }
+    if ($color == 'green') $color = 'seagreen';
+    if ($color == 'blue') $color = 'steelblue';
+    return sprintf(
+        'style="background-color:%s; color:white; text-decoration:none%s"',
+        $color, $fs
+    );
+}
+// Show a link formatted to look like a button.
+// url: the destination of the lin
+// text: The text to display on the button
+// desc: tooltip text (show on hover)
+// class: class of the button, e.g. btn
+// extra: Additional text in href tag
+//
 function button_text($url, $text, $desc=null, $class=null, $extra='') {
     if (!$desc) {
         $desc = $text;
     }
+    if (!$extra && !$class) {
+        $extra = button_style();
+    }
     if (!$class) {
-        $class = "btn-success btn-sm";
+        $class = "btn btn-sm";
     }
     return sprintf(' <a href="%s" title="%s" class="btn %s" %s>%s</a>',
         $url, $desc, $class, $extra, $text
     );
+}
+
+function button_text_small($url, $text, $desc=null) {
+    return button_text($url, $text, $desc, "btn btn-xs", button_style());
 }
 
 function show_button($url, $text, $desc=null, $class=null, $extra=null) {
@@ -940,7 +907,7 @@ function show_button($url, $text, $desc=null, $class=null, $extra=null) {
 // for places with a bunch of buttons, like forum posts
 //
 function show_button_small($url, $text, $desc=null) {
-    echo button_text($url, $text, $desc, "btn-primary btn-xs");
+    echo button_text_small($url, $text, $desc);
 }
 
 // used for showing icons
@@ -994,46 +961,6 @@ function db_init($try_replica=false) {
         exit();
     }
     return 0;
-}
-
-// return a structure indicating whether project has non-deprecated
-// apps versions for various resource types,
-// and with a count of app versions
-//
-function get_app_types() {
-    $t = new StdClass;
-    $t->cpu = false;
-    $t->cuda = false;
-    $t->ati = false;
-    $t->intel_gpu = false;
-    $t->apple_gpu = false;
-    $t->count = 0;
-    $avs = BoincAppVersion::enum("deprecated=0");
-    foreach ($avs as $av) {
-        if (strstr($av->plan_class, "ati")) {
-            $t->ati = true;
-            $t->count++;
-        } else if (strstr($av->plan_class, "amd")) {
-            $t->ati = true;
-            $t->count++;
-        } else if (strstr($av->plan_class, "cuda")) {
-            $t->cuda = true;
-            $t->count++;
-        } else if (strstr($av->plan_class, "nvidia")) {
-            $t->cuda = true;
-            $t->count++;
-        } else if (strstr($av->plan_class, "intel_gpu")) {
-            $t->intel_gpu = true;
-            $t->count++;
-        } else if (strstr($av->plan_class, "apple_gpu")) {
-            $t->apple_gpu = true;
-            $t->count++;
-        } else {
-            $t->cpu = true;
-            $t->count++;
-        }
-    }
-    return $t;
 }
 
 // Functions to sanitize GET and POST args
@@ -1115,19 +1042,20 @@ function credit_to_gflop_hours($c) {
     return $c/(200/24);
 }
 
-function do_download($path,$name="") {
-    if (strcmp($name,"") == 0) {
-        $name=basename($path);
-    }
+function download_header($name, $nbytes) {
     header('Content-Description: File Transfer');
     header('Content-Type: application/octet-stream');
-    header('Content-Disposition: attachment; filename='.$name);
+    header("Content-Disposition: attachment; filename=$name");
     header('Content-Transfer-Encoding: binary');
     header('Expires: 0');
     header('Cache-Control: must-revalidate, post-check=0, pre-check=0');
     header('Pragma: public');
-    header('Content-Length: ' . filesize($path));
+    header("Content-Length: $nbytes");
     flush();
+}
+
+function do_download($path) {
+    download_header(basename($path), filesize($path));
     readfile($path);
 }
 
@@ -1136,7 +1064,7 @@ function do_download($path,$name="") {
 function redirect_to_secure_url() {
     if (defined('SECURE_URL_BASE')
         && strstr(SECURE_URL_BASE, "https://")
-        && empty($_SERVER['HTTPS'])
+        && !is_https()
     ) {
         Header("Location: https://".$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI']);
         exit;
@@ -1279,7 +1207,5 @@ function check_validated_email($user) {
         exit;
     }
 }
-
-$cvs_version_tracker[]="\$Id$";  //Generated automatically - do not edit
 
 ?>

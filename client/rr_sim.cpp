@@ -80,20 +80,20 @@ struct RR_SIM {
     inline void activate(RESULT* rp) {
         PROJECT* p = rp->project;
         active_jobs.push_back(rp);
-        int rt = rp->avp->gpu_usage.rsc_type;
+        int rt = rp->resource_usage.rsc_type;
 
         // if this is a GPU app and GPU computing is suspended,
         // don't count its CPU usage.
         // That way we'll fetch more CPU work if needed.
         //
         if (!rt || !gpu_suspend_reason) {
-            rsc_work_fetch[0].sim_nused += rp->avp->avg_ncpus;
-            p->rsc_pwf[0].sim_nused += rp->avp->avg_ncpus;
+            rsc_work_fetch[0].sim_nused += rp->resource_usage.avg_ncpus;
+            p->rsc_pwf[0].sim_nused += rp->resource_usage.avg_ncpus;
         }
 
         if (rt) {
-            rsc_work_fetch[rt].sim_nused += rp->avp->gpu_usage.usage;
-            p->rsc_pwf[rt].sim_nused += rp->avp->gpu_usage.usage;
+            rsc_work_fetch[rt].sim_nused += rp->resource_usage.coproc_usage;
+            p->rsc_pwf[rt].sim_nused += rp->resource_usage.coproc_usage;
             if (rsc_work_fetch[rt].has_exclusions) {
                 set_bits(
                     rp->app->non_excluded_instances[rt],
@@ -111,12 +111,6 @@ struct RR_SIM {
         }
         if (have_max_concurrent) {
             max_concurrent_inc(rp);
-            if (p->rsc_pwf[0].sim_nused > p->rsc_pwf[0].max_nused) {
-                p->rsc_pwf[0].max_nused = p->rsc_pwf[0].sim_nused;
-            }
-            if (rt && p->rsc_pwf[rt].sim_nused > p->rsc_pwf[rt].max_nused) {
-                p->rsc_pwf[rt].max_nused = p->rsc_pwf[rt].sim_nused;
-            }
         }
     }
 
@@ -136,11 +130,11 @@ void set_rrsim_flops(RESULT* rp) {
     // For coproc jobs, use app version estimate
     //
     if (rp->uses_gpu()) {
-        rp->rrsim_flops = rp->avp->flops * gstate.overall_gpu_frac();
+        rp->rrsim_flops = rp->resource_usage.flops * gstate.overall_gpu_frac();
     } else if (rp->avp->needs_network) {
-        rp->rrsim_flops =  rp->avp->flops * gstate.overall_cpu_and_network_frac();
+        rp->rrsim_flops =  rp->resource_usage.flops * gstate.overall_cpu_and_network_frac();
     } else {
-        rp->rrsim_flops =  rp->avp->flops * gstate.overall_cpu_frac();
+        rp->rrsim_flops =  rp->resource_usage.flops * gstate.overall_cpu_frac();
     }
     if (rp->rrsim_flops == 0) {
         rp->rrsim_flops = 1e6;      // just in case
@@ -148,11 +142,7 @@ void set_rrsim_flops(RESULT* rp) {
 }
 
 void print_deadline_misses() {
-    unsigned int i;
-    RESULT* rp;
-    PROJECT* p;
-    for (i=0; i<gstate.results.size(); i++){
-        rp = gstate.results[i];
+    for (RESULT* rp: gstate.results) {
         if (rp->rr_sim_misses_deadline) {
             msg_printf(rp->project, MSG_INFO,
                 "[rr_sim] Result %s projected to miss deadline.",
@@ -160,8 +150,7 @@ void print_deadline_misses() {
             );
         }
     }
-    for (i=0; i<gstate.projects.size(); i++) {
-        p = gstate.projects[i];
+    for (PROJECT* p: gstate.projects) {
         for (int j=0; j<coprocs.n_rsc; j++) {
             if (p->rsc_pwf[j].deadlines_missed) {
                 msg_printf(p, MSG_INFO,
@@ -179,15 +168,13 @@ void print_deadline_misses() {
 // NOTE: "results" is sorted by increasing arrival time.
 //
 void RR_SIM::init_pending_lists() {
-    for (unsigned int i=0; i<gstate.projects.size(); i++) {
-        PROJECT* p = gstate.projects[i];
+    for (PROJECT* p: gstate.projects) {
         for (int j=0; j<coprocs.n_rsc; j++) {
             p->rsc_pwf[j].pending.clear();
             p->rsc_pwf[j].queue_est = 0;
         }
     }
-    for (unsigned int i=0; i<gstate.results.size(); i++) {
-        RESULT* rp = gstate.results[i];
+    for (RESULT* rp: gstate.results) {
         rp->rr_sim_misses_deadline = false;
         rp->already_selected = false;
         if (!rp->nearly_runnable()) continue;
@@ -201,11 +188,11 @@ void RR_SIM::init_pending_lists() {
 
         PROJECT* p = rp->project;
         p->pwf.n_runnable_jobs++;
-        p->rsc_pwf[0].nused_total += rp->avp->avg_ncpus;
+        p->rsc_pwf[0].nused_total += rp->resource_usage.avg_ncpus;
         set_rrsim_flops(rp);
-        int rt = rp->avp->gpu_usage.rsc_type;
+        int rt = rp->resource_usage.rsc_type;
         if (rt) {
-            p->rsc_pwf[rt].nused_total += rp->avp->gpu_usage.usage;
+            p->rsc_pwf[rt].nused_total += rp->resource_usage.coproc_usage;
             p->rsc_pwf[rt].n_runnable_jobs++;
             p->rsc_pwf[rt].queue_est += rp->rrsim_flops_left/rp->rrsim_flops;
         }
@@ -237,8 +224,7 @@ void RR_SIM::pick_jobs_to_run(double reltime) {
 
     // save and restore rec_temp
     //
-    for (unsigned int i=0; i<gstate.projects.size(); i++) {
-        PROJECT* p = gstate.projects[i];
+    for (PROJECT* p: gstate.projects) {
         p->pwf.rec_temp_save = p->pwf.rec_temp;
         p->pwf.at_max_concurrent_limit = false;
     }
@@ -257,8 +243,7 @@ void RR_SIM::pick_jobs_to_run(double reltime) {
         // Clear usage counts.
         // Initialize iterators to the pending list of each project.
         //
-        for (unsigned int i=0; i<gstate.projects.size(); i++) {
-            PROJECT* p = gstate.projects[i];
+        for (PROJECT* p: gstate.projects) {
             RSC_PROJECT_WORK_FETCH& rsc_pwf = p->rsc_pwf[rt];
             size_t s = rsc_pwf.pending.size();
 #if 0
@@ -376,8 +361,7 @@ void RR_SIM::pick_jobs_to_run(double reltime) {
         }
     }
 
-    for (unsigned int i=0; i<gstate.projects.size(); i++) {
-        PROJECT* p = gstate.projects[i];
+    for (PROJECT* p: gstate.projects) {
         p->pwf.rec_temp = p->pwf.rec_temp_save;
     }
     if (log_flags.rr_simulation) {
@@ -413,13 +397,13 @@ static void handle_missed_deadline(RESULT* rpbest, double diff, double ar) {
         }
     } else {
         rpbest->rr_sim_misses_deadline = true;
-        int rt = rpbest->avp->gpu_usage.rsc_type;
+        int rt = rpbest->resource_usage.rsc_type;
         if (rt) {
             pbest->rsc_pwf[rt].deadlines_missed++;
-            rsc_work_fetch[rt].deadline_missed_instances += rpbest->avp->gpu_usage.usage;
+            rsc_work_fetch[rt].deadline_missed_instances += rpbest->resource_usage.coproc_usage;
         } else {
             pbest->rsc_pwf[0].deadlines_missed++;
-            rsc_work_fetch[0].deadline_missed_instances += rpbest->avp->avg_ncpus;
+            rsc_work_fetch[0].deadline_missed_instances += rpbest->resource_usage.avg_ncpus;
         }
         if (log_flags.rr_simulation) {
             msg_printf(pbest, MSG_INFO,
@@ -433,14 +417,15 @@ static void handle_missed_deadline(RESULT* rpbest, double diff, double ar) {
 // update "MC shortfall" for projects with max concurrent restrictions
 //
 static void mc_update_stats(double sim_now, double dt, double buf_end) {
-    for (unsigned int i=0; i<gstate.projects.size(); i++) {
-        PROJECT* p = gstate.projects[i];
+    for (PROJECT* p: gstate.projects) {
         if (!p->app_configs.project_has_mc) continue;
         for (int rt=0; rt<coprocs.n_rsc; rt++) {
             RSC_PROJECT_WORK_FETCH& rsc_pwf = p->rsc_pwf[rt];
-            RSC_WORK_FETCH& rwf = rsc_work_fetch[rt];
-            double x = rsc_pwf.max_nused - rsc_pwf.sim_nused;
-            x = std::min(x, rwf.ninstances - rwf.sim_nused);
+
+            // x is the number of instances this project isn't using but could
+            // (given MC constraints)
+            //
+            double x = rsc_pwf.mc_max_could_use - rsc_pwf.sim_nused;
             if (x > 1e-6 && sim_now < buf_end) {
                 double dt2;
                 if (sim_now + dt > buf_end) {
@@ -484,8 +469,7 @@ void RR_SIM::simulate() {
     init_pending_lists();
 
     if (have_max_concurrent) {
-        for (unsigned int i=0; i<gstate.projects.size(); i++) {
-            PROJECT* p = gstate.projects[i];
+        for (PROJECT* p: gstate.projects) {
             p->pwf.at_max_concurrent_limit = false;
         }
     }
@@ -565,10 +549,10 @@ void RR_SIM::simulate() {
                 //
                 double frac = rpbest->uses_gpu()?gstate.overall_gpu_frac():gstate.overall_cpu_frac();
                 double dur = rpbest->estimated_runtime_remaining() / frac;
-                rsc_work_fetch[0].update_busy_time(dur, rpbest->avp->avg_ncpus);
-                int rt = rpbest->avp->gpu_usage.rsc_type;
+                rsc_work_fetch[0].update_busy_time(dur, rpbest->resource_usage.avg_ncpus);
+                int rt = rpbest->resource_usage.rsc_type;
                 if (rt) {
-                    rsc_work_fetch[rt].update_busy_time(dur, rpbest->avp->gpu_usage.usage);
+                    rsc_work_fetch[rt].update_busy_time(dur, rpbest->resource_usage.coproc_usage);
                 }
             }
         }
@@ -605,8 +589,7 @@ void RR_SIM::simulate() {
         // update project REC
         //
         double f = gstate.host_info.p_fpops;
-        for (unsigned int i=0; i<gstate.projects.size(); i++) {
-            PROJECT* p = gstate.projects[i];
+        for (PROJECT* p: gstate.projects) {
             double dtemp = sim_now;
             double x = 0;
             for (int j=0; j<coprocs.n_rsc; j++) {
@@ -686,33 +669,34 @@ void rr_simulation(const char* why) {
 }
 
 // Compute the number resources with > 0 idle instance
-// Put results in global state (rsc_work_fetch)
+// Put results in global state (rsc_work_fetch[].nidle_now)
 // This is called from the account manager logic,
 // to decide if we need to get new projects from the AM.
 //
 int n_idle_resources() {
-    int nidle_rsc = coprocs.n_rsc;
+    int nidle_rsc = 0;
+    coprocs.coprocs[0].count = gstate.n_usable_cpus;
     for (int i=0; i<coprocs.n_rsc; i++) {
-        rsc_work_fetch[i].nidle_now = coprocs.coprocs[i].count;
+        int c = coprocs.coprocs[i].count;
+        rsc_work_fetch[i].nidle_now = c;
+        if (c > 0) nidle_rsc++;
     }
-    for (unsigned int i=0; i<gstate.results.size(); i++) {
-        RESULT* rp = gstate.results[i];
+    for (RESULT* rp: gstate.results) {
         if (!rp->nearly_runnable()) continue;
         if (rp->some_download_stalled()) continue;
-        APP_VERSION* avp = rp->avp;
         if (rsc_work_fetch[0].nidle_now) {
-            rsc_work_fetch[0].nidle_now -= avp->avg_ncpus;
+            rsc_work_fetch[0].nidle_now -= rp->resource_usage.avg_ncpus;
             if (rsc_work_fetch[0].nidle_now <= 0) {
                 nidle_rsc--;
                 rsc_work_fetch[0].nidle_now = 0;
             }
         }
-        int j = avp->gpu_usage.rsc_type;
+        int j = rp->resource_usage.rsc_type;
         if (!j) {
             continue;
         }
         if (rsc_work_fetch[j].nidle_now) {
-            rsc_work_fetch[j].nidle_now -= avp->gpu_usage.usage;
+            rsc_work_fetch[j].nidle_now -= rp->resource_usage.coproc_usage;
             if (rsc_work_fetch[j].nidle_now <= 0) {
                 nidle_rsc--;
                 rsc_work_fetch[j].nidle_now = 0;

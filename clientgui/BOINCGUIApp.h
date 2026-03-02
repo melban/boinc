@@ -1,6 +1,6 @@
 // This file is part of BOINC.
 // http://boinc.berkeley.edu
-// Copyright (C) 2023 University of California
+// Copyright (C) 2025 University of California
 //
 // BOINC is free software; you can redistribute it and/or modify it
 // under the terms of the GNU Lesser General Public License
@@ -120,8 +120,10 @@ protected:
     int                 m_iShutdownCoreClient;
     int                 m_iDisplayExitDialog;
     int                 m_iDisplayShutdownConnectedClientDialog;
+    int                 m_iDisplayAnotherInstanceRunningDialog;
 #ifdef __WXMAC__
     int                 m_iHideMenuBarIcon;
+    int                 m_iWasShutDownBySystemWhileHidden;
 #endif
 
     bool                m_bGUIVisible;
@@ -180,7 +182,7 @@ public:
                                                     { return m_iBOINCMGRDisableAutoStart; }
     void                SetBOINCMGRDisableAutoStart(int iDisableAutoStart)
                                                     { m_iBOINCMGRDisableAutoStart = iDisableAutoStart; }
-
+    bool                getBOINCMGRAutoStarted() { return m_bBOINCMGRAutoStarted; }
     int                 GetBOINCMGRDisplayExitMessage()
                                                     { return m_iDisplayExitDialog; }
     void                SetBOINCMGRDisplayExitMessage(int iDisplayExitMessage)
@@ -191,11 +193,18 @@ public:
     void                SetBOINCMGRDisplayShutdownConnectedClientMessage(int iDisplayShutdownConnectedClientDialog)
                                                     { m_iDisplayShutdownConnectedClientDialog = iDisplayShutdownConnectedClientDialog; }
 
+    int                 GetBOINCMGRDisplayAnotherInstanceRunningMessage()
+                                                    { return m_iDisplayAnotherInstanceRunningDialog; }
+    void                SetBOINCMGRDisplayAnotherInstanceRunningMessage(int iDisplayAnotherInstanceRunningDialog)
+                                                    { m_iDisplayAnotherInstanceRunningDialog = iDisplayAnotherInstanceRunningDialog; }
+
 #ifdef __WXMAC__
     int                 GetBOINCMGRHideMenuBarIcon()
                                                     { return m_iHideMenuBarIcon; }
     void                SetBOINCMGRHideMenuBarIcon(int iHideMenuBarIcon)
                                                     { m_iHideMenuBarIcon = iHideMenuBarIcon; }
+    void                 SetBOINCMGRWasShutDownBySystemWhileHidden(int val)
+                                                    { m_iWasShutDownBySystemWhileHidden = val; }
 #endif
 
     bool                GetRunDaemon()
@@ -270,17 +279,13 @@ public:
     bool                WasFileModifiedBeforeSystemBoot(char * filePath);
     void                HideThisApp(void);
     void                getDisplayNameForThisApp(char* pathBuf, size_t bufSize);
-
-#if !wxCHECK_VERSION(3,0,1)
-// This should be fixed after wxCocoa 3.0.0:
-// http://trac.wxwidgets.org/ticket/16156
+    void                SetActivationPolicyAccessory(bool hideDock);
+    void                CheckPartialActivation();
+    long                GetBrandID();
 
     // Override standard wxCocoa wxApp::CallOnInit() to allow Manager
     // to run properly when launched hidden on login via Login Item.
     bool                CallOnInit();
-#endif
-
-    void                CheckPartialActivation();
 #endif
 
 DECLARE_EVENT_TABLE()

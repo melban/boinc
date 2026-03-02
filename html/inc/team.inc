@@ -86,7 +86,6 @@ function display_team_page($team, $user) {
     global $team_name_sites;
     page_head("$team->name");
 
-    echo sanitize_html($team->name_html);
     echo "<p>";
     start_table();
     row1(tra('Team info'));
@@ -461,7 +460,7 @@ function user_erase_team_delta($user) {
 }
 
 function team_edit_form($team, $label, $url) {
-    global $team_types, $recaptcha_public_key;
+    global $team_types;
     echo "<form method=post action=$url>\n";
     if ($team) {
         echo "<input type=hidden name=teamid value=$team->id>\n";
@@ -508,14 +507,18 @@ function team_edit_form($team, $label, $url) {
     row2(tra("Accept new members?"), "<input type=checkbox name=joinable $x>");
     // Check if we're using reCaptcha to prevent spam accounts
     //
-    if (!$team && $recaptcha_public_key) {
+    if (!$team && recaptcha_public_key()) {
         row2(
             "",
-            boinc_recaptcha_get_html($recaptcha_public_key)
+            boinc_recaptcha_get_html(recaptcha_public_key())
         );
     }
     row2("",
-        "<input class=\"btn btn-success\" type=submit name=new value='$label'>"
+        sprintf(
+            '<input class="btn" %s type=submit name=new value="%s">',
+            button_style(),
+            $label
+        )
     );
     end_table();
     echo "</form>\n";
@@ -631,6 +634,5 @@ function make_team(
     }
 }
 
-$cvs_version_tracker[]="\$Id$";  //Generated automatically - do not edit
 
 ?>

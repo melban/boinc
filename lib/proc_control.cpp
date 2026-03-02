@@ -1,6 +1,6 @@
 // This file is part of BOINC.
-// http://boinc.berkeley.edu
-// Copyright (C) 2020 University of California
+// https://boinc.berkeley.edu
+// Copyright (C) 2026 University of California
 //
 // BOINC is free software; you can redistribute it and/or modify it
 // under the terms of the GNU Lesser General Public License
@@ -46,9 +46,9 @@
 
 using std::vector;
 
-//#define DEBUG
+//#define DEBUG_PROC_CONTROL
 
-#ifdef DEBUG
+#ifdef DEBUG_PROC_CONTROL
 #include <stdio.h>
 #endif
 
@@ -58,8 +58,7 @@ static void get_descendants_aux(PROC_MAP& pm, int pid, vector<int>& pids) {
     PROCINFO& p = i->second;
     if (p.scanned) return;  // avoid infinite recursion
     p.scanned = true;
-    for (unsigned int j=0; j<p.children.size(); j++) {
-        int child_pid = p.children[j];
+    for (int child_pid: p.children) {
         pids.push_back(child_pid);
         get_descendants_aux(pm, child_pid, pids);
     }
@@ -74,10 +73,10 @@ void get_descendants(int pid, vector<int>& pids) {
     retval = procinfo_setup(pm);
     if (retval) return;
     get_descendants_aux(pm, pid, pids);
-#ifdef DEBUG
+#ifdef DEBUG_PROC_CONTROL
     fprintf(stderr, "descendants of %d:\n", pid);
-    for (unsigned int i=0; i<pids.size(); i++) {
-        fprintf(stderr, "   %d\n", pids[i]);
+    for (int dpid: pids) {
+        fprintf(stderr, "   %d\n", dpid);
     }
 #endif
 }
@@ -107,11 +106,11 @@ int suspend_or_resume_threads(
     DWORD n;
     static vector<DWORD> suspended_threads;
 
-#ifdef DEBUG
+#ifdef DEBUG_PROC_CONTROL
     fprintf(stderr, "start: check_exempt %d %s\n", check_exempt, precision_time_to_string(dtime()));
     fprintf(stderr, "%s processes", resume?"resume":"suspend");
-    for (unsigned int i=0; i<pids.size(); i++) {
-        fprintf(stderr, " %d", pids[i]);
+    for (int pid: pids) {
+        fprintf(stderr, " %d", pid);
     }
     fprintf(stderr, "\n");
 #endif
@@ -135,12 +134,12 @@ int suspend_or_resume_threads(
 
     do {
         if (check_exempt && !diagnostics_is_thread_exempt_suspend(te.th32ThreadID)) {
-#ifdef DEBUG
+#ifdef DEBUG_PROC_CONTROL
             fprintf(stderr, "thread is exempt\n");
 #endif
             continue;
         }
-#ifdef DEBUG
+#ifdef DEBUG_PROC_CONTROL
         fprintf(stderr, "thread %d PID %d %s\n",
             te.th32ThreadID, te.th32OwnerProcessID,
             precision_time_to_string(dtime())
@@ -157,7 +156,7 @@ int suspend_or_resume_threads(
                 te.th32ThreadID
             ) != suspended_threads.end()) {
                 n = ResumeThread(thread);
-#ifdef DEBUG
+#ifdef DEBUG_PROC_CONTROL
                 fprintf(stderr, "ResumeThread returns %d\n", n);
 #endif
             } else {
@@ -166,7 +165,7 @@ int suspend_or_resume_threads(
         } else {
             n = SuspendThread(thread);
             suspended_threads.push_back(te.th32ThreadID);
-#ifdef DEBUG
+#ifdef DEBUG_PROC_CONTROL
             fprintf(stderr, "SuspendThread returns %d\n", n);
 #endif
         }
@@ -175,7 +174,7 @@ int suspend_or_resume_threads(
     } while (Thread32Next(threads, &te));
 
     CloseHandle (threads);
-#ifdef DEBUG
+#ifdef DEBUG_PROC_CONTROL
     fprintf(stderr, "end: %s\n", precision_time_to_string(dtime()));
 #endif
     return retval;
@@ -185,8 +184,8 @@ int suspend_or_resume_threads(
 
 bool any_process_exists(vector<int>& pids) {
     int status;
-    for (unsigned int i=0; i<pids.size(); i++) {
-        if (waitpid(pids[i], &status, WNOHANG) >= 0) {
+    for (int pid: pids) {
+        if (waitpid(pid, &status, WNOHANG) >= 0) {
             return true;
         }
     }
@@ -196,14 +195,14 @@ bool any_process_exists(vector<int>& pids) {
 #endif
 
 void kill_all(vector<int>& pids) {
-    for (unsigned int i=0; i<pids.size(); i++) {
+    for (int pid: pids) {
 #ifdef _WIN32
-        HANDLE h = OpenProcess(READ_CONTROL | PROCESS_TERMINATE, false, pids[i]);
+        HANDLE h = OpenProcess(READ_CONTROL | PROCESS_TERMINATE, false, pid);
         if (h == NULL) continue;
         TerminateProcess(h, 0);
         CloseHandle(h);
 #else
-        kill(pids[i], SIGTERM);
+        kill(pid, SIGTERM);
 #endif
     }
 }
@@ -264,8 +263,8 @@ void suspend_or_resume_descendants(bool resume, bool use_tstp) {
     vector<int> descendants;
     int pid = getpid();
     get_descendants(pid, descendants);
-    for (unsigned int i=0; i<descendants.size(); i++) {
-        kill(descendants[i], resume?SIGCONT:(use_tstp?SIGTSTP:SIGSTOP));
+    for (int dpid: descendants) {
+        kill(dpid, resume?SIGCONT:(use_tstp?SIGTSTP:SIGSTOP));
     }
 }
 #endif

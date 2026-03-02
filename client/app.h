@@ -53,12 +53,14 @@ typedef int PROCESS_ID;
 
 // Represents a job in progress.
 
-// When an active task is created, it is assigned a "slot"
+// When a job is started, it is assigned a "slot"
 // which determines the directory it runs in.
-// This doesn't change over the life of the active task;
-// thus the task can use the slot directory for temp files
+// This doesn't change over the life of the job;
+// so it can use the slot directory for temp files
 // that BOINC doesn't know about.
 
+// If you add anything, initialize it in the constructor
+//
 struct ACTIVE_TASK {
 #ifdef _WIN32
     HANDLE process_handle, shm_handle;
@@ -100,8 +102,12 @@ struct ACTIVE_TASK {
         // most recent CPU time reported by app
     bool once_ran_edf;
 
-    // END OF ITEMS SAVED IN STATE FILE
+    // END OF ITEMS SAVED IN STATE FILES
 
+    double wss_from_app;
+        // work set size reported by the app
+        // (e.g. docker_wrapper does this).
+        // If nonzero, use this instead of procinfo data
     double fraction_done;
         // App's estimate of how much of the work unit is done.
         // Passed from the application via an API call;
@@ -227,37 +233,48 @@ struct ACTIVE_TASK {
         // This is compared with project-specified limits
         // to decide whether to abort job; no other use.
     int get_free_slot(RESULT*);
-    int start(bool test=false);         // start a process
+    int setup_slot_dir(char *buf, unsigned int size);
+    int start();
 
     // Termination stuff.
     // Terminology:
-    // "kill": forcibly kill the main process and all its descendants.
-    // "request exit": send a request-exit message, and enumerate descendants.
+    // "kill" means kill the main process and all its descendants,
+    //      with SIGKILL on Unix or TerminateProcess on Win
+    // "request_quit": send a quit message, and enumerate descendants.
     //      If after 15 secs any processes remain, kill them
+    //      Use this if the job will be restarted in the future.
     //      called from:
     //          task preemption
-    //          project detach or reset
+    //          client exit
     //      implementation:
     //          sends msg, sets quit_time, state QUIT_PENDING;
     //              get list of descendants
     //          normal exit handled in handle_premature_exit()
     //          timeout handled in ACTIVE_TASK_SET::poll()
-    // "abort_task": like request exit,
-    //      but the app is supposed to write a stack trace to stderr
-    //      called from: rsc exceeded; got ack of running task;
+    // "request_abort": like request quit,
+    //      but send an abort message rather than quit.
+    //      Use this if the job won't be restarted.
+    //      called from:
+    //          project detach or reset
+    //          rsc limit exceeded
+    //          abort request from server
     //          intermediate upload failure
     //          client exiting w/ abort_jobs_on_exit set
+    //      If it gets this, the BOINC API library
+    //      tries to write the call stack to stderr
+    //      so you can e.g. see where an infinite loop happened
     //
-    int request_exit();
+    int request_quit();
     int request_abort();
     int kill_running_task(bool will_restart);
-        // Kill process and subsidiary processes forcibly.
-        // Unix: send a SIGKILL signal, Windows: TerminateProcess()
+        // Kill process and subsidiary processes.
     int kill_subsidiary_processes();
         // kill subsidiary processes of a job
         // whose main process has already exited
     int abort_task(int exit_status, const char*);
         // can be called whether or not process exists
+        // if process exists, request_abort()
+        // else just mark task as aborted
 
     // is the GPU task running or suspended (due to CPU throttling)
     //
@@ -276,8 +293,8 @@ struct ACTIVE_TASK {
         // return true if this task has exited
 
     int suspend();
-        // tell a process to stop executing (but stay in mem)
-        // Done by sending it a <suspend> message
+        // sending process a <suspend> message;
+        // tells it to stop executing but stay in mem
     int unsuspend(int reason=0);
         // Undo a suspend: send a <resume> message
     int preempt(PREEMPT_TYPE preempt_type, int reason=0);
@@ -307,8 +324,8 @@ struct ACTIVE_TASK {
     int handle_upload_files();
     void upload_notify_app(const FILE_INFO*, const FILE_REF*);
     int copy_output_files();
-    int setup_file(FILE_INFO*, FILE_REF&, char*, bool, bool);
-    bool must_copy_file(FILE_REF&, bool);
+    int setup_file(FILE_INFO*, const FILE_REF&, char*, bool, bool);
+    bool must_copy_file(const FILE_REF&, bool);
     void write_task_state_file();
     void read_task_state_file();
 
@@ -331,15 +348,14 @@ public:
     void suspend_all(int reason);
     void unsuspend_all(int reason=0);
     bool is_task_executing();
-    void request_tasks_exit(PROJECT* p=0);
-    int wait_for_exit(double, PROJECT* p=0);
-    int exit_tasks(PROJECT* p=0);
+    void request_tasks_exit(bool will_restart, PROJECT* p);
+    int wait_for_exit(double, PROJECT* p);
+    int exit_tasks(bool will_restart, PROJECT* p);
     void kill_tasks(PROJECT* p=0);
     int abort_project(PROJECT*);
     void get_msgs();
     bool check_app_exited();
     bool check_rsc_limits_exceeded();
-    bool check_quit_timeout_exceeded();
     bool is_slot_in_use(int);
     bool is_slot_dir_in_use(char*);
     void send_heartbeats();

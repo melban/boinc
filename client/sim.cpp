@@ -133,13 +133,13 @@ void usage(char* prog) {
     exit(1);
 }
 
-// peak flops of an app version
+// peak flops of a result
 //
-double app_peak_flops(APP_VERSION* avp, double cpu_scale) {
-    double x = avp->avg_ncpus*cpu_scale;
-    int rt = avp->gpu_usage.rsc_type;
+double app_peak_flops(RESULT* rp, double cpu_scale) {
+    double x = rp->resource_usage.avg_ncpus*cpu_scale;
+    int rt = rp->resource_usage.rsc_type;
     if (rt) {
-        x += avp->gpu_usage.usage * rsc_work_fetch[rt].relative_speed;
+        x += rp->resource_usage.coproc_usage * rsc_work_fetch[rt].relative_speed;
     }
     x *= gstate.host_info.p_fpops;
     return x;
@@ -158,8 +158,7 @@ double cpu_peak_flops() {
 }
 
 void print_project_results(FILE* f) {
-    for (unsigned int i=0; i<gstate.projects.size(); i++) {
-        PROJECT* p = gstate.projects[i];
+    for (PROJECT* p: gstate.projects) {
         p->print_results(f, sim_results);
     }
 }
@@ -167,13 +166,11 @@ void print_project_results(FILE* f) {
 APP* choose_app(vector<APP*>& apps) {
     double x = drand();
     double sum = 0;
-    unsigned int i;
 
-    for (i=0; i<apps.size(); i++) {
-        sum += apps[i]->weight;
+    for (APP* app: apps) {
+        sum += app->weight;
     }
-    for (i=0; i<apps.size(); i++) {
-        APP* app = apps[i];
+    for (APP* app: apps) {
         x -= app->weight/sum;
         if (x <= 0) {
             return app;
@@ -184,7 +181,7 @@ APP* choose_app(vector<APP*>& apps) {
 
 bool app_version_needs_work(APP_VERSION* avp) {
     if (avp->dont_use) return false;
-    int rt = avp->gpu_usage.rsc_type;
+    int rt = avp->resource_usage.rsc_type;
     if (rt) {
         return (rsc_work_fetch[rt].req_secs>0 || rsc_work_fetch[rt].req_instances>0);
     }
@@ -192,8 +189,7 @@ bool app_version_needs_work(APP_VERSION* avp) {
 }
 
 bool has_app_version_needing_work(APP* app) {
-    for (unsigned int i=0; i<gstate.app_versions.size(); i++) {
-        APP_VERSION* avp = gstate.app_versions[i];
+    for (APP_VERSION* avp: gstate.app_versions) {
         if (avp->app != app) continue;
         if (app_version_needs_work(avp)) return true;
     }
@@ -204,13 +200,12 @@ bool has_app_version_needing_work(APP* app) {
 //
 APP_VERSION* choose_app_version(APP* app) {
     APP_VERSION* best_avp = NULL;
-    for (unsigned int i=0; i<gstate.app_versions.size(); i++) {
-        APP_VERSION* avp = gstate.app_versions[i];
+    for (APP_VERSION* avp: gstate.app_versions) {
         if (avp->app != app) continue;
         if (!app_version_needs_work(avp)) continue;
         if (!best_avp) {
             best_avp = avp;
-        } else if (avp->flops > best_avp->flops) {
+        } else if (avp->resource_usage.flops > best_avp->resource_usage.flops) {
             best_avp = avp;
         }
     }
@@ -225,15 +220,16 @@ void make_job(
 ) {
     APP* app = choose_app(app_list);
     APP_VERSION* avp = choose_app_version(app);
-    rp->clear();
-    rp->avp = avp;
-    rp->app = app;
-    if (!rp->avp) {
+    if (!avp) {
         fprintf(stderr, "ERROR - NO APP VERSION\n");
         exit(1);
     }
+    rp->clear();
+    rp->avp = avp;
+    rp->app = app;
     rp->project = p;
     rp->wup = wup;
+    rp->resource_usage = avp->resource_usage;
     sprintf(rp->name, "%s_%d", p->project_name, p->result_index++);
     wup->project = p;
     wup->rsc_fpops_est = app->fpops_est;
@@ -294,8 +290,7 @@ void CLIENT_STATE::handle_completed_results(PROJECT* p) {
 // and get an initial schedule for them
 //
 void CLIENT_STATE::get_workload(vector<IP_RESULT>& ip_results) {
-    for (unsigned int i=0; i<results.size(); i++) {
-        RESULT* rp = results[i];
+    for (RESULT* rp: results) {
         double x = rp->estimated_runtime_remaining();
         if (x == 0) continue;
         IP_RESULT ipr(rp->name, rp->report_deadline-now, x);
@@ -307,8 +302,7 @@ void CLIENT_STATE::get_workload(vector<IP_RESULT>& ip_results) {
 
 void get_apps_needing_work(PROJECT* p, vector<APP*>& apps) {
     apps.clear();
-    for (unsigned int i=0; i<gstate.apps.size(); i++) {
-        APP* app = gstate.apps[i];
+    for (APP* app: gstate.apps) {
         if (app->project != p) continue;
         if (app->ignore) continue;
         if (!has_app_version_needing_work(app)) continue;
@@ -325,18 +319,21 @@ void decrement_request_rsc(
 }
 
 void decrement_request(RESULT* rp) {
-    APP_VERSION* avp = rp->avp;
-    double est_runtime = rp->wup->rsc_fpops_est/avp->flops;
+    double est_runtime = rp->wup->rsc_fpops_est/rp->resource_usage.flops;
     est_runtime /= (gstate.time_stats.on_frac*gstate.time_stats.active_frac);
-    decrement_request_rsc(rsc_work_fetch[0], avp->avg_ncpus, est_runtime);
-    int rt = avp->gpu_usage.rsc_type;
+    decrement_request_rsc(
+        rsc_work_fetch[0], rp->resource_usage.avg_ncpus, est_runtime
+    );
+    int rt = rp->resource_usage.rsc_type;
     if (rt) {
-        decrement_request_rsc(rsc_work_fetch[rt], avp->gpu_usage.usage, est_runtime);
+        decrement_request_rsc(
+            rsc_work_fetch[rt], rp->resource_usage.coproc_usage, est_runtime
+        );
     }
 }
 
 double get_estimated_delay(RESULT* rp) {
-    int rt = rp->avp->gpu_usage.rsc_type;
+    int rt = rp->resource_usage.rsc_type;
     return rsc_work_fetch[rt].estimated_delay;
 }
 
@@ -389,8 +386,8 @@ bool CLIENT_STATE::simulate_rpc(PROJECT* p) {
         }
     }
 
-    for (unsigned int i=0; i<app_versions.size(); i++) {
-        app_versions[i]->dont_use = false;
+    for (APP_VERSION* avp: app_versions) {
+        avp->dont_use = false;
     }
 
     work_fetch.request_string(buf2, sizeof(buf2));
@@ -415,7 +412,7 @@ bool CLIENT_STATE::simulate_rpc(PROJECT* p) {
         WORKUNIT* wup = new WORKUNIT;
         make_job(p, wup, rp, wapps);
 
-        double et = wup->rsc_fpops_est / rp->avp->flops;
+        double et = wup->rsc_fpops_est / rp->resource_usage.flops;
         if (server_uses_workload) {
             IP_RESULT c(rp->name, rp->report_deadline-now, et);
             if (check_candidate(c, n_usable_cpus, ip_results)) {
@@ -486,7 +483,7 @@ void PROJECT::backoff() {
 }
 
 bool CLIENT_STATE::scheduler_rpc_poll() {
-    PROJECT *p;
+    PROJECT* p;
     bool action = false;
     static double last_time=0;
     static double last_work_fetch_time = 0;
@@ -556,7 +553,6 @@ bool CLIENT_STATE::scheduler_rpc_poll() {
 }
 
 bool ACTIVE_TASK_SET::poll() {
-    unsigned int i;
     char buf[256];
     bool action = false;
     static double last_time = START_TIME;
@@ -566,11 +562,9 @@ bool ACTIVE_TASK_SET::poll() {
     if (diff > delta) {
         diff = 0;
     }
-    PROJECT* p;
     int n;
 
-    for (i=0; i<gstate.projects.size(); i++) {
-        p = gstate.projects[i];
+    for (PROJECT* p: gstate.projects) {
         p->idle = true;
     }
 
@@ -590,16 +584,15 @@ bool ACTIVE_TASK_SET::poll() {
     //
     double cpu_usage_cpu=0;
     double cpu_usage_gpu=0;
-    for (i=0; i<active_tasks.size(); i++) {
-        ACTIVE_TASK* atp = active_tasks[i];
+    for (ACTIVE_TASK* atp: active_tasks) {
         if (atp->task_state() != PROCESS_EXECUTING) continue;
         RESULT* rp = atp->result;
         if (rp->uses_gpu()) {
             if (gpu_active) {
-                cpu_usage_gpu += rp->avp->avg_ncpus;
+                cpu_usage_gpu += rp->resource_usage.avg_ncpus;
             }
         } else {
-            cpu_usage_cpu += rp->avp->avg_ncpus;
+            cpu_usage_cpu += rp->resource_usage.avg_ncpus;
         }
     }
     double cpu_usage = cpu_usage_cpu + cpu_usage_gpu;
@@ -612,15 +605,14 @@ bool ACTIVE_TASK_SET::poll() {
     }
 
     double used = 0;
-    for (i=0; i<active_tasks.size(); i++) {
-        ACTIVE_TASK* atp = active_tasks[i];
+    for (ACTIVE_TASK* atp: active_tasks) {
         if (atp->task_state() != PROCESS_EXECUTING) continue;
         RESULT* rp = atp->result;
         if (!gpu_active && rp->uses_gpu()) {
             continue;
         }
         atp->elapsed_time += diff;
-        double flops = rp->avp->flops;
+        double flops = rp->resource_usage.flops;
         if (!rp->uses_gpu()) {
             flops *= cpu_scale;
         }
@@ -641,7 +633,7 @@ bool ACTIVE_TASK_SET::poll() {
             html_msg += buf;
             action = true;
         }
-        double pf = diff * app_peak_flops(rp->avp, cpu_scale);
+        double pf = diff * app_peak_flops(rp, cpu_scale);
         rp->project->project_results.flops_used += pf;
         rp->peak_flop_count += pf;
         sim_results.flops_used += pf;
@@ -649,8 +641,7 @@ bool ACTIVE_TASK_SET::poll() {
         rp->project->idle = false;
     }
 
-    for (i=0; i<gstate.projects.size(); i++) {
-        p = gstate.projects[i];
+    for (PROJECT* p: gstate.projects) {
         if (p->idle) {
             p->idle_time += diff;
             p->idle_time_sumsq += diff*(p->idle_time*p->idle_time);
@@ -671,17 +662,13 @@ bool ACTIVE_TASK_SET::poll() {
 // add up |X-Y| over all projects, and divide by total flops
 //
 double CLIENT_STATE::share_violation() {
-    unsigned int i;
-
     double tot = 0, trs=0;
-    for (i=0; i<projects.size(); i++) {
-        PROJECT* p = projects[i];
+    for (PROJECT* p: projects) {
         tot += p->project_results.flops_used;
         trs += p->resource_share;
     }
     double sum = 0;
-    for (i=0; i<projects.size(); i++) {
-        PROJECT* p = projects[i];
+    for (PROJECT* p: projects) {
         double t = p->project_results.flops_used;
         double rs = p->resource_share/trs;
         double rt = tot*rs;
@@ -704,9 +691,7 @@ double CLIENT_STATE::share_violation() {
 double CLIENT_STATE::monotony() {
     double sum = 0;
     double schedint = global_prefs.cpu_scheduling_period();
-    unsigned int i;
-    for (i=0; i<projects.size(); i++) {
-        PROJECT* p = projects[i];
+    for (PROJECT* p: projects) {
         double avg_ss = p->idle_time_sumsq/active_time;
         double s = sqrt(avg_ss);
         sum += s;
@@ -814,8 +799,7 @@ void show_project_colors() {
         "<table>\n"
         "  <tr><th>Project</th><th>Resource share</th></tr>\n"
     );
-    for (unsigned int i=0; i<gstate.projects.size(); i++) {
-        PROJECT* p = gstate.projects[i];
+    for (PROJECT* p: gstate.projects) {
         fprintf(html_out,
             "<tr><td bgcolor=%s><font color=ffffff>%s</font></td><td>%.0f</td></tr>\n",
             colors[p->proj_index%NCOLORS], p->project_name, p->resource_share
@@ -826,9 +810,7 @@ void show_project_colors() {
 
 void job_count(PROJECT* p, int rsc_type, int& in_progress, int& done) {
     in_progress = done = 0;
-    unsigned int i;
-    for (i=0; i<gstate.results.size(); i++) {
-        RESULT* rp = gstate.results[i];
+    for (RESULT* rp: gstate.results) {
         if (rp->project != p) continue;
         if (rp->resource_type() != rsc_type) continue;
         if (rp->state() < RESULT_FILES_UPLOADED) {
@@ -840,29 +822,27 @@ void job_count(PROJECT* p, int rsc_type, int& in_progress, int& done) {
 }
 
 void show_resource(int rsc_type) {
-    unsigned int i;
     char buf[256];
 
     fprintf(html_out, "<td width=%d valign=top>", WIDTH2);
     bool found = false;
-    for (i=0; i<gstate.active_tasks.active_tasks.size(); i++) {
-        ACTIVE_TASK* atp = gstate.active_tasks.active_tasks[i];
-        RESULT* rp = atp->result;
+    for (ACTIVE_TASK* atp: gstate.active_tasks.active_tasks) {
         if (atp->task_state() != PROCESS_EXECUTING) continue;
+        RESULT* rp = atp->result;
+        PROJECT* p = rp->project;
         double ninst=0;
         if (rsc_type) {
-            if (rp->avp->gpu_usage.rsc_type != rsc_type) continue;
-            ninst = rp->avp->gpu_usage.usage;
+            if (rp->resource_usage.rsc_type != rsc_type) continue;
+            ninst = rp->resource_usage.coproc_usage;
         } else {
-            ninst = rp->avp->avg_ncpus;
+            ninst = rp->resource_usage.avg_ncpus;
         }
 
-        PROJECT* p = rp->project;
         if (!found) {
             found = true;
             fprintf(html_out,
                 "<table>\n"
-                "<tr><th>#devs</th><th>Job name (* = high priority)</th><th>GFLOPs left</th>%s</tr>\n",
+                "<tr><th>#devs</th><th>App</th><th>Job name (* = high priority)</th><th>GFLOPs left</th>%s</tr>\n",
                 rsc_type?"<th>GPU</th>":""
             );
         }
@@ -871,8 +851,9 @@ void show_resource(int rsc_type) {
         } else {
             safe_strcpy(buf, "");
         }
-        fprintf(html_out, "<tr valign=top><td>%.2f</td><td bgcolor=%s><font color=#ffffff>%s%s</font></td><td>%.0f</td>%s</tr>\n",
+        fprintf(html_out, "<tr valign=top><td>%.2f</td><td>%s</td><td bgcolor=%s><font color=#ffffff>%s%s</font></td><td>%.0f</td>%s</tr>\n",
             ninst,
+            rp->wup->app->name,
             colors[p->proj_index%NCOLORS],
             rp->edf_scheduled?"*":"",
             rp->name,
@@ -889,8 +870,7 @@ void show_resource(int rsc_type) {
         "<table><tr><td>Project</td><td>In progress</td><td>done</td><td>REC</td></tr>\n"
     );
     found = false;
-    for (i=0; i<gstate.projects.size(); i++) {
-        PROJECT* p = gstate.projects[i];
+    for (PROJECT* p: gstate.projects) {
         int in_progress, done;
         job_count(p, rsc_type, in_progress, done);
         if (in_progress || done) {
@@ -1008,14 +988,12 @@ void html_end() {
 }
 
 void set_initial_rec() {
-    unsigned int i;
     double sum=0;
     double x = cpu_peak_flops() + gpu_peak_flops();
-    for (i=0; i<gstate.projects.size(); i++) {
-        sum += gstate.projects[i]->resource_share;
+    for (PROJECT* p: gstate.projects) {
+        sum += p->resource_share;
     }
-    for (i=0; i<gstate.projects.size(); i++) {
-        PROJECT* p = gstate.projects[i];
+    for (PROJECT* p: gstate.projects) {
         p->pwf.rec = 86400*x*(p->resource_share/sum)/1e9;
     }
 }
@@ -1031,8 +1009,7 @@ void write_recs() {
         gstate.projects.end(),
         compare_names
     );
-    for (unsigned int i=0; i<gstate.projects.size(); i++) {
-        PROJECT* p = gstate.projects[i];
+    for (PROJECT* p: gstate.projects) {
         fprintf(rec_file, "%f ", p->pwf.rec);
     }
     fprintf(rec_file, "\n");
@@ -1050,12 +1027,13 @@ void make_graph(const char* title, const char* fname, int field) {
         "plot ",
         title
     );
-    for (unsigned int i=0; i<gstate.projects.size(); i++) {
-        PROJECT* p = gstate.projects[i];
+    unsigned int i=0;
+    for (PROJECT* p: gstate.projects) {
         fprintf(f, "\"%srec.dat\" using 1:%d title \"%s\" with lines%s",
             outfile_prefix, 2+i+field, p->project_name,
             (i==gstate.projects.size()-1)?"\n":", \\\n"
         );
+        i++;
     }
     fclose(f);
     snprintf(png_fname, sizeof(png_fname), "%s%s.png", outfile_prefix, fname);
@@ -1120,14 +1098,13 @@ void simulate() {
         cc_config.rec_half_life
     );
     fprintf(summary_file, "Jobs\n");
-    for (unsigned int i=0; i<gstate.results.size(); i++) {
-        RESULT* rp = gstate.results[i];
+    for (RESULT* rp: gstate.results) {
         fprintf(summary_file,
             "   %s %s (%s)\n      time left %s deadline %s\n",
             rp->project->project_name,
             rp->name,
-            rsc_name_long(rp->avp->gpu_usage.rsc_type),
-            timediff_format(rp->sim_flops_left/rp->avp->flops).c_str(),
+            rsc_name_long(rp->resource_usage.rsc_type),
+            timediff_format(rp->sim_flops_left/rp->resource_usage.flops).c_str(),
             timediff_format(rp->report_deadline - START_TIME).c_str()
         );
     }
@@ -1176,8 +1153,7 @@ void simulate() {
             }
         }
         //msg_printf(0, MSG_INFO, "took time step");
-        for (unsigned int i=0; i<gstate.active_tasks.active_tasks.size(); i++) {
-            ACTIVE_TASK* atp = gstate.active_tasks.active_tasks[i];
+        for (ACTIVE_TASK* atp: gstate.active_tasks.active_tasks) {
             if (atp->task_state() == PROCESS_EXECUTING) {
                 atp->elapsed_time += delta;
             }
@@ -1205,26 +1181,25 @@ void show_app(APP* app) {
     } else {
         fprintf(summary_file, "\n");
     }
-    for (unsigned int i=0; i<gstate.app_versions.size(); i++) {
-        APP_VERSION* avp = gstate.app_versions[i];
+    for (APP_VERSION* avp: gstate.app_versions) {
         if (avp->app != app) continue;
-        if (avp->gpu_usage.rsc_type) {
+        if (avp->resource_usage.rsc_type) {
             fprintf(summary_file,
                 "      app version %d (%s)\n"
                 "         %.2f CPUs, %.2f %s GPUs, %.0f GFLOPS\n",
                 avp->version_num, avp->plan_class,
-                avp->avg_ncpus,
-                avp->gpu_usage.usage,
-                rsc_name(avp->gpu_usage.rsc_type),
-                avp->flops/1e9
+                avp->resource_usage.avg_ncpus,
+                avp->resource_usage.coproc_usage,
+                rsc_name(avp->resource_usage.rsc_type),
+                avp->resource_usage.flops/1e9
             );
         } else {
             fprintf(summary_file,
                 "      app version %d (%s)\n"
                 "         %.2f CPUs, %.0f GFLOPS\n",
                 avp->version_num, avp->plan_class,
-                avp->avg_ncpus,
-                avp->flops/1e9
+                avp->resource_usage.avg_ncpus,
+                avp->resource_usage.flops/1e9
             );
         }
     }
@@ -1238,12 +1213,8 @@ void show_app(APP* app) {
 // - app.latency_bound and app.fpops_est are populated
 //
 void get_app_params() {
-    APP* app;
-    unsigned int i, j;
-
-    for (i=0; i<gstate.results.size(); i++) {
-        RESULT* rp = gstate.results[i];
-        app = rp->app;
+    for (RESULT* rp: gstate.results) {
+        APP *app = rp->app;
         double latency_bound = rp->report_deadline - rp->received_time;
         if (!app->latency_bound) {
             app->latency_bound = latency_bound;
@@ -1252,28 +1223,23 @@ void get_app_params() {
         rp->report_deadline = START_TIME + latency_bound;
         rp->sim_flops_left = rp->wup->rsc_fpops_est;
     }
-    for (i=0; i<gstate.workunits.size(); i++) {
-        WORKUNIT* wup = gstate.workunits[i];
-        app = wup->app;
+    for (WORKUNIT* wup: gstate.workunits) {
+        APP *app = wup->app;
         if (!app->fpops_est) {
             app->fpops_est = wup->rsc_fpops_est;
         }
     }
-    for (i=0; i<gstate.apps.size(); i++) {
-        app = gstate.apps[i];
+    for (APP* app: gstate.apps) {
         app->ignore = true;
     }
-    for (i=0; i<gstate.app_versions.size(); i++) {
-        APP_VERSION* avp = gstate.app_versions[i];
-        if (avp->missing_coproc) continue;
+    for (APP_VERSION* avp: gstate.app_versions) {
+        if (avp->resource_usage.missing_coproc) continue;
         avp->app->ignore = false;
     }
     fprintf(summary_file, "Applications and version\n");
-    for (j=0; j<gstate.projects.size(); j++) {
-        PROJECT* p = gstate.projects[j];
+    for (PROJECT* p: gstate.projects) {
         fprintf(summary_file, "%s\n", p->project_name);
-        for (i=0; i<gstate.apps.size(); i++) {
-            app = gstate.apps[i];
+        for (APP *app: gstate.apps) {
             if (app->project != p) continue;
 
             if (app->ignore) {
@@ -1336,11 +1302,9 @@ void get_app_params() {
 // zero backoffs and REC
 //
 void clear_backoff() {
-    unsigned int i;
-    for (i=0; i<gstate.projects.size(); i++) {
-        PROJECT* p = gstate.projects[i];
+    for (PROJECT* p: gstate.projects) {
         for (int j=0; j<coprocs.n_rsc; j++) {
-            p->rsc_pwf[j].reset();
+            p->rsc_pwf[j].reset(j);
         }
         p->min_rpc_time = 0;
     }
@@ -1350,25 +1314,18 @@ void clear_backoff() {
 // then projects with no apps
 //
 void cull_projects() {
-    unsigned int i;
-    PROJECT* p;
-
-    for (i=0; i<gstate.projects.size(); i++) {
-        p = gstate.projects[i];
+    for (PROJECT* p: gstate.projects) {
         p->no_apps = true;
     }
-    for (i=0; i<gstate.app_versions.size(); i++) {
-        APP_VERSION* avp = gstate.app_versions[i];
+    for (APP_VERSION* avp: gstate.app_versions) {
         if (avp->app->ignore) continue;
     }
-    for (i=0; i<gstate.apps.size(); i++) {
-        APP* app = gstate.apps[i];
+    for (APP* app: gstate.apps) {
         if (!app->ignore) {
             app->project->no_apps = false;
         }
     }
-    for (i=0; i<gstate.projects.size(); i++) {
-        p = gstate.projects[i];
+    for (PROJECT* p: gstate.projects) {
         if (p->no_apps) {
             fprintf(summary_file,
                 "%s: Removing from simulation - no apps\n",
@@ -1407,7 +1364,7 @@ void cull_projects() {
 
     vector<PROJECT*>::iterator iter = gstate.projects.begin();
     while (iter != gstate.projects.end()) {
-        p = *iter;
+        PROJECT* p = *iter;
         if (p->ignore) {
             iter = gstate.projects.erase(iter);
         } else {
@@ -1451,8 +1408,7 @@ void do_client_simulation() {
 
     // if tasks have pending transfers, mark as completed
     //
-    for (unsigned int i=0; i<gstate.results.size(); i++) {
-        RESULT* rp = gstate.results[i];
+    for (RESULT* rp: gstate.results) {
         if (rp->state() < RESULT_FILES_DOWNLOADED) {
             rp->set_state(RESULT_FILES_DOWNLOADED, "init");
         } else if (rp->state() == RESULT_FILES_UPLOADING) {
@@ -1496,8 +1452,8 @@ void do_client_simulation() {
     fprintf(summary_file, "--------------------------\n");
 
     int j=0;
-    for (unsigned int i=0; i<gstate.projects.size(); i++) {
-        gstate.projects[i]->proj_index = j++;
+    for (PROJECT* p: gstate.projects) {
+        p->proj_index = j++;
     }
 
     clear_backoff();

@@ -1,6 +1,6 @@
 // This file is part of BOINC.
-// http://boinc.berkeley.edu
-// Copyright (C) 2019 University of California
+// https://boinc.berkeley.edu
+// Copyright (C) 2026 University of California
 //
 // BOINC is free software; you can redistribute it and/or modify it
 // under the terms of the GNU Lesser General Public License
@@ -155,8 +155,7 @@ bool host_has_file(char *filename, bool skip_last_wu) {
     // loop over files already on host to see if host already has the
     // file
     //
-    for (i=0; i<(int)g_request->file_infos.size(); i++) {
-        FILE_INFO& fi = g_request->file_infos[i];
+    for (const FILE_INFO& fi: g_request->file_infos) {
         if (!strcmp(filename, fi.name)) {
             has_file=true;
             break;
@@ -332,7 +331,16 @@ static int possibly_send_result(SCHED_DB_RESULT& result) {
         if (count > 0) return ERR_WU_USER_RULE;
     }
 
-    return add_result_to_reply(result, wu, bavp, true);
+    HOST_USAGE hu;
+    BUDA_VARIANT *bvp = NULL;
+    if (is_buda(wu)) {
+        if (!choose_buda_variant(wu, -1, &bvp, hu)) {
+            return -1;
+        }
+    } else {
+        hu = bavp->host_usage;
+    }
+    return add_result_to_reply(result, wu, bavp, hu, bvp, false);
 }
 
 // Retrieves and returns a trigger instance identified by the given

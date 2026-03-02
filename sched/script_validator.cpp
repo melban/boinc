@@ -1,6 +1,6 @@
 // This file is part of BOINC.
-// http://boinc.berkeley.edu
-// Copyright (C) 2020 University of California
+// https://boinc.berkeley.edu
+// Copyright (C) 2026 University of California
 //
 // BOINC is free software; you can redistribute it and/or modify it
 // under the terms of the GNU Lesser General Public License
@@ -104,12 +104,17 @@ void validate_handler_usage() {
     );
 }
 
-int init_result(RESULT& result, void*&) {
+// run script to check a result
+// if script exits with VAL_RESULT_TRANSIENT_ERROR, return that;
+// the WU will be validated again after a delay.
+//
+// any other nonzero return means the result is not valid
+//
+int init_result(const RESULT& result, void*&) {
     if (init_script.empty()) {
         return 0;
     }
 
-    unsigned int i, j;
     char buf[256];
     vector<string> paths;
     int retval;
@@ -120,13 +125,12 @@ int init_result(RESULT& result, void*&) {
         return retval;
     }
 
-
     char cmd[4096];
     sprintf(cmd, "../bin/%s", init_script[0].c_str());
-    for (i=1; i<init_script.size(); i++) {
+    for (unsigned i=1; i<init_script.size(); i++) {
         string& s = init_script[i];
         if (s == "files") {
-            for (j=0; j<paths.size(); j++) {
+            for (unsigned j=0; j<paths.size(); j++) {
                 strcat(cmd, " ");
                 strcat(cmd, paths[j].c_str());
             }
@@ -139,10 +143,22 @@ int init_result(RESULT& result, void*&) {
         }
     }
     retval = system(cmd);
-    if (retval) {
-        return retval;
+    if (WIFEXITED(retval)) {
+        int s = WEXITSTATUS(retval);
+        if (!s) return 0;
+        if (s == VAL_RESULT_TRANSIENT_ERROR) {
+            log_messages.printf(MSG_NORMAL,
+                "init script return transient error"
+            );
+            return VAL_RESULT_TRANSIENT_ERROR;
+        }
+        log_messages.printf(MSG_NORMAL,
+            "init script %s returned: %d\n", cmd, s
+        );
+        return -1;
     }
-    return 0;
+    log_messages.printf(MSG_CRITICAL, "init script %s didn't exit\n", cmd);
+    return -1;
 }
 
 int compare_results(RESULT& r1, void*, RESULT const& r2, void*, bool& match) {
@@ -151,7 +167,6 @@ int compare_results(RESULT& r1, void*, RESULT const& r2, void*, bool& match) {
         return 0;
     }
 
-    unsigned int i, j;
     char buf[256];
     vector<string> paths1, paths2;
     int retval;
@@ -169,15 +184,15 @@ int compare_results(RESULT& r1, void*, RESULT const& r2, void*, bool& match) {
 
     char cmd[4096];
     sprintf(cmd, "../bin/%s", compare_script[0].c_str());
-    for (i=1; i<compare_script.size(); i++) {
+    for (unsigned i=1; i<compare_script.size(); i++) {
         string& s = compare_script[i];
         if (s == "files") {
-            for (j=0; j<paths1.size(); j++) {
+            for (unsigned j=0; j<paths1.size(); j++) {
                 strcat(cmd, " ");
                 strcat(cmd, paths1[j].c_str());
             }
         } else if (s == "files2") {
-            for (j=0; j<paths2.size(); j++) {
+            for (unsigned j=0; j<paths2.size(); j++) {
                 strcat(cmd, " ");
                 strcat(cmd, paths2[j].c_str());
             }
@@ -196,12 +211,20 @@ int compare_results(RESULT& r1, void*, RESULT const& r2, void*, bool& match) {
         }
     }
     retval = system(cmd);
-    if (retval) {
+    if (WIFEXITED(retval)) {
+        int s = WEXITSTATUS(retval);
+        if (s == 0) {
+            match = true;
+            return 0;
+        }
+        if (s == VAL_RESULT_TRANSIENT_ERROR) {
+            return VAL_RESULT_TRANSIENT_ERROR;
+        }
         match = false;
-    } else {
-        match = true;
+        return 0;
     }
-    return 0;
+    log_messages.printf(MSG_CRITICAL, "compare script %s didn't exit\n", cmd);
+    return -1;
 }
 
 int cleanup_result(RESULT const&, void*) {

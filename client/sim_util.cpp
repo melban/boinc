@@ -114,8 +114,8 @@ int ACTIVE_TASK::suspend() {
     return 0;
 }
 
-int ACTIVE_TASK::request_exit() {
-    set_task_state(PROCESS_UNINITIALIZED, "request_exit");
+int ACTIVE_TASK::request_quit() {
+    set_task_state(PROCESS_UNINITIALIZED, "request_quit");
     return 0;
 }
 
@@ -141,7 +141,7 @@ int ACTIVE_TASK::init(RESULT* rp) {
     result = rp;
     wup = rp->wup;
     app_version = rp->avp;
-    max_elapsed_time = rp->wup->rsc_fpops_bound/result->avp->flops;
+    max_elapsed_time = rp->wup->rsc_fpops_bound/result->resource_usage.flops;
     max_disk_usage = rp->wup->rsc_disk_bound;
     max_mem_usage = rp->wup->rsc_memory_bound;
     _task_state = PROCESS_UNINITIALIZED;

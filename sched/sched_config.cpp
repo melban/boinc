@@ -105,6 +105,12 @@ int SCHED_CONFIG::parse(FILE* f) {
             continue;
         }
         if (xp.match_tag("/config")) {
+            if (batch_accel && size_classes) {
+                boinc::fprintf(stderr,
+                    "config.xml: can't have both batch_accel and size_classes\n"
+                );
+                return ERR_XML_PARSE;
+            }
             char hostname[256];
             gethostname(hostname, 256);
             if (!strcmp(hostname, db_host)) strcpy(db_host, "localhost");
@@ -140,6 +146,7 @@ int SCHED_CONFIG::parse(FILE* f) {
         if (xp.parse_str("upload_url", upload_url, sizeof(upload_url))) continue;
         if (xp.parse_str("upload_dir", upload_dir, sizeof(upload_dir))) continue;
         if (xp.parse_bool("non_cpu_intensive", non_cpu_intensive)) continue;
+        if (xp.parse_bool("strict_memory_bound", strict_memory_bound)) continue;
         if (xp.parse_bool("verify_files_on_app_start", verify_files_on_app_start)) continue;
         if (xp.parse_int("homogeneous_redundancy", homogeneous_redundancy)) continue;
         if (xp.parse_bool("hr_class_static", hr_class_static)) continue;
@@ -318,6 +325,8 @@ int SCHED_CONFIG::parse(FILE* f) {
         if (xp.parse_bool("credit_by_app", credit_by_app)) continue;
         if (xp.parse_bool("keyword_sched", keyword_sched)) continue;
         if (xp.parse_bool("rte_no_stats", rte_no_stats)) continue;
+        if (xp.parse_bool("batch_accel", batch_accel)) continue;
+        if (xp.parse_bool("size_classes", size_classes)) continue;
 
         //////////// SCHEDULER LOG FLAGS /////////
 

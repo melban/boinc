@@ -89,7 +89,13 @@ function user_search_form() {
         row2(tra("Decreasing average credit"), "<input type=radio name=search_type value=\"rac\">");
         row2(tra("Decreasing total credit"), "<input type=radio name=search_type value=\"total\">");
     }
-    row2("", "<input class=\"btn btn-success\" type=submit name=action value=".tra("Search").">");
+    row2("",
+        sprintf(
+            '<input class="btn" %s type=submit name=action value="%s">',
+            button_style(),
+            tra("Search")
+        )
+    );
     end_table();
     echo "
         <script>document.f.search_string.focus()</script>
@@ -181,5 +187,4 @@ if ($action) {
     user_search_form();
 }
 
-$cvs_version_tracker[]="\$Id: user_search.php 13586 2007-09-13 09:46:36Z Rytis $";  //Generated automatically - do not edit
 ?>

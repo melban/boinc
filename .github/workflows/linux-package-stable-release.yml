@@ -1,6 +1,6 @@
 # This file is part of BOINC.
-# http://boinc.berkeley.edu
-# Copyright (C) 2024 University of California
+# https://boinc.berkeley.edu
+# Copyright (C) 2025 University of California
 #
 # BOINC is free software; you can redistribute it and/or modify it
 # under the terms of the GNU Lesser General Public License
@@ -38,7 +38,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        os: [focal, jammy, noble, buster, bullseye, bookworm]
+        os: [focal, jammy, noble, buster, bullseye, bookworm, trixie]
       fail-fast: false
     steps:
       - name: Check if build is running from origin repo
@@ -51,7 +51,7 @@ jobs:
         run: |
           echo "SKIP_RUN=1" >> $GITHUB_ENV
 
-      - uses: actions/checkout@a5ac7e51b41094c92402da3b24376905380afc29
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd
         if: ${{ success() && env.SKIP_RUN == 0 }}
         with:
           fetch-depth: 2
@@ -59,12 +59,8 @@ jobs:
       - name: Install dependencies
         if: ${{ success() && env.SKIP_RUN == 0 }}
         run: |
-          # Install aptly version 1.5.0+ (to support ubuntu xz compression)
-          # gpg1 is used for compatibility with aptly
-          wget -qO - https://www.aptly.info/pubkey.txt | sudo apt-key add -
-          echo "deb http://repo.aptly.info/ squeeze main" | sudo tee -a /etc/apt/sources.list
-          sudo apt update -qq
-          sudo apt-get install -y aptly gnupg1 gpgv1
+          sudo apt-get update
+          sudo apt-get install -y aptly gnupg2 gpgv
 
       - name: Setup GPG keys
         if: ${{ success() && env.SKIP_RUN == 0 }}
@@ -81,7 +77,7 @@ jobs:
           cd ${{ github.workspace }}/.github/workflows/debrepo/
           ./repo_update.sh "$ALLOW_CREATE" ${{ env.BASEREPO }} ${{ github.workspace }} ${{ matrix.os }} "stable" ${{ env.PUBKEY }}
 
-      - uses: actions/upload-artifact@65462800fd760344b1a7b4382951275a0abb4808
+      - uses: actions/upload-artifact@bbbca2ddaa5d8feaa63e36b76fdaad77386f024f
         if: ${{ success() && env.SKIP_RUN == 0 }}
         with:
           name: repo-stable-${{ matrix.os }}
@@ -101,10 +97,9 @@ jobs:
       image: fedora:38
     strategy:
       matrix:
-        os: [fc37, fc38, fc39, fc40, suse15_4, suse15_5, suse15_6]
+        os: [fc37, fc38, fc39, fc40, fc41, fc42, fc43, suse15_4, suse15_5, suse15_6, suse16_0]
       fail-fast: false
     env:
-      ARCH: x86_64
       PUBKEY_HASH: D4460B4F0EEDE2C0662092F640254C9B29853EA6
     steps:
       - name: Check if build is running from origin repo
@@ -117,7 +112,7 @@ jobs:
         run: |
           echo "SKIP_RUN=1" >> $GITHUB_ENV
 
-      - uses: actions/checkout@a5ac7e51b41094c92402da3b24376905380afc29
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd
         if: ${{ success() && env.SKIP_RUN == 0 }}
         with:
           fetch-depth: 2
@@ -152,9 +147,9 @@ jobs:
 
             cd .github/workflows/rpmrepo/
             # Updates or creates the repository
-            ./repo_update.sh "$ALLOW_CREATE" ${{ env.BASEREPO }} ${CWD} ${{ matrix.os }} "stable" ${{ env.PUBKEY }} ${{ env.PUBKEY_HASH }} ${{ env.ARCH }}
+            ./repo_update.sh "$ALLOW_CREATE" ${{ env.BASEREPO }} ${CWD} ${{ matrix.os }} "stable" ${{ env.PUBKEY }} ${{ env.PUBKEY_HASH }}
 
-      - uses: actions/upload-artifact@65462800fd760344b1a7b4382951275a0abb4808
+      - uses: actions/upload-artifact@bbbca2ddaa5d8feaa63e36b76fdaad77386f024f
         if: ${{ success() && env.SKIP_RUN == 0 }}
         with:
           name: repo-stable-${{ matrix.os }}

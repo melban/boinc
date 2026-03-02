@@ -1,18 +1,25 @@
 # BOINC manager localization template
-# Copyright (C) 2024 University of California
+# Copyright (C) 2025 University of California
 # 
 # This file is distributed under the same license as BOINC.
 # 
 # Translators:
+# . ., 2025
 # 233 666 <fenggaobuke@gmail.com>, 2017
+# . ., 2025
 # 37615e072eace5a9287437b9c1b42712_c82c5bb, 2015,2018
 # Aaron Y <yhaoquan@gmail.com>, 2018
 # Cally Mal <zhouxiaobo.500@gmail.com>, 2015,2018-2019
+# EdgeArcher129840, 2025
+# EdgeArcher129840, 2025
+# FIRST LAST, 2023
 # FIRST LAST, 2023
 # Gang Yin <zenith.yin@gmail.com>, 2015,2018
 # Hansong Zhang, 2017
 # Han Xiaojun <15075320251@163.com>, 2021
 # Heyang Qin <qysnn1@gmail.com>, 2017,2019-2022
+# inky, 2018-2019
+# Li Zelin, 2015
 # Mingye Wang <arthur200126@gmail.com>, 2019
 # 37615e072eace5a9287437b9c1b42712_c82c5bb, 2015
 # Heyang Qin <qysnn1@gmail.com>, 2017,2019
@@ -28,14 +35,15 @@
 # 李泽林, 2015
 # Li Zelin, 2015
 # 浩然 王 <9709021@qq.com>, 2018
+# 海洋 李 <penguinnator@outlook.com>, 2019
 # Heyang Qin <qysnn1@gmail.com>, 2015-2017
 msgid ""
 msgstr ""
 "Project-Id-Version: BOINC\n"
 "Report-Msgid-Bugs-To: BOINC translation team <boinc_loc@ssl.berkeley.edu>\n"
-"POT-Creation-Date: 2024-03-10 13:41 UTC\n"
+"POT-Creation-Date: 2025-02-09 02:28 UTC\n"
 "PO-Revision-Date: 2015-02-08 15:28+0000\n"
-"Last-Translator: FIRST LAST, 2023\n"
+"Last-Translator: 海洋 李 <penguinnator@outlook.com>, 2019\n"
 "Language-Team: Chinese (China) (http://app.transifex.com/boinc/boinc/language/zh_CN/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -75,24 +83,24 @@ msgstr "是的，我已经注册过了(&Y)"
 
 #: clientgui/AccountInfoPage.cpp:366 clientgui/AccountInfoPage.cpp:588
 msgid "&Password:"
-msgstr "密码(&P)："
+msgstr "&密码："
 
 #: clientgui/AccountInfoPage.cpp:373 clientgui/AccountInfoPage.cpp:612
 msgid "Choose a &password:"
-msgstr "选择一个密码(&P)："
+msgstr "创建您的密码："
 
 #: clientgui/AccountInfoPage.cpp:376
 msgid "C&onfirm password:"
-msgstr "密码确认(&O)："
+msgstr "确认您的密码："
 
 #: clientgui/AccountInfoPage.cpp:383
 #, c-format
 msgid "Are you already running %s?"
-msgstr "您已经在运行 %s 吗？"
+msgstr "您已经在运行%s了吗？"
 
 #: clientgui/AccountInfoPage.cpp:412
 msgid "&Username:"
-msgstr "用户名(&U)："
+msgstr "&用户名："
 
 #: clientgui/AccountInfoPage.cpp:441
 msgid "&Email address or LDAP ID:"
@@ -100,23 +108,23 @@ msgstr "电子邮件地址或 LDAP ID(&E)："
 
 #: clientgui/AccountInfoPage.cpp:445
 msgid "&Email address:"
-msgstr "电子邮件地址(&E)："
+msgstr "&电子邮箱地址："
 
 #: clientgui/AccountInfoPage.cpp:453
 #, c-format
 msgid "minimum length %d"
-msgstr "最小长度 %d"
+msgstr "最小长度%d"
 
 #: clientgui/AccountInfoPage.cpp:460
 msgid "Forgot your password?"
-msgstr "忘记您的密码了？"
+msgstr "忘记了密码？"
 
 #: clientgui/AccountInfoPage.cpp:467
 msgid ""
 "If you have not yet registered with this account manager,\n"
 "please do so before proceeding.  Click on the link below\n"
 "to register or to retrieve a forgotten password."
-msgstr "如果您还没有注册过这个帐户管理器，\n请在继续之前先注册。点击下方的超链接\n就可以进行注册或取回您已忘记的密码。"
+msgstr "若您还没有注册这个帐户管理器，\n请您注册后再继续操作。点击下面的链接\n来注册或找回您忘记的密码。"
 
 #: clientgui/AccountInfoPage.cpp:470
 msgid "Account manager web site"
@@ -136,21 +144,21 @@ msgstr "使用帐户管理器"
 
 #: clientgui/AccountInfoPage.cpp:523
 msgid "Please enter a user name."
-msgstr "请输入一个用户名。"
+msgstr "请输入您的用户名。"
 
 #: clientgui/AccountInfoPage.cpp:525
 msgid "Please enter an email address."
-msgstr "请指定一个电子邮箱地址。"
+msgstr "请输入您的电子邮箱地址。"
 
 #: clientgui/AccountInfoPage.cpp:535
 #, c-format
 msgid "Please enter a password of at least %d characters."
-msgstr "请输入长度至少为 %d 的密码。"
+msgstr "请输入长度不小于 %d 位的密码。"
 
 #: clientgui/AccountInfoPage.cpp:545
 msgid ""
 "The password and confirmation password do not match. Please type them again."
-msgstr "第一次和第二次密码不一致，请重新输入。"
+msgstr "两次密码输入的不一致，请重新输入。"
 
 #: clientgui/AccountManagerInfoPage.cpp:269
 msgid "Choose an account manager"
@@ -160,11 +168,11 @@ msgstr "选择一个帐户管理器"
 msgid ""
 "To choose an account manager, click its name or \n"
 "type its URL below."
-msgstr "要选择一个帐户管理器，请点击它的名称或在下方输入它的网址。"
+msgstr "要选择一个帐户管理器，点击它的名字或者 \n输入它的网址."
 
 #: clientgui/AccountManagerInfoPage.cpp:276
 msgid "Account manager details:"
-msgstr "帐户管理器详情："
+msgstr "帐户管理器的详细信息："
 
 #: clientgui/AccountManagerInfoPage.cpp:280
 msgid "Account manager &URL:"
@@ -176,7 +184,7 @@ msgstr "打开网页"
 
 #: clientgui/AccountManagerInfoPage.cpp:287
 msgid "Visit this account manager's web site"
-msgstr "访问该账户管理器的网站"
+msgstr "访问帐户管理器的网站"
 
 #. %s is the project name
 #. i.e. 'BOINC', 'GridRepublic'
@@ -184,21 +192,21 @@ msgstr "访问该账户管理器的网站"
 #: clientgui/AccountManagerPropertiesPage.cpp:192
 #, c-format
 msgid "Communicating with %s."
-msgstr "正在和 %s 进行通讯。"
+msgstr "正在与 %s 通信。"
 
 #: clientgui/AccountManagerProcessingPage.cpp:193
 #: clientgui/AccountManagerPropertiesPage.cpp:199
 msgid "Communicating with server."
-msgstr "正在和服务器进行通讯。"
+msgstr "正在与服务器通信。"
 
 #: clientgui/AccountManagerProcessingPage.cpp:198
 #: clientgui/AccountManagerPropertiesPage.cpp:204
 msgid "Please wait..."
-msgstr "请稍候..."
+msgstr "请稍候······"
 
 #: clientgui/AccountManagerProcessingPage.cpp:325
 msgid "An internal server error has occurred.\n"
-msgstr "服务器上产生了一个内部错误。\n"
+msgstr "发生了一个内部服务器错误。\n"
 
 #: clientgui/AdvancedFrame.cpp:102
 msgid "Connected"
@@ -206,12 +214,12 @@ msgstr "已连接"
 
 #: clientgui/AdvancedFrame.cpp:110
 msgid "Disconnected"
-msgstr "已断开"
+msgstr "连接已断开"
 
 #: clientgui/AdvancedFrame.cpp:334
 #, c-format
 msgid "New %s window..."
-msgstr "新建 %s 窗口..."
+msgstr "新的 %s 窗口······"
 
 #: clientgui/AdvancedFrame.cpp:338
 #, c-format
@@ -220,19 +228,19 @@ msgstr "打开另一个 %s 窗口"
 
 #: clientgui/AdvancedFrame.cpp:349
 msgid "Select computer...\tCtrl+Shift+I"
-msgstr "选择计算机...\tCtrl+Shift+I"
+msgstr "选择计算机······\tCtrl+Shift+I"
 
 #: clientgui/AdvancedFrame.cpp:350
 msgid "Connect to a BOINC client on another computer"
-msgstr "连接到另一台计算机上的 BOINC 客户端"
+msgstr "连接另一台计算机上的 BOINC 客户端。"
 
 #: clientgui/AdvancedFrame.cpp:354
 msgid "Shut down connected client..."
-msgstr "关闭当前已连接的客户端..."
+msgstr "关闭已连接的客户端······"
 
 #: clientgui/AdvancedFrame.cpp:355
 msgid "Shut down the currently connected BOINC client"
-msgstr "关闭当前连接到的 BOINC 客户端"
+msgstr "关闭已连接的 BOINC 客户端······"
 
 #: clientgui/AdvancedFrame.cpp:360 clientgui/sg_BoincSimpleFrame.cpp:150
 #, c-format
@@ -365,7 +373,7 @@ msgstr "重新尝试被挂起的传输"
 
 #: clientgui/AdvancedFrame.cpp:504
 msgid "Retry deferred file transfers and task requests"
-msgstr "重新尝试被延迟的文件传输和任务请求"
+msgstr "重新尝试被推迟的文件传输和任务请求"
 
 #: clientgui/AdvancedFrame.cpp:509 clientgui/sg_BoincSimpleFrame.cpp:276
 msgid "Event Log...\tCtrl+Shift+E"
@@ -381,7 +389,7 @@ msgstr "一直运行(&R)"
 
 #: clientgui/AdvancedFrame.cpp:519
 msgid "Allow work regardless of preferences"
-msgstr "运行计算程序且不受参数设置的影响"
+msgstr "让计算程序不受参数影响地运行"
 
 #: clientgui/AdvancedFrame.cpp:523
 msgid "Run based on &preferences"
@@ -389,7 +397,7 @@ msgstr "依照参数运行(&P)"
 
 #: clientgui/AdvancedFrame.cpp:524
 msgid "Allow work according to preferences"
-msgstr "运行计算程序且依照用户的参数设置"
+msgstr "让计算程序依照用户的参数设置来运行"
 
 #: clientgui/AdvancedFrame.cpp:528
 msgid "&Suspend"
@@ -417,7 +425,7 @@ msgstr "运行 GPU 计算程序且依照用户的参数设置"
 
 #: clientgui/AdvancedFrame.cpp:564
 msgid "Suspend GPU"
-msgstr "暂停 GPU"
+msgstr "暂停使用 GPU"
 
 #: clientgui/AdvancedFrame.cpp:565
 msgid "Stop GPU work regardless of preferences"
@@ -585,39 +593,39 @@ msgstr "工具(&T)"
 msgid "&Help"
 msgstr "帮助(&H)"
 
-#: clientgui/AdvancedFrame.cpp:1358
+#: clientgui/AdvancedFrame.cpp:1357
 #, c-format
 msgid "%s - Shut down the current client..."
 msgstr "%s - 关闭当前连接的客户端..."
 
-#: clientgui/AdvancedFrame.cpp:1367
+#: clientgui/AdvancedFrame.cpp:1366
 #, c-format
 msgid ""
 "%s will shut down the current client\n"
 "and prompt you for another host to connect to."
 msgstr "%s 将要关闭当前连接的客户端，\n然后会提示您输入想要连接的客户端。"
 
-#: clientgui/AdvancedFrame.cpp:1757 clientgui/DlgAbout.cpp:121
+#: clientgui/AdvancedFrame.cpp:1756 clientgui/DlgAbout.cpp:121
 #, c-format
 msgid "%s"
 msgstr "%s"
 
-#: clientgui/AdvancedFrame.cpp:1767
+#: clientgui/AdvancedFrame.cpp:1766
 #, c-format
 msgid "%s has successfully added %s"
 msgstr "%s 已经成功地加入了 %s"
 
-#: clientgui/AdvancedFrame.cpp:1914
+#: clientgui/AdvancedFrame.cpp:1913
 #, c-format
 msgid "%s - (%s)"
 msgstr "%s - (%s)"
 
-#: clientgui/AdvancedFrame.cpp:1918
+#: clientgui/AdvancedFrame.cpp:1917
 #, c-format
 msgid "Connecting to %s"
 msgstr "正在连接至 %s"
 
-#: clientgui/AdvancedFrame.cpp:1921
+#: clientgui/AdvancedFrame.cpp:1920
 #, c-format
 msgid "Connected to %s (%s)"
 msgstr "已连接至 %s ( %s )"
@@ -632,7 +640,7 @@ msgid ""
 "different password than the one you entered.\n"
 "\n"
 "Please visit the project's web site and follow the instructions there."
-msgstr "已有一个帐户使用了该用户名并且其密码与您输入的不同。\n\n请访问项目网站并按照上面的说明进行操作。"
+msgstr "已有一个帐户使用了该用户名，并且其密码与您输入的不同。\n\n请访问项目网站并按照上面的说明进行操作。"
 
 #: clientgui/AlreadyExistsPage.cpp:191
 msgid "Email address already in use"
@@ -644,7 +652,7 @@ msgid ""
 "different password than the one you entered.\n"
 "\n"
 "Please visit the project's web site and follow the instructions there."
-msgstr "已有一个帐户使用了该电子邮件地址并且其密码与您输入的不同。\n\n请访问项目网站并按照上面的说明进行操作。"
+msgstr "已有一个帐户使用了该电子邮件地址，并且其密码与您输入的不同。\n\n请访问项目网站并按照上面的说明进行操作。"
 
 #: clientgui/AsyncRPC.cpp:1081
 msgid "Communicating with BOINC client.  Please wait ..."
@@ -662,10 +670,9 @@ msgstr "%s - 网络通讯"
 
 #: clientgui/AsyncRPC.cpp:1106 clientgui/DlgAdvPreferencesBase.cpp:195
 #: clientgui/DlgDiagnosticLogFlags.cpp:128 clientgui/DlgExclusiveApps.cpp:151
-#: clientgui/DlgExitMessage.cpp:190 clientgui/DlgGenericMessage.cpp:125
-#: clientgui/DlgHiddenColumns.cpp:108 clientgui/DlgOptions.cpp:445
-#: clientgui/DlgSelectComputer.cpp:168 clientgui/sg_DlgPreferences.cpp:361
-#: clientgui/wizardex.cpp:387
+#: clientgui/DlgExitMessage.cpp:200 clientgui/DlgHiddenColumns.cpp:108
+#: clientgui/DlgOptions.cpp:445 clientgui/DlgSelectComputer.cpp:168
+#: clientgui/sg_DlgPreferences.cpp:361 clientgui/wizardex.cpp:387
 msgid "Cancel"
 msgstr "取消"
 
@@ -738,12 +745,12 @@ msgstr "如果您退出 %s，\n您当前所有的计算项目将会保留，\n�
 msgid "Project web pages"
 msgstr "项目网页"
 
-#: clientgui/BOINCClientManager.cpp:539
+#: clientgui/BOINCClientManager.cpp:548
 #, c-format
 msgid "%s - Unexpected Exit"
 msgstr "%s - 异常退出"
 
-#: clientgui/BOINCClientManager.cpp:549
+#: clientgui/BOINCClientManager.cpp:558
 #, c-format
 msgid ""
 "The %s client has exited unexpectedly 3 times within the last %d minutes.\n"
@@ -775,7 +782,7 @@ msgstr "%s 已经成功地连接至互联网。"
 #: clientgui/BOINCDialupManager.cpp:327
 #, c-format
 msgid "%s failed to connect to the Internet."
-msgstr "%s 连接至互联网失败。"
+msgstr "%s 无法连接至互联网。"
 
 #: clientgui/BOINCDialupManager.cpp:368
 #, c-format
@@ -794,7 +801,7 @@ msgstr "%s 已经成功地断开至互联网的连接。"
 msgid "%s failed to disconnected from the Internet."
 msgstr "%s 断开至互联网的连接失败。"
 
-#: clientgui/BOINCGUIApp.cpp:390
+#: clientgui/BOINCGUIApp.cpp:419
 #, c-format
 msgid ""
 "You currently are not authorized to manage %s.\n"
@@ -805,86 +812,86 @@ msgid ""
 "- contact your administrator to add you to the 'boinc_master' user group."
 msgstr "您当前未被授权管理%s.\n\n要在当前用户下运行%s ，请：\n- 重新安装%s，在被问到关于非系统管理员用户的问题时，回答\"是\"\n 或者\n - 联系系统管理员将您加入到“boinc_master”用户组。"
 
-#: clientgui/BOINCGUIApp.cpp:398
+#: clientgui/BOINCGUIApp.cpp:427
 #, c-format
 msgid ""
 "%s ownership or permissions are not set properly; please reinstall %s.\n"
 "(Error code %d"
 msgstr "%s 相关的本地用户权限设置有误，请重新安装 %s。\n( 错误代码 %d )"
 
-#: clientgui/BOINCGUIApp.cpp:404
+#: clientgui/BOINCGUIApp.cpp:433
 msgid " at "
 msgstr " 位置 "
 
-#: clientgui/BOINCGUIApp.cpp:407 clientgui/MainDocument.cpp:2636
-#: clientgui/MainDocument.cpp:2695 clientgui/ViewTransfers.cpp:922
+#: clientgui/BOINCGUIApp.cpp:436 clientgui/MainDocument.cpp:2648
+#: clientgui/MainDocument.cpp:2707 clientgui/ViewTransfers.cpp:922
 msgid ")"
 msgstr ")"
 
-#: clientgui/BOINCGUIApp.cpp:437
+#: clientgui/BOINCGUIApp.cpp:466
 msgid ""
 "A reboot is required in order for BOINC to run properly.\n"
 "Please reboot your computer and try again."
 msgstr "BOINC 需要在计算机重新启动后才能正常运行。\n请您先重启计算机再重试当前的操作。"
 
-#: clientgui/BOINCGUIApp.cpp:438 clientgui/BOINCGUIApp.cpp:467
-#: clientgui/DlgAbout.cpp:158
+#: clientgui/BOINCGUIApp.cpp:467 clientgui/DlgAbout.cpp:158
 msgid "BOINC Manager"
 msgstr "BOINC Manager"
 
-#: clientgui/BOINCGUIApp.cpp:466
-msgid "Another instance of BOINC Manager is already running."
-msgstr ""
+#: clientgui/BOINCGUIApp.cpp:496
+#, c-format
+msgid "Another instance of %s is already running."
+msgstr "%s的另一个实例已在运行。"
 
-#: clientgui/BOINCGUIApp.cpp:664
+#: clientgui/BOINCGUIApp.cpp:700
 msgid "BOINC Manager was started by the operating system automatically"
 msgstr "BOINC Manager 已经由操作系统自动运行"
 
-#: clientgui/BOINCGUIApp.cpp:666
+#: clientgui/BOINCGUIApp.cpp:702
 msgid "Startup BOINC so only the system tray icon is visible"
 msgstr "启动 BOINC 时仅显示在系统托盘区"
 
-#: clientgui/BOINCGUIApp.cpp:668
+#: clientgui/BOINCGUIApp.cpp:704
 msgid "Directory containing the BOINC Client executable"
 msgstr "包含 BOINC 客户端执行程序的目录"
 
-#: clientgui/BOINCGUIApp.cpp:669
+#: clientgui/BOINCGUIApp.cpp:705
 msgid "BOINC data directory"
 msgstr "BOINC 数据目录"
 
-#: clientgui/BOINCGUIApp.cpp:671
+#: clientgui/BOINCGUIApp.cpp:707
 msgid "Host name or IP address"
 msgstr "主机名称或 IP 地址"
 
-#: clientgui/BOINCGUIApp.cpp:672
+#: clientgui/BOINCGUIApp.cpp:708
 msgid "GUI RPC port number"
 msgstr "图形界面 RPC 端口号"
 
-#: clientgui/BOINCGUIApp.cpp:673
+#: clientgui/BOINCGUIApp.cpp:709
 msgid "Password"
 msgstr "密码"
 
-#: clientgui/BOINCGUIApp.cpp:674
+#: clientgui/BOINCGUIApp.cpp:710
 msgid "Startup BOINC with these optional arguments"
 msgstr "使用可选参数来启动 BOINC"
 
-#: clientgui/BOINCGUIApp.cpp:675
+#: clientgui/BOINCGUIApp.cpp:711
 msgid "disable BOINC security users and permissions"
 msgstr "禁用 BOINC 中用户和权限相关的安全选项"
 
-#: clientgui/BOINCGUIApp.cpp:676
+#: clientgui/BOINCGUIApp.cpp:712
 msgid "set skin debugging mode to enable skin manager error messages"
 msgstr "设置皮肤调试模式已启用皮肤管理器的错误消息记录"
 
-#: clientgui/BOINCGUIApp.cpp:677
+#: clientgui/BOINCGUIApp.cpp:713
 msgid "multiple instances of BOINC Manager allowed"
 msgstr "允许运行多个 BOINC Manager 的实例"
 
-#: clientgui/BOINCGUIApp.cpp:679
+#: clientgui/BOINCGUIApp.cpp:715
 msgid "Not used: workaround for bug in XCode 4.2"
 msgstr "未使用：用于临时修复 XCode 4.2 的错误"
 
-#: clientgui/BOINCGUIApp.cpp:681
+#: clientgui/BOINCGUIApp.cpp:717
 msgid "Don't run the client"
 msgstr "不要运行客户端"
 
@@ -1057,9 +1064,9 @@ msgstr "版权所有："
 
 #: clientgui/DlgAbout.cpp:197
 msgid ""
-"(C) 2003-2024 University of California, Berkeley.\n"
+"(C) 2003-2025 University of California, Berkeley.\n"
 "All Rights Reserved."
-msgstr ""
+msgstr "(C) 2003-2025 University of California, Berkeley。\n版权所有。"
 
 #: clientgui/DlgAbout.cpp:202
 #, c-format
@@ -1070,63 +1077,63 @@ msgstr "%s 基于 GNU 宽通用公共许可证 v3.0 而发布。"
 msgid "For more information, visit "
 msgstr "获取更多信息，请访问　"
 
-#: clientgui/DlgAbout.cpp:226 clientgui/DlgExitMessage.cpp:185
-#: clientgui/DlgGenericMessage.cpp:120 clientgui/DlgSelectComputer.cpp:163
+#: clientgui/DlgAbout.cpp:226 clientgui/DlgExitMessage.cpp:195
+#: clientgui/DlgSelectComputer.cpp:163
 msgid "&OK"
 msgstr "确定(&O)"
 
-#: clientgui/DlgAdvPreferences.cpp:761 clientgui/sg_DlgPreferences.cpp:830
+#: clientgui/DlgAdvPreferences.cpp:747 clientgui/sg_DlgPreferences.cpp:830
 msgid "Invalid number"
 msgstr "无效的数字"
 
-#: clientgui/DlgAdvPreferences.cpp:762 clientgui/sg_DlgPreferences.cpp:831
+#: clientgui/DlgAdvPreferences.cpp:748 clientgui/sg_DlgPreferences.cpp:831
 msgid "Invalid time, value must be between 0:00 and 24:00, format is HH:MM"
-msgstr "无效的时间，值必须介于 0:00 至 24:00之间，格式是 hh: mm"
+msgstr "无效的时间，值必须介于 0:00 至 24:00 之间，格式是 hh: mm"
 
-#: clientgui/DlgAdvPreferences.cpp:763 clientgui/sg_DlgPreferences.cpp:832
+#: clientgui/DlgAdvPreferences.cpp:749 clientgui/sg_DlgPreferences.cpp:832
 msgid "Start time must be different from end time"
 msgstr "起始时间必须和结束时间不同"
 
-#: clientgui/DlgAdvPreferences.cpp:764
+#: clientgui/DlgAdvPreferences.cpp:750
 msgid "Number must be between 0 and 10"
-msgstr "必须是0到10之间的数字"
+msgstr "数字必须介于 0 到 10 之间"
 
-#: clientgui/DlgAdvPreferences.cpp:765 clientgui/sg_DlgPreferences.cpp:833
+#: clientgui/DlgAdvPreferences.cpp:751 clientgui/sg_DlgPreferences.cpp:833
 msgid "Number must be between 0 and 100"
 msgstr "数字必须介于 0 和 100 之间"
 
-#: clientgui/DlgAdvPreferences.cpp:766
+#: clientgui/DlgAdvPreferences.cpp:752
 msgid "Number must be between 1 and 100"
 msgstr "数字必须介于 1 和 100 之间"
 
-#: clientgui/DlgAdvPreferences.cpp:767
+#: clientgui/DlgAdvPreferences.cpp:753
 msgid ""
 "Suspend when no mouse or keyboard input needs to be greater than 'in use' "
 "mouse or keyboard input."
 msgstr "选项“没有鼠标或键盘输入时暂停”里设置的时间需要比选项“在使用中”设置的时间长"
 
-#: clientgui/DlgAdvPreferences.cpp:1060 clientgui/sg_DlgPreferences.cpp:904
+#: clientgui/DlgAdvPreferences.cpp:1046 clientgui/sg_DlgPreferences.cpp:904
 msgid "invalid input value detected"
 msgstr "检测到错误的输入值"
 
-#: clientgui/DlgAdvPreferences.cpp:1072 clientgui/sg_DlgPreferences.cpp:916
+#: clientgui/DlgAdvPreferences.cpp:1058 clientgui/sg_DlgPreferences.cpp:916
 msgid "Validation Error"
 msgstr "验证错误"
 
-#: clientgui/DlgAdvPreferences.cpp:1267 clientgui/sg_DlgPreferences.cpp:1250
+#: clientgui/DlgAdvPreferences.cpp:1253 clientgui/sg_DlgPreferences.cpp:1250
 msgid ""
 "Changing to use the local preferences defined on this page. This will "
 "override your web-based preferences, even if you subsequently make changes "
 "there. Do you want to proceed?"
-msgstr "使用在此页说明的本地配置进行修改。即便您之后在网络平台上进行配置修改，本地配置也会将其覆盖掉，确定要继续吗？"
+msgstr "您即将使用在此页修改好的本地配置。即便您之后在网络平台上修改配置，本地配置也会将其覆盖掉，确定要继续吗？"
 
-#: clientgui/DlgAdvPreferences.cpp:1271 clientgui/DlgAdvPreferences.cpp:1312
+#: clientgui/DlgAdvPreferences.cpp:1257 clientgui/DlgAdvPreferences.cpp:1298
 #: clientgui/WizardAttach.cpp:573 clientgui/sg_DlgPreferences.cpp:1242
 #: clientgui/sg_DlgPreferences.cpp:1254
 msgid "Confirmation"
 msgstr "确认"
 
-#: clientgui/DlgAdvPreferences.cpp:1311
+#: clientgui/DlgAdvPreferences.cpp:1297
 msgid "Discard local preferences and use web-based preferences?"
 msgstr "放弃本地首选项并使用网上的首选项吗？"
 
@@ -1217,7 +1224,7 @@ msgstr "这将确定在怎样的情况下计算机会被视为“正在使用”
 #. context: 'In use' means mouse or keyboard input in last ___ minutes
 #: clientgui/DlgAdvPreferencesBase.cpp:310
 msgid "'In use' means mouse or keyboard input in last"
-msgstr "如果在最近一段时间内有鼠标或键盘操作则认为计算机在使用中"
+msgstr "如果在最近一段时间内有鼠标或键盘操作，则认为计算机在使用中"
 
 #. context: 'In use' means mouse or keyboard input in last ___ minutes
 #. context: Switch between tasks every ___ minutes
@@ -1243,7 +1250,7 @@ msgstr "当使用计算机时暂停 GPU 计算"
 
 #: clientgui/DlgAdvPreferencesBase.cpp:342
 msgid "Check this to suspend GPU computing when you're using the computer."
-msgstr "勾选这个选项以使得当您使用计算机时暂停GPU计算。"
+msgstr "勾选这个选项以使得当您使用计算机时暂停 GPU 计算。"
 
 #: clientgui/DlgAdvPreferencesBase.cpp:349
 #: clientgui/DlgAdvPreferencesBase.cpp:392
@@ -1269,7 +1276,7 @@ msgstr "% 的处理器时间"
 msgid ""
 "Keep some CPUs free for other applications. Example: 75% means use 6 cores "
 "on an 8-core CPU."
-msgstr "保留一些CPU核心以供其他应用程序使用。例如： 75%意味着在8核CPU上使用6个核心。"
+msgstr "保留一些CPU核心以供其他应用程序使用。例如： 75% 意味着在 8 核CPU上使用 6 个核心。"
 
 #: clientgui/DlgAdvPreferencesBase.cpp:362 clientgui/sg_DlgPreferences.cpp:285
 #, no-c-format
@@ -1277,12 +1284,12 @@ msgid ""
 "Suspend/resume computing every few seconds to reduce CPU temperature and "
 "energy usage. Example: 75% means compute for 3 seconds, wait for 1 second, "
 "and repeat."
-msgstr "每隔几秒钟就暂停一下然后恢复计算，以降低CPU温度并减少电能使用。比如：75%意味着每计算 3 秒就暂停 1 秒，然后如此重复。"
+msgstr "每隔几秒就暂停计算一下，以降低 CPU 的温度并减少电能使用。比如：75%意味着每计算 3 秒就暂停 1 秒，然后如此重复。"
 
 #: clientgui/DlgAdvPreferencesBase.cpp:375
 #: clientgui/DlgAdvPreferencesBase.cpp:433
 msgid "Suspend when non-BOINC CPU usage is above"
-msgstr "当非BOINC CPU使用率高于多少时暂停"
+msgstr "当除 BOINC 之外的程序的 CPU 的使用率高于该值时暂停计算"
 
 #: clientgui/DlgAdvPreferencesBase.cpp:381
 #: clientgui/DlgAdvPreferencesBase.cpp:443
@@ -1308,7 +1315,7 @@ msgstr "当计算机空闲时"
 #: clientgui/DlgAdvPreferencesBase.cpp:449
 #, c-format
 msgid "Limit the memory used by %s when you're not using the computer."
-msgstr "限制当您未使用计算机时%s 使用的内存。"
+msgstr "限制当您未使用计算机时 %s 使用的内存。"
 
 #: clientgui/DlgAdvPreferencesBase.cpp:459
 msgid "Suspend when no mouse or keyboard input in last"
@@ -1354,7 +1361,7 @@ msgstr "这个选项决定计算任务向磁盘保存其进度的频繁程度，
 #. context: Request tasks to checkpoint at most every ___ seconds
 #: clientgui/DlgAdvPreferencesBase.cpp:520
 msgid "Request tasks to checkpoint at most every"
-msgstr "要求任务每隔多少分钟储存一次进度"
+msgstr "要求任务每两次储存进度的间隔为"
 
 #. context: Request tasks to checkpoint at most every ___ seconds
 #: clientgui/DlgAdvPreferencesBase.cpp:527
@@ -1364,7 +1371,7 @@ msgstr "秒"
 #. leave non-GPU tasks in memory while suspended
 #: clientgui/DlgAdvPreferencesBase.cpp:534
 msgid "Leave non-GPU tasks in memory while suspended"
-msgstr "在暂停时将非GPU任务留在内存中"
+msgstr "在暂停时将非 GPU 任务留在内存中"
 
 #: clientgui/DlgAdvPreferencesBase.cpp:535
 msgid ""
@@ -1400,7 +1407,7 @@ msgstr "天的工作"
 msgid ""
 "Store additional tasks above the minimum level.  Determines how much work is"
 " requested when contacting a project."
-msgstr "在最低限度之上额外存储一些任务。这将决定BOINC客户端在联系一个项目时要求多少新任务。"
+msgstr "在最低限度之上额外存储一些任务。这将决定 BOINC 客户端在联系一个项目时要求多少新任务。"
 
 #. context: Store up to an additional ___ days of work
 #: clientgui/DlgAdvPreferencesBase.cpp:565
@@ -1432,7 +1439,7 @@ msgstr "限制下载速度为"
 #: clientgui/DlgAdvPreferencesBase.cpp:658
 #: clientgui/DlgAdvPreferencesBase.cpp:666
 msgid "KB/second"
-msgstr "KB每秒"
+msgstr "KB/秒"
 
 #. upload rate
 #: clientgui/DlgAdvPreferencesBase.cpp:663
@@ -1446,7 +1453,7 @@ msgstr "限制上传速率为"
 #: clientgui/DlgAdvPreferencesBase.cpp:672
 #, c-format
 msgid "Example: %s should transfer at most 2000 MB of data every 30 days."
-msgstr "例如： 限制%s在30天内最多传输2000 MB数据。"
+msgstr "例如： 限制%s在30天内最多传输 2000 MB 数据。"
 
 #: clientgui/DlgAdvPreferencesBase.cpp:673
 msgid "Limit usage to"
@@ -1474,7 +1481,7 @@ msgstr "其它"
 msgid ""
 "Check this only if your Internet provider modifies image files. Skipping "
 "verification reduces the security of %s."
-msgstr "仅当您的Internet提供商会修改图像文件的情况下才需要选中此选项。跳过验证会降低%s的安全性。"
+msgstr "仅当您的 Internet 提供商会修改图像文件的情况下才需要选中此选项。跳过验证会降低%s的安全性。"
 
 #: clientgui/DlgAdvPreferencesBase.cpp:700
 msgid "Skip data verification for image files"
@@ -1708,7 +1715,7 @@ msgid ""
 "Copy the selected messages to the clipboard. You can select multiple "
 "messages by holding down the shift or command key while clicking on "
 "messages."
-msgstr "复制选中的消息至剪贴板。您可以在选择的时候通过按住Shift键或Commandl键来选取多条消息。"
+msgstr "复制选中的消息至剪贴板。您可以在选择的时候通过按住 Shift 或 Command 键来选取多条消息。"
 
 #: clientgui/DlgEventLog.cpp:356 clientgui/DlgEventLog.cpp:364
 #: clientgui/ViewMessages.cpp:99
@@ -1716,7 +1723,7 @@ msgid ""
 "Copy the selected messages to the clipboard. You can select multiple "
 "messages by holding down the shift or control key while clicking on "
 "messages."
-msgstr "复制选中的消息至剪贴板。您可以在选择的时候通过按住Shift键或Ctrl键来选取多条消息。"
+msgstr "复制选中的消息至剪贴板。您可以在选择的时候通过按住 Shift 或 Ctrl来选取多条消息。"
 
 #: clientgui/DlgEventLog.cpp:371 clientgui/DlgItemProperties.cpp:81
 #: clientgui/sg_DlgMessages.cpp:148
@@ -1814,12 +1821,12 @@ msgstr "“%s”已经在列表内了。"
 msgid "Add Exclusive App"
 msgstr "添加互斥应用程序"
 
-#: clientgui/DlgExitMessage.cpp:84
+#: clientgui/DlgExitMessage.cpp:86
 #, c-format
 msgid "%s - Exit Confirmation"
 msgstr "%s - 退出确认"
 
-#: clientgui/DlgExitMessage.cpp:132
+#: clientgui/DlgExitMessage.cpp:144
 #, c-format
 msgid ""
 "You have requested to exit the %s,\n"
@@ -1830,7 +1837,7 @@ msgid ""
 "choose from the following options:"
 msgstr "您刚才请求了退出 %s，\n它的作用是查看和管理运行在您计算机上的任务。\n\n如果想要停止运行计算任务，\n请从下列选项中进行选择："
 
-#: clientgui/DlgExitMessage.cpp:138
+#: clientgui/DlgExitMessage.cpp:150
 #, c-format
 msgid ""
 "This will shut down %s and its tasks until the\n"
@@ -1841,7 +1848,7 @@ msgid ""
 "tasks at the times you selected in your preferences."
 msgstr "本操作将会退出 %s 及其所有任务直到\n重新运行 %s 。\n\n一般情况下，建议只关闭 %s 的窗口而不是退出应用程序，\n这样 %s 将会在您设定的时间段内进行工作。"
 
-#: clientgui/DlgExitMessage.cpp:146
+#: clientgui/DlgExitMessage.cpp:158
 #, c-format
 msgid ""
 "This will shut down %s and its tasks until either the\n"
@@ -1852,16 +1859,16 @@ msgid ""
 "tasks at the times you selected in your preferences."
 msgstr "本操作将会退出 %s 及其所有任务直到\n重新运行 %s 或是重新启动 %s 屏保。\n\n一般情况下，建议只关闭 %s 的窗口而不是退出应用程序，\n这样 %s 将会在您设定的时间段内进行工作。"
 
-#: clientgui/DlgExitMessage.cpp:165
+#: clientgui/DlgExitMessage.cpp:176
 #, c-format
 msgid "Stop running tasks when exiting the %s"
 msgstr "当退出 %s 的时候停止运行所有计算任务"
 
-#: clientgui/DlgExitMessage.cpp:177
+#: clientgui/DlgExitMessage.cpp:187
 msgid "Remember this decision and do not show this dialog."
-msgstr "记住当前的选择并不再显示本对话框。"
+msgstr "记住当前的选择，并不再显示本对话框。"
 
-#: clientgui/DlgGenericMessage.cpp:112
+#: clientgui/DlgGenericMessage.cpp:119
 msgid "Don't show this dialog again."
 msgstr "不再显示本对话框。"
 
@@ -2041,108 +2048,116 @@ msgstr "调度优先级"
 msgid "CPU"
 msgstr "CPU"
 
-#: clientgui/DlgItemProperties.cpp:353
+#: clientgui/DlgItemProperties.cpp:359
 msgid "Duration correction factor"
 msgstr "时长校正因子"
 
-#: clientgui/DlgItemProperties.cpp:361
+#: clientgui/DlgItemProperties.cpp:367
 msgid "Last scheduler reply"
 msgstr "调度程序上次响应时间"
 
-#: clientgui/DlgItemProperties.cpp:371
+#: clientgui/DlgItemProperties.cpp:377
 msgid "Properties of task "
 msgstr "任务属性　"
 
-#: clientgui/DlgItemProperties.cpp:383 clientgui/ViewWork.cpp:288
+#: clientgui/DlgItemProperties.cpp:389 clientgui/ViewWork.cpp:288
 msgid "Application"
 msgstr "计算程序"
 
-#: clientgui/DlgItemProperties.cpp:384 clientgui/ViewWork.cpp:289
+#: clientgui/DlgItemProperties.cpp:390 clientgui/ViewWork.cpp:289
 msgid "Name"
 msgstr "任务名称"
 
-#: clientgui/DlgItemProperties.cpp:385
+#: clientgui/DlgItemProperties.cpp:391
 msgid "State"
 msgstr "状态"
 
-#: clientgui/DlgItemProperties.cpp:388
+#: clientgui/DlgItemProperties.cpp:394
 msgid "Received"
 msgstr "接收时间"
 
-#: clientgui/DlgItemProperties.cpp:391
+#: clientgui/DlgItemProperties.cpp:397
 msgid "Report deadline"
 msgstr "上报期限"
 
-#: clientgui/DlgItemProperties.cpp:393
+#: clientgui/DlgItemProperties.cpp:399
 msgid "Resources"
 msgstr "资源"
 
-#: clientgui/DlgItemProperties.cpp:396
+#: clientgui/DlgItemProperties.cpp:402
 msgid "Estimated computation size"
 msgstr "预计的任务大小"
 
-#: clientgui/DlgItemProperties.cpp:411
+#: clientgui/DlgItemProperties.cpp:417
 msgid "Keywords"
 msgstr "关键词"
 
-#: clientgui/DlgItemProperties.cpp:417 clientgui/DlgItemProperties.cpp:444
+#: clientgui/DlgItemProperties.cpp:423 clientgui/DlgItemProperties.cpp:450
 msgid "CPU time"
 msgstr "已用 CPU 时间"
 
-#: clientgui/DlgItemProperties.cpp:418
+#: clientgui/DlgItemProperties.cpp:424
 msgid "CPU time since checkpoint"
-msgstr "上个存盘点之后运行的 CPU 时间"
+msgstr "上个之后运行的 CPU 时间"
 
-#: clientgui/DlgItemProperties.cpp:420 clientgui/DlgItemProperties.cpp:445
+#: clientgui/DlgItemProperties.cpp:426 clientgui/DlgItemProperties.cpp:451
 msgid "Elapsed time"
 msgstr "已用时间"
 
-#: clientgui/DlgItemProperties.cpp:422
+#: clientgui/DlgItemProperties.cpp:428
 msgid "Estimated time remaining"
 msgstr "预计剩余时间"
 
-#: clientgui/DlgItemProperties.cpp:423
+#: clientgui/DlgItemProperties.cpp:429
 msgid "Fraction done"
 msgstr "完成百分比"
 
-#: clientgui/DlgItemProperties.cpp:424
+#: clientgui/DlgItemProperties.cpp:430
 msgid "Virtual memory size"
 msgstr "虚拟内存大小"
 
-#: clientgui/DlgItemProperties.cpp:425
+#: clientgui/DlgItemProperties.cpp:431
 msgid "Working set size"
 msgstr "工作集大小"
 
-#: clientgui/DlgItemProperties.cpp:427
+#: clientgui/DlgItemProperties.cpp:433
 msgid "Directory"
 msgstr "目录"
 
-#: clientgui/DlgItemProperties.cpp:430
+#: clientgui/DlgItemProperties.cpp:436
 msgid "Process ID"
 msgstr "进程标识(PID)"
 
-#: clientgui/DlgItemProperties.cpp:436 clientgui/DlgItemProperties.cpp:438
-#: clientgui/DlgItemProperties.cpp:440
+#: clientgui/DlgItemProperties.cpp:442 clientgui/DlgItemProperties.cpp:444
+#: clientgui/DlgItemProperties.cpp:446
 msgid "Progress rate"
 msgstr "进展率"
 
-#: clientgui/DlgItemProperties.cpp:436
+#: clientgui/DlgItemProperties.cpp:442
 msgid "per hour"
 msgstr "每小时"
 
-#: clientgui/DlgItemProperties.cpp:438
+#: clientgui/DlgItemProperties.cpp:444
 msgid "per minute"
 msgstr "每分钟"
 
-#: clientgui/DlgItemProperties.cpp:440
+#: clientgui/DlgItemProperties.cpp:446
 msgid "per second"
 msgstr "每秒"
 
-#: clientgui/DlgItemProperties.cpp:448
+#: clientgui/DlgItemProperties.cpp:454
 msgid "Executable"
 msgstr "可执行文件"
 
-#: clientgui/DlgItemProperties.cpp:513 clientgui/ViewWork.cpp:1276
+#: clientgui/DlgItemProperties.cpp:455
+msgid "Application Name"
+msgstr "应用名称"
+
+#: clientgui/DlgItemProperties.cpp:456
+msgid "Plan Class"
+msgstr "计划类别"
+
+#: clientgui/DlgItemProperties.cpp:521 clientgui/ViewWork.cpp:1276
 #: clientgui/sg_TaskPanel.cpp:824
 msgid "Local: "
 msgstr "本地："
@@ -2472,7 +2487,7 @@ msgstr "您的团队信息"
 
 #: clientgui/Localization.cpp:123
 msgid "Get help for climateprediction.net"
-msgstr "从 CPDN 得到帮助"
+msgstr "从 climateprediction.net 得到帮助"
 
 #: clientgui/Localization.cpp:125
 msgid "News"
@@ -2480,7 +2495,7 @@ msgstr "新闻"
 
 #: clientgui/Localization.cpp:127
 msgid "climateprediction.net News"
-msgstr "CPDN 的项目新闻"
+msgstr "climateprediction.net 的项目新闻"
 
 #: clientgui/Localization.cpp:131
 msgid "View your account information, credits, and trickles"
@@ -2534,217 +2549,227 @@ msgstr "项目主页"
 msgid "Your tasks"
 msgstr "您的任务"
 
-#: clientgui/MainDocument.cpp:1296
+#: clientgui/MainDocument.cpp:1297
 msgid "Version Update"
 msgstr "版本升级"
 
-#: clientgui/MainDocument.cpp:1305
+#: clientgui/MainDocument.cpp:1307
 #, c-format
-msgid "A new version of %s is available. You can download it here: %s"
-msgstr "%s有新版本可用。您可以在%s进行下载。"
+msgid ""
+"A new version of %s is available.\n"
+"You can download it here: %s"
+msgstr "%s有新版本可用。\n您可以在%s进行下载。"
 
-#: clientgui/MainDocument.cpp:1308
+#: clientgui/MainDocument.cpp:1311
 #, c-format
 msgid "There is no new version of %s available for download."
 msgstr "%s已是最新版本。"
 
-#: clientgui/MainDocument.cpp:1312
+#: clientgui/MainDocument.cpp:1315
 #, c-format
 msgid "%s is not connected to the client"
 msgstr "%s没有连接到客户端。"
 
-#: clientgui/MainDocument.cpp:1975
+#: clientgui/MainDocument.cpp:1322
+msgid "Go to download page"
+msgstr "前往下载页"
+
+#: clientgui/MainDocument.cpp:1323
+msgid "Close"
+msgstr "关闭"
+
+#: clientgui/MainDocument.cpp:1987
 msgid "Missing application"
 msgstr "应用程序不存在"
 
-#: clientgui/MainDocument.cpp:1976
+#: clientgui/MainDocument.cpp:1988
 msgid ""
 "Please download and install the CoRD application from "
 "http://cord.sourceforge.net"
 msgstr "请从 http://cord.sourceforge.net 下载并安装 CoRD 程序。"
 
-#: clientgui/MainDocument.cpp:2584
+#: clientgui/MainDocument.cpp:2596
 msgid "on batteries"
 msgstr "电池供电"
 
-#: clientgui/MainDocument.cpp:2585
+#: clientgui/MainDocument.cpp:2597
 msgid "computer is in use"
 msgstr "正在使用计算机"
 
-#: clientgui/MainDocument.cpp:2586
+#: clientgui/MainDocument.cpp:2598
 msgid "user request"
 msgstr "用户请求"
 
-#: clientgui/MainDocument.cpp:2587
+#: clientgui/MainDocument.cpp:2599
 msgid "time of day"
 msgstr "每日时间段"
 
-#: clientgui/MainDocument.cpp:2588
+#: clientgui/MainDocument.cpp:2600
 msgid "CPU benchmarks in progress"
 msgstr "正在进行 CPU 基准测试"
 
-#: clientgui/MainDocument.cpp:2589
+#: clientgui/MainDocument.cpp:2601
 msgid "need disk space - check preferences"
 msgstr "磁盘空间不足 - 请检查参数设置"
 
-#: clientgui/MainDocument.cpp:2590
+#: clientgui/MainDocument.cpp:2602
 msgid "computer is not in use"
 msgstr "计算机未在使用"
 
-#: clientgui/MainDocument.cpp:2591
+#: clientgui/MainDocument.cpp:2603
 msgid "starting up"
 msgstr "启动中"
 
-#: clientgui/MainDocument.cpp:2592
+#: clientgui/MainDocument.cpp:2604
 msgid "an exclusive app is running"
 msgstr "有互斥的应用程序在运行"
 
-#: clientgui/MainDocument.cpp:2593
+#: clientgui/MainDocument.cpp:2605
 msgid "CPU is busy"
 msgstr "CPU 忙碌中"
 
-#: clientgui/MainDocument.cpp:2594
+#: clientgui/MainDocument.cpp:2606
 msgid "network bandwidth limit exceeded"
 msgstr "网络带宽限制已超出"
 
-#: clientgui/MainDocument.cpp:2595
+#: clientgui/MainDocument.cpp:2607
 msgid "requested by operating system"
 msgstr "操作系统请求"
 
-#: clientgui/MainDocument.cpp:2597
+#: clientgui/MainDocument.cpp:2609
 msgid "unknown reason"
 msgstr "未知原因"
 
-#: clientgui/MainDocument.cpp:2619
+#: clientgui/MainDocument.cpp:2631
 msgid "GPU missing, "
 msgstr "无可用 GPU, "
 
-#: clientgui/MainDocument.cpp:2626
+#: clientgui/MainDocument.cpp:2638
 msgid "New"
 msgstr "新任务"
 
-#: clientgui/MainDocument.cpp:2630
+#: clientgui/MainDocument.cpp:2642
 msgid "Download failed"
 msgstr "下载失败"
 
-#: clientgui/MainDocument.cpp:2632
+#: clientgui/MainDocument.cpp:2644
 msgid "Downloading"
 msgstr "正在下载"
 
-#: clientgui/MainDocument.cpp:2634 clientgui/MainDocument.cpp:2693
+#: clientgui/MainDocument.cpp:2646 clientgui/MainDocument.cpp:2705
 msgid " (suspended - "
 msgstr "(已暂停 - "
 
-#: clientgui/MainDocument.cpp:2642
+#: clientgui/MainDocument.cpp:2654
 msgid "Project suspended by user"
 msgstr "项目已被用户暂停"
 
-#: clientgui/MainDocument.cpp:2644
+#: clientgui/MainDocument.cpp:2656
 msgid "Task suspended by user"
 msgstr "任务已被用户暂停"
 
 #. an NCI process can be running even though computation is suspended
 #. (because of <dont_suspend_nci>
-#: clientgui/MainDocument.cpp:2649
+#: clientgui/MainDocument.cpp:2661
 msgid "Suspended - "
 msgstr "已暂停 - "
 
-#: clientgui/MainDocument.cpp:2652
+#: clientgui/MainDocument.cpp:2664
 msgid "GPU suspended - "
 msgstr "GPU 已暂停 - "
 
-#: clientgui/MainDocument.cpp:2656
+#: clientgui/MainDocument.cpp:2668
 msgid "Waiting for memory"
 msgstr "等待足够的内存"
 
-#: clientgui/MainDocument.cpp:2658
+#: clientgui/MainDocument.cpp:2670
 msgid "Waiting for shared memory"
 msgstr "等待足够的共享内存"
 
-#: clientgui/MainDocument.cpp:2660
+#: clientgui/MainDocument.cpp:2672
 msgid "Running"
 msgstr "运行中"
 
-#: clientgui/MainDocument.cpp:2662
+#: clientgui/MainDocument.cpp:2674
 msgid " (non-CPU-intensive)"
 msgstr "（非 CPU 密集计算）"
 
-#: clientgui/MainDocument.cpp:2665
+#: clientgui/MainDocument.cpp:2677
 msgid "Waiting to run"
 msgstr "等待运行"
 
-#: clientgui/MainDocument.cpp:2667 clientgui/MainDocument.cpp:2670
+#: clientgui/MainDocument.cpp:2679 clientgui/MainDocument.cpp:2682
 msgid "Ready to start"
 msgstr "准备运行"
 
-#: clientgui/MainDocument.cpp:2674
+#: clientgui/MainDocument.cpp:2686
 msgid "Postponed: "
 msgstr "推迟：　"
 
-#: clientgui/MainDocument.cpp:2677
+#: clientgui/MainDocument.cpp:2689
 msgid "Postponed"
 msgstr "已推迟"
 
-#: clientgui/MainDocument.cpp:2681
+#: clientgui/MainDocument.cpp:2693
 msgid "Waiting for network access"
 msgstr "正在等待访问网络"
 
-#: clientgui/MainDocument.cpp:2685
+#: clientgui/MainDocument.cpp:2697
 msgid "Computation error"
 msgstr "计算错误"
 
-#: clientgui/MainDocument.cpp:2689
+#: clientgui/MainDocument.cpp:2701
 msgid "Upload failed"
 msgstr "上传失败"
 
-#: clientgui/MainDocument.cpp:2691
+#: clientgui/MainDocument.cpp:2703
 msgid "Uploading"
 msgstr "正在上传"
 
-#: clientgui/MainDocument.cpp:2702
+#: clientgui/MainDocument.cpp:2714
 msgid "Aborted by user"
 msgstr "已被用户中止"
 
-#: clientgui/MainDocument.cpp:2705
+#: clientgui/MainDocument.cpp:2717
 msgid "Aborted by project"
 msgstr "已被项目中止"
 
-#: clientgui/MainDocument.cpp:2708
+#: clientgui/MainDocument.cpp:2720
 msgid "Aborted: not started by deadline"
 msgstr "已中止：未在截止日期前开始计算"
 
-#: clientgui/MainDocument.cpp:2711
+#: clientgui/MainDocument.cpp:2723
 msgid "Aborted: task disk limit exceeded"
 msgstr "已中止：任务磁盘使用超出限制"
 
-#: clientgui/MainDocument.cpp:2714
+#: clientgui/MainDocument.cpp:2726
 msgid "Aborted: run time limit exceeded"
 msgstr "已中止：运行时间超出限制"
 
-#: clientgui/MainDocument.cpp:2717
+#: clientgui/MainDocument.cpp:2729
 msgid "Aborted: memory limit exceeded"
 msgstr "已中止：内存使用超出限制"
 
-#: clientgui/MainDocument.cpp:2720
+#: clientgui/MainDocument.cpp:2732
 msgid "Aborted"
 msgstr "已中止"
 
-#: clientgui/MainDocument.cpp:2725
+#: clientgui/MainDocument.cpp:2737
 msgid "Acknowledged"
 msgstr "已被确认"
 
-#: clientgui/MainDocument.cpp:2727
+#: clientgui/MainDocument.cpp:2739
 msgid "Ready to report"
 msgstr "等待上报"
 
-#: clientgui/MainDocument.cpp:2729
+#: clientgui/MainDocument.cpp:2741
 #, c-format
 msgid "Error: invalid state '%d'"
 msgstr "错误：非法状态 '%d'"
 
 #: clientgui/NoInternetConnectionPage.cpp:179
 msgid "No Internet connection"
-msgstr "未连接到互联网"
+msgstr "无法连接到互联网"
 
 #: clientgui/NoInternetConnectionPage.cpp:182
 msgid "Please connect to the Internet and try again."
@@ -2801,86 +2826,90 @@ msgstr "要选择一个项目，请点击它的项目名称或在下方输入它
 msgid "Categories:"
 msgstr "类别："
 
-#: clientgui/ProjectInfoPage.cpp:271 clientgui/sg_ProjectPanel.cpp:90
+#: clientgui/ProjectInfoPage.cpp:297 clientgui/sg_ProjectPanel.cpp:90
 msgid "Projects:"
 msgstr "项目："
 
-#: clientgui/ProjectInfoPage.cpp:283
+#: clientgui/ProjectInfoPage.cpp:310
 msgid "Project details"
 msgstr "项目简介"
 
-#: clientgui/ProjectInfoPage.cpp:293
+#: clientgui/ProjectInfoPage.cpp:320
 msgid "Research area:"
 msgstr "研究领域："
 
-#: clientgui/ProjectInfoPage.cpp:303
+#: clientgui/ProjectInfoPage.cpp:330
 msgid "Organization:"
 msgstr "项目组织："
 
-#: clientgui/ProjectInfoPage.cpp:313
+#: clientgui/ProjectInfoPage.cpp:340
 msgid "Web site:"
 msgstr "网站："
 
-#: clientgui/ProjectInfoPage.cpp:324
+#: clientgui/ProjectInfoPage.cpp:351
 msgid "Supported systems:"
 msgstr "支持的操作系统："
 
-#: clientgui/ProjectInfoPage.cpp:331
+#: clientgui/ProjectInfoPage.cpp:358
 msgid "Supports Microsoft Windows"
 msgstr "支持 Windows"
 
-#: clientgui/ProjectInfoPage.cpp:335
+#: clientgui/ProjectInfoPage.cpp:362
 msgid "Supports Mac OS X"
 msgstr "支持 Mac OS X"
 
-#: clientgui/ProjectInfoPage.cpp:339
+#: clientgui/ProjectInfoPage.cpp:366
 msgid "Supports Linux on Intel"
 msgstr "支持 Intel 平台上的 Linux"
 
-#: clientgui/ProjectInfoPage.cpp:343
+#: clientgui/ProjectInfoPage.cpp:370
 msgid "Supports Android"
 msgstr "支持安卓"
 
-#: clientgui/ProjectInfoPage.cpp:347
+#: clientgui/ProjectInfoPage.cpp:374
 msgid "Supports FreeBSD"
 msgstr "支持 FreeBSD"
 
-#: clientgui/ProjectInfoPage.cpp:351
+#: clientgui/ProjectInfoPage.cpp:378
 msgid "Supports Linux on ARM (e.g. Raspberry Pi)"
 msgstr "支持 ARM 平台上的 Linux (例如：树莓派)"
 
-#: clientgui/ProjectInfoPage.cpp:355
+#: clientgui/ProjectInfoPage.cpp:382
 msgid "Supports NVIDIA GPUs"
 msgstr "支持 NVIDIA GPU"
 
-#: clientgui/ProjectInfoPage.cpp:359
+#: clientgui/ProjectInfoPage.cpp:386
 msgid "Supports AMD GPUs"
 msgstr "支持 AMD  GPU"
 
-#: clientgui/ProjectInfoPage.cpp:363
+#: clientgui/ProjectInfoPage.cpp:390
 msgid "Supports Intel GPUs"
 msgstr "支持 Intel  GPU"
 
-#: clientgui/ProjectInfoPage.cpp:367
+#: clientgui/ProjectInfoPage.cpp:394
 msgid "Supports VirtualBox"
 msgstr "支持 VirtualBox 虚拟机"
 
-#: clientgui/ProjectInfoPage.cpp:377
+#: clientgui/ProjectInfoPage.cpp:404
 msgid "Project URL:"
 msgstr "项目网址："
 
-#: clientgui/ProjectInfoPage.cpp:520 clientgui/ProjectInfoPage.cpp:754
-#: clientgui/ProjectInfoPage.cpp:758
+#. Populate the list control with the list of project names that belong to
+#. either the specific
+#. category or all of them.
+#. cycle through all projects
+#: clientgui/ProjectInfoPage.cpp:551 clientgui/ProjectInfoPage.cpp:803
+#: clientgui/ProjectInfoPage.cpp:807
 msgid "All"
 msgstr "所有"
 
-#: clientgui/ProjectInfoPage.cpp:803
+#: clientgui/ProjectInfoPage.cpp:852
 msgid ""
 "This project may not have work for your type of computer.  Do you want to "
 "add it anyway?"
 msgstr "该项目可能没有适合您计算机的任务类型，您确定还要添加它吗？"
 
-#: clientgui/ProjectInfoPage.cpp:862
+#: clientgui/ProjectInfoPage.cpp:889
 msgid "You already added this project. Please choose a different project."
 msgstr "您已加入这个项目，请选择其它的项目。"
 
@@ -2911,7 +2940,7 @@ msgstr "您已作为志愿者参与到该项目："
 
 #: clientgui/ProjectWelcomePage.cpp:232
 msgid "Name:"
-msgstr "用户名："
+msgstr "昵称："
 
 #: clientgui/ProjectWelcomePage.cpp:234
 msgid "URL:"
@@ -3052,7 +3081,7 @@ msgstr "请输入一个网址。\n例如：\nhttp://www.example.com/"
 #: clientgui/ValidateURL.cpp:91 clientgui/ValidateURL.cpp:103
 #: clientgui/ValidateURL.cpp:107 clientgui/ValidateURL.cpp:110
 msgid "Invalid URL"
-msgstr "错误的网址"
+msgstr "地址无效"
 
 #: clientgui/ValidateURL.cpp:84 clientgui/ValidateURL.cpp:88
 #: clientgui/ValidateURL.cpp:92
@@ -3194,7 +3223,7 @@ msgstr "显示项目细节。"
 
 #: clientgui/ViewProjects.cpp:252 clientgui/ViewStatistics.cpp:426
 msgid "Account"
-msgstr "帐户"
+msgstr "你的账户"
 
 #: clientgui/ViewProjects.cpp:254
 msgid "Work done"
@@ -3207,7 +3236,7 @@ msgstr "近期日均积分"
 #: clientgui/ViewProjects.cpp:257 clientgui/ViewTransfers.cpp:233
 #: clientgui/ViewWork.cpp:284
 msgid "Status"
-msgstr "状态"
+msgstr "统计"
 
 #: clientgui/ViewProjects.cpp:336
 msgid "Projects"
@@ -3293,7 +3322,7 @@ msgstr "项目已结束 - 可以删除"
 
 #: clientgui/ViewProjects.cpp:1145
 msgid "Will remove when tasks done"
-msgstr "将在任务完成后删除"
+msgstr "将在所有任务完成后删除"
 
 #: clientgui/ViewProjects.cpp:1148
 msgid "Scheduler request pending"
@@ -3301,7 +3330,7 @@ msgstr "等待调度请求"
 
 #: clientgui/ViewProjects.cpp:1154
 msgid "Scheduler request in progress"
-msgstr "正在进行调度请求"
+msgstr "正在请求调度"
 
 #: clientgui/ViewProjects.cpp:1157
 msgid "Trickle up message pending"
@@ -3482,7 +3511,7 @@ msgstr "中断传输"
 
 #: clientgui/ViewTransfers.cpp:212
 msgid "Abort this file transfer.  You won't get credit for the task."
-msgstr "中止该文件的传输，您将不能得到相应的任务积分。"
+msgstr "中止该文件的传输，您将不能得到该任务的积分。"
 
 #: clientgui/ViewTransfers.cpp:227
 msgid "File"
@@ -3510,7 +3539,7 @@ msgstr "速度"
 
 #: clientgui/ViewTransfers.cpp:318
 msgid "Transfers"
-msgstr "网络传输"
+msgstr "传输"
 
 #: clientgui/ViewTransfers.cpp:396
 msgid "Network activity is suspended - "
@@ -3752,7 +3781,7 @@ msgstr "更多的参数设置，请在高级视图下选择“计算参数设置
 
 #: clientgui/sg_DlgPreferences.cpp:269
 msgid "'In use' means mouse/keyboard input in last"
-msgstr "如果在最近的多少分钟内有鼠标或键盘操作则认为计算机在使用中"
+msgstr "“正在使用计算机”意味着鼠标或键盘操作发生在最近的"
 
 #: clientgui/sg_DlgPreferences.cpp:347
 msgid "GB of disk space"

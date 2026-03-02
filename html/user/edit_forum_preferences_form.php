@@ -154,7 +154,7 @@ $blocked_str = "";
 foreach ($blocked_users as $id) {
     if ($id) {
         $blocked_user = BoincUser::lookup_id((int)$id);
-        if (!$blocked) {
+        if (!$blocked_user) {
             echo "Missing user $id";
             continue;
         }
@@ -196,15 +196,23 @@ row2(
 row1(tra("Update"));
 row2(
     tra("Click here to update preferences"),
-    "<input class=\"btn btn-success\" type=submit value=\"".tra("Update")."\">"
+    sprintf('<input %s class="btn" type=submit value="%s">',
+        button_style(),
+        tra("Update")
+    )
 );
 echo "</form>\n";
 row1(tra("Reset"));
 row2(tra("Or click here to reset preferences to the defaults"),
-    "<form method=\"post\" action=\"edit_forum_preferences_action.php\"><input class=\"btn btn-warning\" type=\"submit\" value=\"".tra("Reset")."\"><input type=\"hidden\" name=\"action\" value=\"reset_confirm\"></form>"
+    sprintf('<form method="post" action="edit_forum_preferences_action.php">
+        <input %s class="btn" type="submit" value="%s">
+        <input type="hidden" name="action" value="reset_confirm">
+        </form>',
+        button_style('darkgoldenrod'),
+        tra("Reset")
+    )
 );
 end_table();
 page_tail();
 
-$cvs_version_tracker[]="\$Id$";  //Generated automatically - do not edit
 ?>

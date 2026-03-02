@@ -78,7 +78,6 @@ void RESULT::clear() {
     exit_status = 0;
     stderr_out.clear();
     suspended_via_gui = false;
-    coproc_missing = false;
     report_immediately = false;
     not_started = false;
     name_md5.clear();
@@ -218,8 +217,6 @@ int RESULT::parse_state(XML_PARSER& xp) {
 // write result descriptor to state file, GUI RPC reply, or sched request
 //
 int RESULT::write(MIOFILE& out, bool to_server) {
-    unsigned int i;
-    FILE_INFO* fip;
     int n, retval;
 
     out.printf(
@@ -316,8 +313,8 @@ int RESULT::write(MIOFILE& out, bool to_server) {
         out.printf("</stderr_out>\n");
     }
     if (to_server) {
-        for (i=0; i<output_files.size(); i++) {
-            fip = output_files[i].file_info;
+        for (const FILE_REF& fref: output_files) {
+            FILE_INFO* fip = fref.file_info;
             if (fip->uploaded) {
                 retval = fip->write(out, true);
                 if (retval) return retval;
@@ -337,8 +334,8 @@ int RESULT::write(MIOFILE& out, bool to_server) {
             report_deadline,
             received_time
         );
-        for (i=0; i<output_files.size(); i++) {
-            retval = output_files[i].write(out);
+        for (const FILE_REF& fref: output_files) {
+            retval = fref.write(out);
             if (retval) return retval;
         }
     }
@@ -389,7 +386,7 @@ int RESULT::write_gui(MIOFILE& out, bool check_resources) {
     if (project->suspended_via_gui) out.printf("    <project_suspended_via_gui/>\n");
     if (report_immediately) out.printf("    <report_immediately/>\n");
     if (edf_scheduled) out.printf("    <edf_scheduled/>\n");
-    if (coproc_missing) out.printf("    <coproc_missing/>\n");
+    if (resource_usage.missing_coproc) out.printf("    <coproc_missing/>\n");
     if (schedule_backoff > gstate.now) {
         out.printf("    <scheduler_wait/>\n");
         if (strlen(schedule_backoff_reason)) {
@@ -405,35 +402,35 @@ int RESULT::write_gui(MIOFILE& out, bool check_resources) {
         atp->write_gui(out);
     }
     if (!strlen(resources) || check_resources) { // update resource string only when zero or when app_config is updated.
-        if (avp->gpu_usage.rsc_type) {
-            if (avp->gpu_usage.usage == 1) {
+        if (resource_usage.rsc_type) {
+            if (resource_usage.coproc_usage == 1) {
                 snprintf(resources, sizeof(resources),
                     "%.3g %s + 1 %s",
-                    avp->avg_ncpus,
-                    cpu_string(avp->avg_ncpus),
-                    rsc_name_long(avp->gpu_usage.rsc_type)
+                    resource_usage.avg_ncpus,
+                    cpu_string(resource_usage.avg_ncpus),
+                    rsc_name_long(resource_usage.rsc_type)
                 );
             } else {
                 snprintf(resources, sizeof(resources),
                     "%.3g %s + %.3g %ss",
-                    avp->avg_ncpus,
-                    cpu_string(avp->avg_ncpus),
-                    avp->gpu_usage.usage,
-                    rsc_name_long(avp->gpu_usage.rsc_type)
+                    resource_usage.avg_ncpus,
+                    cpu_string(resource_usage.avg_ncpus),
+                    resource_usage.coproc_usage,
+                    rsc_name_long(resource_usage.rsc_type)
                 );
             }
-        } else if (avp->missing_coproc) {
+        } else if (resource_usage.missing_coproc) {
             snprintf(resources, sizeof(resources),
                 "%.3g %s + %.12s GPU (missing)",
-                avp->avg_ncpus,
-                cpu_string(avp->avg_ncpus),
-                avp->missing_coproc_name
+                resource_usage.avg_ncpus,
+                cpu_string(resource_usage.avg_ncpus),
+                resource_usage.missing_coproc_name
             );
-        } else if (!project->non_cpu_intensive && (avp->avg_ncpus != 1)) {
+        } else if (!project->non_cpu_intensive && (resource_usage.avg_ncpus != 1)) {
             snprintf(resources, sizeof(resources),
                 "%.3g %s",
-                avp->avg_ncpus,
-                cpu_string(avp->avg_ncpus)
+                resource_usage.avg_ncpus,
+                cpu_string(resource_usage.avg_ncpus)
             );
         } else {
             safe_strcpy(resources, " ");
@@ -444,13 +441,13 @@ int RESULT::write_gui(MIOFILE& out, bool check_resources) {
         char buf[256];
         safe_strcpy(buf, "");
         if (atp && atp->scheduler_state == CPU_SCHED_SCHEDULED) {
-            if (avp->gpu_usage.rsc_type) {
-                COPROC& cp = coprocs.coprocs[avp->gpu_usage.rsc_type];
+            if (resource_usage.rsc_type) {
+                COPROC& cp = coprocs.coprocs[resource_usage.rsc_type];
                 if (cp.count > 1) {
                     // if there are multiple GPUs of this type,
                     // show the user which one(s) are being used
                     //
-                    int n = (int)ceil(avp->gpu_usage.usage);
+                    int n = (int)ceil(resource_usage.coproc_usage);
                     safe_strcpy(buf, n>1?" (devices ":" (device ");
                     for (int i=0; i<n; i++) {
                         char buf2[256];
@@ -478,12 +475,10 @@ int RESULT::write_gui(MIOFILE& out, bool check_resources) {
 // successfully uploaded or have unrecoverable errors
 //
 bool RESULT::is_upload_done() {
-    unsigned int i;
-    FILE_INFO* fip;
     int retval;
 
-    for (i=0; i<output_files.size(); i++) {
-        fip = output_files[i].file_info;
+    for (const FILE_REF& fref: output_files) {
+        FILE_INFO* fip = fref.file_info;
         if (fip->uploadable()) {
             if (fip->had_failure(retval)) continue;
             if (!fip->uploaded) {
@@ -497,11 +492,8 @@ bool RESULT::is_upload_done() {
 // resets all FILE_INFO's in result to uploaded = false
 //
 void RESULT::clear_uploaded_flags() {
-    unsigned int i;
-    FILE_INFO* fip;
-
-    for (i=0; i<output_files.size(); i++) {
-        fip = output_files[i].file_info;
+    for (const FILE_REF& fref: output_files) {
+        FILE_INFO* fip = fref.file_info;
         fip->uploaded = false;
     }
 }
@@ -517,21 +509,20 @@ bool RESULT::is_not_started() {
 //
 bool RESULT::some_download_stalled() {
 #ifndef SIM
-    unsigned int i;
     FILE_INFO* fip;
     PERS_FILE_XFER* pfx;
     bool some_file_missing = false;
 
-    for (i=0; i<wup->input_files.size(); i++) {
-        fip = wup->input_files[i].file_info;
+    for (const FILE_REF &fref: wup->input_files) {
+        fip = fref.file_info;
         if (fip->status != FILE_PRESENT) some_file_missing = true;
         pfx = fip->pers_file_xfer;
         if (pfx && pfx->next_request_time > gstate.now) {
             return true;
         }
     }
-    for (i=0; i<avp->app_files.size(); i++) {
-        fip = avp->app_files[i].file_info;
+    for (const FILE_REF &fref: avp->app_files) {
+        fip = fref.file_info;
         if (fip->status != FILE_PRESENT) some_file_missing = true;
         pfx = fip->pers_file_xfer;
         if (pfx && pfx->next_request_time > gstate.now) {
@@ -547,18 +538,16 @@ bool RESULT::some_download_stalled() {
 }
 
 FILE_REF* RESULT::lookup_file(FILE_INFO* fip) {
-    for (unsigned int i=0; i<output_files.size(); i++) {
-        FILE_REF& fr = output_files[i];
-        if (fr.file_info == fip) return &fr;
+    for (FILE_REF& fref: output_files) {
+        if (fref.file_info == fip) return &fref;
     }
     return 0;
 }
 
 FILE_INFO* RESULT::lookup_file_logical(const char* lname) {
-    for (unsigned int i=0; i<output_files.size(); i++) {
-        FILE_REF& fr = output_files[i];
-        if (!strcmp(lname, fr.open_name)) {
-            return fr.file_info;
+    for (const FILE_REF& fref: output_files) {
+        if (!strcmp(lname, fref.open_name)) {
+            return fref.file_info;
         }
     }
     return 0;
@@ -591,7 +580,7 @@ bool RESULT::runnable() {
     if (suspended_via_gui) return false;
     if (project->suspended_via_gui) return false;
     if (state() != RESULT_FILES_DOWNLOADED) return false;
-    if (coproc_missing) return false;
+    if (resource_usage.missing_coproc) return false;
     if (schedule_backoff > gstate.now) return false;
     if (avp->needs_network && gstate.file_xfers_suspended) {
         // check file_xfers_suspended rather than network_suspended;
@@ -618,7 +607,7 @@ bool RESULT::nearly_runnable() {
     default:
         return false;
     }
-    if (coproc_missing) return false;
+    if (resource_usage.missing_coproc) return false;
     if (schedule_backoff > gstate.now) return false;
     return true;
 }
@@ -634,8 +623,14 @@ bool RESULT::downloading() {
     return true;
 }
 
+bool RESULT::running() {
+    ACTIVE_TASK *atp = gstate.lookup_active_task_by_result(this);
+    if (!atp) return false;
+    return atp->task_state() != PROCESS_UNINITIALIZED;
+}
+
 double RESULT::estimated_runtime_uncorrected() {
-    return wup->rsc_fpops_est/avp->flops;
+    return wup->rsc_fpops_est/resource_usage.flops;
 }
 
 // estimate how long a result will take on this host
@@ -665,7 +660,7 @@ double RESULT::estimated_runtime_remaining() {
 
     if (atp) {
 #ifdef SIM
-        return sim_flops_left/avp->flops;
+        return sim_flops_left/resource_usage.flops;
 #else
         return atp->est_dur() - atp->elapsed_time;
 #endif

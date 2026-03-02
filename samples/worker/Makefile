@@ -1,4 +1,4 @@
-CXXFLAGS += -g
+#CXXFLAGS += -g
 CXX ?= g++
 
 ifdef ANDROID
@@ -11,6 +11,16 @@ else
 	endif
 endif
 
+ifdef RELEASE_ARCH
+  CFLAGS += -O3 -flto
+  CXXFLAGS += -O3 -flto
+  LDFLAGS += -O3 -flto -s -static-libstdc++
+else
+  CFLAGS += -O0 -g
+  CXXFLAGS += -O0 -g
+  LDFLAGS += -O0 -g
+endif
+
 PROGS = worker$(WORKER_RELEASE_SUFFIX)
 
 all: $(PROGS)
@@ -20,8 +30,8 @@ clean: distclean
 distclean:
 	rm -f $(PROGS) $(addsuffix .exe, $(PROGS)) *.o
 
-worker$(WORKER_RELEASE_SUFFIX): worker.o
-	$(CXX) $(CXXFLAGS) $(CPPFLAGS) $(LDFLAGS) -o worker$(WORKER_RELEASE_SUFFIX) worker.o
+worker$(WORKER_RELEASE_SUFFIX): worker.cpp
+	$(CXX) $(CXXFLAGS) $(CPPFLAGS) $(LDFLAGS) -o worker$(WORKER_RELEASE_SUFFIX) worker.cpp
 
 install: all
 

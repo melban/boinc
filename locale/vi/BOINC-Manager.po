@@ -1,5 +1,5 @@
 # BOINC manager localization template
-# Copyright (C) 2023 University of California
+# Copyright (C) 2025 University of California
 # 
 # This file is distributed under the same license as BOINC.
 # 
@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: BOINC\n"
 "Report-Msgid-Bugs-To: BOINC translation team <boinc_loc@ssl.berkeley.edu>\n"
-"POT-Creation-Date: 2023-07-22 11:33 UTC\n"
+"POT-Creation-Date: 2025-02-09 02:28 UTC\n"
 "PO-Revision-Date: 2015-02-08 15:28+0000\n"
 "Last-Translator: Minh Phan, 2022\n"
 "Language-Team: Vietnamese (http://app.transifex.com/boinc/boinc/language/vi/)\n"
@@ -184,416 +184,416 @@ msgstr "Đã kết nối"
 msgid "Disconnected"
 msgstr "Đã ngắt kết nối"
 
-#: clientgui/AdvancedFrame.cpp:328
+#: clientgui/AdvancedFrame.cpp:334
 #, c-format
 msgid "New %s window..."
 msgstr "Cửa sổ %s mới..."
 
-#: clientgui/AdvancedFrame.cpp:332
+#: clientgui/AdvancedFrame.cpp:338
 #, c-format
 msgid "Open another %s window"
 msgstr "Mở một cửa sổ %s khác"
 
-#: clientgui/AdvancedFrame.cpp:343
+#: clientgui/AdvancedFrame.cpp:349
 msgid "Select computer...\tCtrl+Shift+I"
 msgstr "Chọn máy tính...\tCtrl+Shift+I"
 
-#: clientgui/AdvancedFrame.cpp:344
+#: clientgui/AdvancedFrame.cpp:350
 msgid "Connect to a BOINC client on another computer"
 msgstr "Kết nối tới một máy khách BOINC trên một chiếc máy tính khác"
 
-#: clientgui/AdvancedFrame.cpp:348
+#: clientgui/AdvancedFrame.cpp:354
 msgid "Shut down connected client..."
 msgstr "Tắt máy khách đã được kết nối..."
 
-#: clientgui/AdvancedFrame.cpp:349
+#: clientgui/AdvancedFrame.cpp:355
 msgid "Shut down the currently connected BOINC client"
 msgstr "Tắt máy khách BOINC hiện tại được kết nối"
 
-#: clientgui/AdvancedFrame.cpp:354 clientgui/sg_BoincSimpleFrame.cpp:150
+#: clientgui/AdvancedFrame.cpp:360 clientgui/sg_BoincSimpleFrame.cpp:150
 #, c-format
 msgid "Close the %s window"
 msgstr "Đóng cửa sổ %s"
 
-#: clientgui/AdvancedFrame.cpp:357 clientgui/sg_BoincSimpleFrame.cpp:153
+#: clientgui/AdvancedFrame.cpp:363 clientgui/sg_BoincSimpleFrame.cpp:153
 msgid "&Close window"
 msgstr "&Đóng cửa sổ"
 
-#: clientgui/AdvancedFrame.cpp:366 clientgui/sg_BoincSimpleFrame.cpp:162
+#: clientgui/AdvancedFrame.cpp:372 clientgui/sg_BoincSimpleFrame.cpp:162
 #, c-format
 msgid "Exit %s"
 msgstr "Thoát %s"
 
-#: clientgui/AdvancedFrame.cpp:371 clientgui/AdvancedFrame.cpp:376
+#: clientgui/AdvancedFrame.cpp:377 clientgui/AdvancedFrame.cpp:382
 #: clientgui/AsyncRPC.cpp:1086 clientgui/sg_BoincSimpleFrame.cpp:167
 #, c-format
 msgid "E&xit %s"
 msgstr "&Thoát ra %s"
 
-#: clientgui/AdvancedFrame.cpp:390 clientgui/sg_BoincSimpleFrame.cpp:181
+#: clientgui/AdvancedFrame.cpp:396 clientgui/sg_BoincSimpleFrame.cpp:181
 msgid "Preferences...\tCtrl+,"
 msgstr ""
 
-#: clientgui/AdvancedFrame.cpp:399
+#: clientgui/AdvancedFrame.cpp:405
 msgid "&Notices\tCtrl+Shift+N"
 msgstr "&Thông báo \tCtrl+Shift+N"
 
-#: clientgui/AdvancedFrame.cpp:400
+#: clientgui/AdvancedFrame.cpp:406
 msgid "Show notices"
 msgstr "Hiển thị thông báo"
 
-#: clientgui/AdvancedFrame.cpp:405
+#: clientgui/AdvancedFrame.cpp:411
 msgid "&Projects\tCtrl+Shift+P"
 msgstr "&Các dự án\tCtrl+Shift+P"
 
-#: clientgui/AdvancedFrame.cpp:406
+#: clientgui/AdvancedFrame.cpp:412
 msgid "Show projects"
 msgstr "Hiển thị các dự án"
 
-#: clientgui/AdvancedFrame.cpp:411
+#: clientgui/AdvancedFrame.cpp:417
 msgid "&Tasks\tCtrl+Shift+T"
 msgstr "&Nhiệm vụ\tCtrl+Shift+T"
 
-#: clientgui/AdvancedFrame.cpp:412
+#: clientgui/AdvancedFrame.cpp:418
 msgid "Show tasks"
 msgstr "Hiển thị các nhiệm vụ"
 
-#: clientgui/AdvancedFrame.cpp:417
+#: clientgui/AdvancedFrame.cpp:423
 msgid "Trans&fers\tCtrl+Shift+X"
 msgstr "&Truyền dữ liệu file tệp tin\tCtrl+Shift+X"
 
-#: clientgui/AdvancedFrame.cpp:418
+#: clientgui/AdvancedFrame.cpp:424
 msgid "Show file transfers"
 msgstr "Hiển thị truyền file tệp tin"
 
-#: clientgui/AdvancedFrame.cpp:423
+#: clientgui/AdvancedFrame.cpp:429
 msgid "&Statistics\tCtrl+Shift+S"
 msgstr "&Thống kê\tCtrl+Shift+S"
 
-#: clientgui/AdvancedFrame.cpp:424
+#: clientgui/AdvancedFrame.cpp:430
 msgid "Show statistics"
 msgstr "Hiển thị các thống kê"
 
-#: clientgui/AdvancedFrame.cpp:429
+#: clientgui/AdvancedFrame.cpp:435
 msgid "&Disk\tCtrl+Shift+D"
 msgstr "&Ổ đĩa\tCtrl+Shift+D"
 
-#: clientgui/AdvancedFrame.cpp:430
+#: clientgui/AdvancedFrame.cpp:436
 msgid "Show disk usage"
 msgstr "Hiển thị sử dụng ổ đĩa"
 
-#: clientgui/AdvancedFrame.cpp:437
+#: clientgui/AdvancedFrame.cpp:443
 msgid "Simple &View...\tCtrl+Shift+V"
 msgstr "&Chế độ xem đơn giản...\tCtrl+Shift+V"
 
-#: clientgui/AdvancedFrame.cpp:438
+#: clientgui/AdvancedFrame.cpp:444
 msgid "Switch to the Simple View"
 msgstr "Chuyển sang Chế độ xem đơn giản"
 
-#: clientgui/AdvancedFrame.cpp:452 clientgui/AdvancedFrame.cpp:476
+#: clientgui/AdvancedFrame.cpp:458 clientgui/AdvancedFrame.cpp:482
 #: clientgui/sg_BoincSimpleFrame.cpp:236 clientgui/sg_BoincSimpleFrame.cpp:260
 msgid "&Add project..."
 msgstr "&Thêm dự án..."
 
-#: clientgui/AdvancedFrame.cpp:453 clientgui/AdvancedFrame.cpp:477
+#: clientgui/AdvancedFrame.cpp:459 clientgui/AdvancedFrame.cpp:483
 #: clientgui/sg_BoincSimpleFrame.cpp:237 clientgui/sg_BoincSimpleFrame.cpp:261
 msgid "Add a project"
 msgstr "Thêm một dự án"
 
-#: clientgui/AdvancedFrame.cpp:457 clientgui/sg_BoincSimpleFrame.cpp:241
+#: clientgui/AdvancedFrame.cpp:463 clientgui/sg_BoincSimpleFrame.cpp:241
 msgid "&Use account manager..."
 msgstr "&Sử dụng trình quản lý tài khoản..."
 
-#: clientgui/AdvancedFrame.cpp:458 clientgui/sg_BoincSimpleFrame.cpp:242
+#: clientgui/AdvancedFrame.cpp:464 clientgui/sg_BoincSimpleFrame.cpp:242
 msgid "Use an account manager to control this computer."
 msgstr "Sử dụng trình quản lý tài khoản để điều khiển máy tính này."
 
-#: clientgui/AdvancedFrame.cpp:462 clientgui/sg_BoincSimpleFrame.cpp:246
+#: clientgui/AdvancedFrame.cpp:468 clientgui/sg_BoincSimpleFrame.cpp:246
 #, c-format
 msgid "&Synchronize with %s"
 msgstr "&Đồng bộ với %s"
 
-#: clientgui/AdvancedFrame.cpp:466 clientgui/sg_BoincSimpleFrame.cpp:250
+#: clientgui/AdvancedFrame.cpp:472 clientgui/sg_BoincSimpleFrame.cpp:250
 #, c-format
 msgid "Get current settings from %s"
 msgstr "Nhận cài đặt tuỳ chọn hiện tại từ %s"
 
-#: clientgui/AdvancedFrame.cpp:480 clientgui/sg_BoincSimpleFrame.cpp:264
+#: clientgui/AdvancedFrame.cpp:486 clientgui/sg_BoincSimpleFrame.cpp:264
 #, c-format
 msgid "S&top using %s..."
 msgstr "&Dừng sử dụng %s..."
 
-#: clientgui/AdvancedFrame.cpp:486 clientgui/sg_BoincSimpleFrame.cpp:270
+#: clientgui/AdvancedFrame.cpp:492 clientgui/sg_BoincSimpleFrame.cpp:270
 msgid "Remove this computer from account manager control."
 msgstr "Loại bỏ chiếc máy tính này khỏi sự kiểm soát của quản lý tài khoản."
 
-#: clientgui/AdvancedFrame.cpp:492
+#: clientgui/AdvancedFrame.cpp:498
 msgid "Run CPU &benchmarks"
 msgstr "Chạy CPU &benchmarks"
 
-#: clientgui/AdvancedFrame.cpp:493
+#: clientgui/AdvancedFrame.cpp:499
 msgid "Run tests that measure CPU speed"
 msgstr "Chạy các bài kiểm tra đo tốc độ CPU"
 
-#: clientgui/AdvancedFrame.cpp:497
+#: clientgui/AdvancedFrame.cpp:503
 msgid "Retry pending transfers"
 msgstr "Thử truyền lại file tệp tin vẫn chưa được giải quyết"
 
-#: clientgui/AdvancedFrame.cpp:498
+#: clientgui/AdvancedFrame.cpp:504
 msgid "Retry deferred file transfers and task requests"
 msgstr "Thử lại các yêu cầu nhiệm vụ và các lệnh truyền file tệp tin bị trì hoãn"
 
-#: clientgui/AdvancedFrame.cpp:503 clientgui/sg_BoincSimpleFrame.cpp:276
+#: clientgui/AdvancedFrame.cpp:509 clientgui/sg_BoincSimpleFrame.cpp:276
 msgid "Event Log...\tCtrl+Shift+E"
 msgstr "Nhật ký log sự kiện\tCtrl+Shift+E"
 
-#: clientgui/AdvancedFrame.cpp:504
+#: clientgui/AdvancedFrame.cpp:510
 msgid "Show diagnostic messages"
 msgstr "Hiển thị các tin báo chẩn đoán"
 
-#: clientgui/AdvancedFrame.cpp:512
+#: clientgui/AdvancedFrame.cpp:518
 msgid "&Run always"
 msgstr "&Luôn luôn chạy"
 
-#: clientgui/AdvancedFrame.cpp:513
+#: clientgui/AdvancedFrame.cpp:519
 msgid "Allow work regardless of preferences"
 msgstr "Cho phép công việc bất kể tuỳ chọn"
 
-#: clientgui/AdvancedFrame.cpp:517
+#: clientgui/AdvancedFrame.cpp:523
 msgid "Run based on &preferences"
 msgstr "Chạy dựa trên các &tuỳ chọn"
 
-#: clientgui/AdvancedFrame.cpp:518
+#: clientgui/AdvancedFrame.cpp:524
 msgid "Allow work according to preferences"
 msgstr "Cho phép công việc theo như tuỳ chọn"
 
-#: clientgui/AdvancedFrame.cpp:522
+#: clientgui/AdvancedFrame.cpp:528
 msgid "&Suspend"
 msgstr "&Tạm ngưng"
 
-#: clientgui/AdvancedFrame.cpp:523
+#: clientgui/AdvancedFrame.cpp:529
 msgid "Stop work regardless of preferences"
 msgstr "Dừng công việc bất kể tuỳ chọn"
 
-#: clientgui/AdvancedFrame.cpp:548
+#: clientgui/AdvancedFrame.cpp:554
 msgid "Use GPU always"
 msgstr "Luôn sử dụng GPU"
 
-#: clientgui/AdvancedFrame.cpp:549
+#: clientgui/AdvancedFrame.cpp:555
 msgid "Allow GPU work regardless of preferences"
 msgstr "Cho phép GPU làm việc bất kể tuỳ chọn"
 
-#: clientgui/AdvancedFrame.cpp:553
+#: clientgui/AdvancedFrame.cpp:559
 msgid "Use GPU based on preferences"
 msgstr "Sử dụng GPU dựa theo tuỳ chọn"
 
-#: clientgui/AdvancedFrame.cpp:554
+#: clientgui/AdvancedFrame.cpp:560
 msgid "Allow GPU work according to preferences"
 msgstr "Cho phép GPU làm việc theo như tuỳ chọn"
 
-#: clientgui/AdvancedFrame.cpp:558
+#: clientgui/AdvancedFrame.cpp:564
 msgid "Suspend GPU"
 msgstr "Tạm ngưng GPU"
 
-#: clientgui/AdvancedFrame.cpp:559
+#: clientgui/AdvancedFrame.cpp:565
 msgid "Stop GPU work regardless of preferences"
 msgstr "Dừng công việc GPU bất kể tuỳ chọn"
 
-#: clientgui/AdvancedFrame.cpp:583
+#: clientgui/AdvancedFrame.cpp:589
 msgid "Network activity always"
 msgstr "Luôn luôn hoạt động mạng"
 
-#: clientgui/AdvancedFrame.cpp:584
+#: clientgui/AdvancedFrame.cpp:590
 msgid "Allow network activity regardless of preferences"
 msgstr "Cho phép hoạt động mạng bất kể tùy chọn"
 
-#: clientgui/AdvancedFrame.cpp:588
+#: clientgui/AdvancedFrame.cpp:594
 msgid "Network activity based on preferences"
 msgstr "Hoạt động mạng dựa trên tùy chọn"
 
-#: clientgui/AdvancedFrame.cpp:589
+#: clientgui/AdvancedFrame.cpp:595
 msgid "Allow network activity according to preferences"
 msgstr "Cho phép hoạt động mạng theo như tuỳ chọn"
 
-#: clientgui/AdvancedFrame.cpp:593
+#: clientgui/AdvancedFrame.cpp:599
 msgid "Suspend network activity"
 msgstr "Tạm ngưng hoạt động mạng"
 
-#: clientgui/AdvancedFrame.cpp:594
+#: clientgui/AdvancedFrame.cpp:600
 msgid "Stop network activity"
 msgstr "Dừng hẳn hoạt động mạng"
 
-#: clientgui/AdvancedFrame.cpp:603 clientgui/sg_BoincSimpleFrame.cpp:221
+#: clientgui/AdvancedFrame.cpp:609 clientgui/sg_BoincSimpleFrame.cpp:221
 msgid "Computing &preferences..."
 msgstr "&Tùy chọn tính toán..."
 
-#: clientgui/AdvancedFrame.cpp:604 clientgui/sg_BoincSimpleFrame.cpp:222
+#: clientgui/AdvancedFrame.cpp:610 clientgui/sg_BoincSimpleFrame.cpp:222
 msgid "Configure computing preferences"
 msgstr "Cấu hình các tùy chọn tính toán"
 
-#: clientgui/AdvancedFrame.cpp:609
+#: clientgui/AdvancedFrame.cpp:615
 msgid "Exclusive applications..."
 msgstr "Các ứng dụng riêng biệt..."
 
-#: clientgui/AdvancedFrame.cpp:610
+#: clientgui/AdvancedFrame.cpp:616
 msgid "Configure exclusive applications"
 msgstr "Định cấu hình các ứng dụng riêng biệt"
 
-#: clientgui/AdvancedFrame.cpp:615
+#: clientgui/AdvancedFrame.cpp:621
 msgid "Select columns..."
 msgstr "Lựa chọn cột..."
 
-#: clientgui/AdvancedFrame.cpp:616
+#: clientgui/AdvancedFrame.cpp:622
 msgid "Select which columns to display"
 msgstr "Chọn lựa cột nào để hiển thị"
 
-#: clientgui/AdvancedFrame.cpp:620
+#: clientgui/AdvancedFrame.cpp:626
 msgid "Event Log options...\tCtrl+Shift+F"
 msgstr "Các lựa chọn Nhật ký log sự kiện...\tCtrl+Shift+F"
 
-#: clientgui/AdvancedFrame.cpp:621
+#: clientgui/AdvancedFrame.cpp:627
 msgid "Enable or disable various diagnostic messages"
 msgstr "Bật hoặc tắt các thông báo chẩn đoán khác nhau"
 
-#: clientgui/AdvancedFrame.cpp:625 clientgui/sg_BoincSimpleFrame.cpp:227
+#: clientgui/AdvancedFrame.cpp:631 clientgui/sg_BoincSimpleFrame.cpp:227
 msgid "&Other options..."
 msgstr "&Các lựa chọn khác..."
 
-#: clientgui/AdvancedFrame.cpp:626
+#: clientgui/AdvancedFrame.cpp:632
 msgid "Configure display options and network settings"
 msgstr "Định cấu hình các tùy chọn hiển thị và cài đặt mạng"
 
-#: clientgui/AdvancedFrame.cpp:631
+#: clientgui/AdvancedFrame.cpp:637
 msgid "Read config files"
 msgstr "Đọc tệp tin cấu hình"
 
-#: clientgui/AdvancedFrame.cpp:632
+#: clientgui/AdvancedFrame.cpp:638
 msgid ""
 "Read configuration info from cc_config.xml and any app_config.xml files"
 msgstr "Đọc thông tin cấu hình từ tệp cc_config.xml và bất kỳ tệp app_config.xml nào"
 
-#: clientgui/AdvancedFrame.cpp:636
+#: clientgui/AdvancedFrame.cpp:642
 msgid "Read local prefs file"
 msgstr "Đọc file tệp tin tuỳ chỉnh cục bộ prefs"
 
-#: clientgui/AdvancedFrame.cpp:637
+#: clientgui/AdvancedFrame.cpp:643
 msgid "Read preferences from global_prefs_override.xml."
 msgstr "Đọc các tùy chọn từ file tệp tin global_prefs_override.xml."
 
-#: clientgui/AdvancedFrame.cpp:645 clientgui/sg_BoincSimpleFrame.cpp:284
+#: clientgui/AdvancedFrame.cpp:651 clientgui/sg_BoincSimpleFrame.cpp:284
 #, c-format
 msgid "%s &help"
 msgstr "%s &trợ giúp"
 
-#: clientgui/AdvancedFrame.cpp:649 clientgui/sg_BoincSimpleFrame.cpp:288
+#: clientgui/AdvancedFrame.cpp:655 clientgui/sg_BoincSimpleFrame.cpp:288
 #, c-format
 msgid "Show information about %s"
 msgstr "Hiện thông tin về %s"
 
-#: clientgui/AdvancedFrame.cpp:659 clientgui/sg_BoincSimpleFrame.cpp:298
+#: clientgui/AdvancedFrame.cpp:665 clientgui/sg_BoincSimpleFrame.cpp:298
 #, c-format
 msgid "&%s help"
 msgstr "&%s trợ giúp"
 
-#: clientgui/AdvancedFrame.cpp:663 clientgui/sg_BoincSimpleFrame.cpp:302
+#: clientgui/AdvancedFrame.cpp:669 clientgui/sg_BoincSimpleFrame.cpp:302
 #, c-format
 msgid "Show information about the %s"
 msgstr "Hiện thông tin về %s"
 
-#: clientgui/AdvancedFrame.cpp:674 clientgui/sg_BoincSimpleFrame.cpp:312
+#: clientgui/AdvancedFrame.cpp:680 clientgui/sg_BoincSimpleFrame.cpp:312
 #, c-format
 msgid "%s &web site"
 msgstr "%s&trang web"
 
-#: clientgui/AdvancedFrame.cpp:678
+#: clientgui/AdvancedFrame.cpp:684
 #, c-format
 msgid "See more information about %s on the web"
 msgstr "Xem thêm thông tin về %s trên web"
 
-#: clientgui/AdvancedFrame.cpp:689 clientgui/AdvancedFrame.cpp:693
+#: clientgui/AdvancedFrame.cpp:695 clientgui/AdvancedFrame.cpp:699
 #: clientgui/sg_BoincSimpleFrame.cpp:327 clientgui/sg_BoincSimpleFrame.cpp:331
 #, c-format
 msgid "Check for new %s version"
 msgstr "Thăm dò phiên bản %s mới"
 
-#: clientgui/AdvancedFrame.cpp:705 clientgui/sg_BoincSimpleFrame.cpp:343
+#: clientgui/AdvancedFrame.cpp:711 clientgui/sg_BoincSimpleFrame.cpp:343
 msgid "Report Issue"
 msgstr "Báo cáo vấn đề"
 
-#: clientgui/AdvancedFrame.cpp:706 clientgui/sg_BoincSimpleFrame.cpp:344
+#: clientgui/AdvancedFrame.cpp:712 clientgui/sg_BoincSimpleFrame.cpp:344
 msgid "Report bug or enhancement request"
 msgstr "Báo cáo lỗi hoặc yêu cầu nâng cao"
 
-#: clientgui/AdvancedFrame.cpp:711 clientgui/BOINCTaskBar.cpp:550
+#: clientgui/AdvancedFrame.cpp:717 clientgui/BOINCTaskBar.cpp:564
 #: clientgui/sg_BoincSimpleFrame.cpp:349
 #, c-format
 msgid "&About %s..."
 msgstr "&Về %s..."
 
-#: clientgui/AdvancedFrame.cpp:717 clientgui/sg_BoincSimpleFrame.cpp:355
+#: clientgui/AdvancedFrame.cpp:723 clientgui/sg_BoincSimpleFrame.cpp:355
 msgid "Licensing and copyright information."
 msgstr "Thông tin cấp phép và bản quyền."
 
-#: clientgui/AdvancedFrame.cpp:724 clientgui/sg_BoincSimpleFrame.cpp:362
+#: clientgui/AdvancedFrame.cpp:730 clientgui/sg_BoincSimpleFrame.cpp:362
 msgid "&File"
 msgstr "&File tệp"
 
-#: clientgui/AdvancedFrame.cpp:728 clientgui/sg_BoincSimpleFrame.cpp:366
+#: clientgui/AdvancedFrame.cpp:734 clientgui/sg_BoincSimpleFrame.cpp:366
 msgid "&View"
 msgstr "&Chế độ xem"
 
-#: clientgui/AdvancedFrame.cpp:732
+#: clientgui/AdvancedFrame.cpp:738
 msgid "&Activity"
 msgstr "&Hoạt động"
 
-#: clientgui/AdvancedFrame.cpp:736 clientgui/sg_BoincSimpleFrame.cpp:370
+#: clientgui/AdvancedFrame.cpp:742 clientgui/sg_BoincSimpleFrame.cpp:370
 msgid "&Options"
 msgstr "&Các lựa chọn"
 
-#: clientgui/AdvancedFrame.cpp:740 clientgui/sg_BoincSimpleFrame.cpp:374
+#: clientgui/AdvancedFrame.cpp:746 clientgui/sg_BoincSimpleFrame.cpp:374
 msgid "&Tools"
 msgstr "&Công cụ"
 
-#: clientgui/AdvancedFrame.cpp:744 clientgui/DlgAdvPreferencesBase.cpp:202
+#: clientgui/AdvancedFrame.cpp:750 clientgui/DlgAdvPreferencesBase.cpp:202
 #: clientgui/DlgExclusiveApps.cpp:157 clientgui/sg_BoincSimpleFrame.cpp:378
 #: clientgui/sg_DlgPreferences.cpp:371 clientgui/wizardex.cpp:383
 #: clientgui/wizardex.cpp:390
 msgid "&Help"
 msgstr "&Trợ giúp"
 
-#: clientgui/AdvancedFrame.cpp:1348
+#: clientgui/AdvancedFrame.cpp:1357
 #, c-format
 msgid "%s - Shut down the current client..."
 msgstr "%s - Tắt máy khách hiện tại..."
 
-#: clientgui/AdvancedFrame.cpp:1357
+#: clientgui/AdvancedFrame.cpp:1366
 #, c-format
 msgid ""
 "%s will shut down the current client\n"
 "and prompt you for another host to connect to."
 msgstr "%s sẽ dừng máy khách hiện tại\nvà cất nhắc bạn cho một máy chủ khác để kết nối."
 
-#: clientgui/AdvancedFrame.cpp:1747 clientgui/DlgAbout.cpp:121
+#: clientgui/AdvancedFrame.cpp:1756 clientgui/DlgAbout.cpp:121
 #, c-format
 msgid "%s"
 msgstr "%s"
 
-#: clientgui/AdvancedFrame.cpp:1757
+#: clientgui/AdvancedFrame.cpp:1766
 #, c-format
 msgid "%s has successfully added %s"
 msgstr "%s đã thêm vào %s thành công"
 
-#: clientgui/AdvancedFrame.cpp:1904
+#: clientgui/AdvancedFrame.cpp:1913
 #, c-format
 msgid "%s - (%s)"
 msgstr "%s - (%s)"
 
-#: clientgui/AdvancedFrame.cpp:1908
+#: clientgui/AdvancedFrame.cpp:1917
 #, c-format
 msgid "Connecting to %s"
 msgstr "Đang kết nối tới %s"
 
-#: clientgui/AdvancedFrame.cpp:1911
+#: clientgui/AdvancedFrame.cpp:1920
 #, c-format
 msgid "Connected to %s (%s)"
 msgstr "Đã kết nối tới %s (%s)"
@@ -638,10 +638,9 @@ msgstr "%s - Giao tiếp"
 
 #: clientgui/AsyncRPC.cpp:1106 clientgui/DlgAdvPreferencesBase.cpp:195
 #: clientgui/DlgDiagnosticLogFlags.cpp:128 clientgui/DlgExclusiveApps.cpp:151
-#: clientgui/DlgExitMessage.cpp:190 clientgui/DlgGenericMessage.cpp:125
-#: clientgui/DlgHiddenColumns.cpp:108 clientgui/DlgOptions.cpp:445
-#: clientgui/DlgSelectComputer.cpp:168 clientgui/sg_DlgPreferences.cpp:361
-#: clientgui/wizardex.cpp:387
+#: clientgui/DlgExitMessage.cpp:200 clientgui/DlgHiddenColumns.cpp:108
+#: clientgui/DlgOptions.cpp:445 clientgui/DlgSelectComputer.cpp:168
+#: clientgui/sg_DlgPreferences.cpp:361 clientgui/wizardex.cpp:387
 msgid "Cancel"
 msgstr "Huỷ bỏ"
 
@@ -714,12 +713,12 @@ msgstr "Nếu bạn dừng sử dụng %s,\nbạn sẽ giữ lại tất cả c�
 msgid "Project web pages"
 msgstr "Trang web dự án"
 
-#: clientgui/BOINCClientManager.cpp:532
+#: clientgui/BOINCClientManager.cpp:548
 #, c-format
 msgid "%s - Unexpected Exit"
 msgstr "%s - Thoát ra không mong đợi"
 
-#: clientgui/BOINCClientManager.cpp:542
+#: clientgui/BOINCClientManager.cpp:558
 #, c-format
 msgid ""
 "The %s client has exited unexpectedly 3 times within the last %d minutes.\n"
@@ -770,7 +769,7 @@ msgstr "%s đã ngắt khỏi kết nối Internet thành công."
 msgid "%s failed to disconnected from the Internet."
 msgstr "%s đã thất bại khi định ngắt kết nối internet."
 
-#: clientgui/BOINCGUIApp.cpp:364
+#: clientgui/BOINCGUIApp.cpp:419
 #, c-format
 msgid ""
 "You currently are not authorized to manage %s.\n"
@@ -781,157 +780,162 @@ msgid ""
 "- contact your administrator to add you to the 'boinc_master' user group."
 msgstr "Bạn hiện không được uỷ quyền để quản lý %s.\n\nĐể chạy được %s với tư cách người dùng này, xin bạn hãy:\n- cài đặt lại %s và trả lời \"Có\" cho những câu hỏi về người dùng không phải quản trị viên\nhoặc là\n- liên hệ với quản trị viên của bạn để thêm bạn vào nhóm người dùng 'boinc_master'"
 
-#: clientgui/BOINCGUIApp.cpp:372
+#: clientgui/BOINCGUIApp.cpp:427
 #, c-format
 msgid ""
 "%s ownership or permissions are not set properly; please reinstall %s.\n"
 "(Error code %d"
 msgstr "Quyền sở hữu hoặc quyền sử dụng %s không được cài đặt đúng cách; Hãy cài đặt lại %s.\n(Mã lỗi error code %d"
 
-#: clientgui/BOINCGUIApp.cpp:378
+#: clientgui/BOINCGUIApp.cpp:433
 msgid " at "
 msgstr "tại"
 
-#: clientgui/BOINCGUIApp.cpp:381 clientgui/MainDocument.cpp:2636
-#: clientgui/MainDocument.cpp:2695 clientgui/ViewTransfers.cpp:922
+#: clientgui/BOINCGUIApp.cpp:436 clientgui/MainDocument.cpp:2648
+#: clientgui/MainDocument.cpp:2707 clientgui/ViewTransfers.cpp:922
 msgid ")"
 msgstr ")"
 
-#: clientgui/BOINCGUIApp.cpp:411
+#: clientgui/BOINCGUIApp.cpp:466
 msgid ""
 "A reboot is required in order for BOINC to run properly.\n"
 "Please reboot your computer and try again."
 msgstr "Cần phải khởi động lại máy để BOINC chạy bình thường.\nHãy khởi động lại máy tính của bạn và thử lại đi nhé."
 
-#: clientgui/BOINCGUIApp.cpp:412 clientgui/DlgAbout.cpp:158
+#: clientgui/BOINCGUIApp.cpp:467 clientgui/DlgAbout.cpp:158
 msgid "BOINC Manager"
 msgstr "Quản lý BOINC"
 
-#: clientgui/BOINCGUIApp.cpp:632
+#: clientgui/BOINCGUIApp.cpp:496
+#, c-format
+msgid "Another instance of %s is already running."
+msgstr ""
+
+#: clientgui/BOINCGUIApp.cpp:700
 msgid "BOINC Manager was started by the operating system automatically"
 msgstr "Hệ điều hành đã tự động khởi động trình quản lý BOINC"
 
-#: clientgui/BOINCGUIApp.cpp:634
+#: clientgui/BOINCGUIApp.cpp:702
 msgid "Startup BOINC so only the system tray icon is visible"
 msgstr "Khởi động BOINC để chỉ có mỗi biểu tượng khay hệ thống được hiển thị."
 
-#: clientgui/BOINCGUIApp.cpp:636
+#: clientgui/BOINCGUIApp.cpp:704
 msgid "Directory containing the BOINC Client executable"
 msgstr "Thư mục chứa 'máy khách BOINC thực thi được'"
 
-#: clientgui/BOINCGUIApp.cpp:637
+#: clientgui/BOINCGUIApp.cpp:705
 msgid "BOINC data directory"
 msgstr "Thư mục dữ liệu BOINC"
 
-#: clientgui/BOINCGUIApp.cpp:639
+#: clientgui/BOINCGUIApp.cpp:707
 msgid "Host name or IP address"
 msgstr "Tên máy chủ host hoặc địa chỉ IP"
 
-#: clientgui/BOINCGUIApp.cpp:640
+#: clientgui/BOINCGUIApp.cpp:708
 msgid "GUI RPC port number"
 msgstr "Mã số cổng GUI RPC port"
 
-#: clientgui/BOINCGUIApp.cpp:641
+#: clientgui/BOINCGUIApp.cpp:709
 msgid "Password"
 msgstr "Mật khẩu"
 
-#: clientgui/BOINCGUIApp.cpp:642
+#: clientgui/BOINCGUIApp.cpp:710
 msgid "Startup BOINC with these optional arguments"
 msgstr "Khởi động BOINC với các thông số tùy chọn này"
 
-#: clientgui/BOINCGUIApp.cpp:643
+#: clientgui/BOINCGUIApp.cpp:711
 msgid "disable BOINC security users and permissions"
 msgstr "tắt quyền bảo mật và người dùng bảo mật BOINC"
 
-#: clientgui/BOINCGUIApp.cpp:644
+#: clientgui/BOINCGUIApp.cpp:712
 msgid "set skin debugging mode to enable skin manager error messages"
 msgstr "đặt chế độ phát hiện và gỡ lỗi skin để bật thông báo lỗi của trình quản lý skin"
 
-#: clientgui/BOINCGUIApp.cpp:645
+#: clientgui/BOINCGUIApp.cpp:713
 msgid "multiple instances of BOINC Manager allowed"
 msgstr "cho phép trình Quản lý BOINC đọc và tải dữ liệu vào bộ nhớ nhiều lần"
 
-#: clientgui/BOINCGUIApp.cpp:647
+#: clientgui/BOINCGUIApp.cpp:715
 msgid "Not used: workaround for bug in XCode 4.2"
 msgstr "Đã không được sử dụng: cách giải quyết lỗi ở trong XCode 4.2"
 
-#: clientgui/BOINCGUIApp.cpp:649
+#: clientgui/BOINCGUIApp.cpp:717
 msgid "Don't run the client"
 msgstr "Không chạy máy khách"
 
-#: clientgui/BOINCTaskBar.cpp:528
+#: clientgui/BOINCTaskBar.cpp:542
 #, c-format
 msgid "Open %s Web..."
 msgstr "Mở Web %s..."
 
-#: clientgui/BOINCTaskBar.cpp:535
+#: clientgui/BOINCTaskBar.cpp:549
 #, c-format
 msgid "Open %s..."
 msgstr "Mở %s..."
 
-#: clientgui/BOINCTaskBar.cpp:542 clientgui/BOINCTaskBar.cpp:640
-#: clientgui/BOINCTaskBar.cpp:645
+#: clientgui/BOINCTaskBar.cpp:556 clientgui/BOINCTaskBar.cpp:654
+#: clientgui/BOINCTaskBar.cpp:659
 msgid "Snooze"
 msgstr "Nghỉ một thời gian"
 
-#: clientgui/BOINCTaskBar.cpp:544 clientgui/BOINCTaskBar.cpp:659
-#: clientgui/BOINCTaskBar.cpp:664
+#: clientgui/BOINCTaskBar.cpp:558 clientgui/BOINCTaskBar.cpp:673
+#: clientgui/BOINCTaskBar.cpp:678
 msgid "Snooze GPU"
 msgstr "GPU nghỉ một thời gian"
 
-#: clientgui/BOINCTaskBar.cpp:562
+#: clientgui/BOINCTaskBar.cpp:576
 msgid "E&xit"
 msgstr "&Thoát"
 
-#: clientgui/BOINCTaskBar.cpp:635 clientgui/ViewProjects.cpp:788
+#: clientgui/BOINCTaskBar.cpp:649 clientgui/ViewProjects.cpp:788
 #: clientgui/ViewWork.cpp:975 clientgui/sg_BoincSimpleFrame.cpp:1014
 #: clientgui/sg_ProjectCommandPopup.cpp:125
 #: clientgui/sg_TaskCommandPopup.cpp:118
 msgid "Resume"
 msgstr "Bắt đầu lại"
 
-#: clientgui/BOINCTaskBar.cpp:655
+#: clientgui/BOINCTaskBar.cpp:669
 msgid "Resume GPU"
 msgstr "Tiếp tục cho GPU hoạt động lại"
 
-#: clientgui/BOINCTaskBar.cpp:726
+#: clientgui/BOINCTaskBar.cpp:740
 msgid "Computing is enabled"
 msgstr "Việc tính toán được bật"
 
-#: clientgui/BOINCTaskBar.cpp:730
+#: clientgui/BOINCTaskBar.cpp:744
 msgid "Computing is suspended - "
 msgstr "Việc tính toán được tạm ngưng -"
 
-#: clientgui/BOINCTaskBar.cpp:740
+#: clientgui/BOINCTaskBar.cpp:754
 msgid "GPU computing is enabled"
 msgstr "Việc tính toán bằng GPU được bật"
 
-#: clientgui/BOINCTaskBar.cpp:743
+#: clientgui/BOINCTaskBar.cpp:757
 msgid "GPU computing is suspended - "
 msgstr "Việc tính toán bằng GPU được tạm ngưng -"
 
-#: clientgui/BOINCTaskBar.cpp:752
+#: clientgui/BOINCTaskBar.cpp:766
 msgid "Network is enabled"
 msgstr "Mạng kết nối được bật"
 
-#: clientgui/BOINCTaskBar.cpp:755
+#: clientgui/BOINCTaskBar.cpp:769
 msgid "Network is suspended - "
 msgstr "Mạng kết nối được tạm ngưng"
 
-#: clientgui/BOINCTaskBar.cpp:763
+#: clientgui/BOINCTaskBar.cpp:777
 msgid "Reconnecting to client."
 msgstr "Đang kết nối lại tới máy khách."
 
-#: clientgui/BOINCTaskBar.cpp:765
+#: clientgui/BOINCTaskBar.cpp:779
 msgid "Not connected to a client."
 msgstr "Không được kết nối tới một máy khách nào."
 
-#: clientgui/BOINCTaskBar.cpp:818
+#: clientgui/BOINCTaskBar.cpp:832
 #, c-format
 msgid "%s Notices"
 msgstr "%s Thông báo"
 
-#: clientgui/BOINCTaskBar.cpp:824
+#: clientgui/BOINCTaskBar.cpp:838
 msgid "There are new notices - click to view."
 msgstr "Có thông báo đó - nhấn để xem nào."
 
@@ -1028,7 +1032,7 @@ msgstr "Bản quyền:"
 
 #: clientgui/DlgAbout.cpp:197
 msgid ""
-"(C) 2003-2023 University of California, Berkeley.\n"
+"(C) 2003-2025 University of California, Berkeley.\n"
 "All Rights Reserved."
 msgstr ""
 
@@ -1041,63 +1045,63 @@ msgstr "%sđược phân phối theo Giấy phép Công cộng Nhỏ GNU Lesser 
 msgid "For more information, visit "
 msgstr "Để biết thêm thông tin, hãy truy cập"
 
-#: clientgui/DlgAbout.cpp:226 clientgui/DlgExitMessage.cpp:185
-#: clientgui/DlgGenericMessage.cpp:120 clientgui/DlgSelectComputer.cpp:163
+#: clientgui/DlgAbout.cpp:226 clientgui/DlgExitMessage.cpp:195
+#: clientgui/DlgSelectComputer.cpp:163
 msgid "&OK"
 msgstr "&OK"
 
-#: clientgui/DlgAdvPreferences.cpp:761 clientgui/sg_DlgPreferences.cpp:826
+#: clientgui/DlgAdvPreferences.cpp:747 clientgui/sg_DlgPreferences.cpp:830
 msgid "Invalid number"
 msgstr "Số không hợp lệ"
 
-#: clientgui/DlgAdvPreferences.cpp:762 clientgui/sg_DlgPreferences.cpp:827
+#: clientgui/DlgAdvPreferences.cpp:748 clientgui/sg_DlgPreferences.cpp:831
 msgid "Invalid time, value must be between 0:00 and 24:00, format is HH:MM"
 msgstr "Thời gian không hợp lệ mất rồi, giá trị phải là từ 0:00 đến 24:00, định dạng là Giờ:Phút cơ"
 
-#: clientgui/DlgAdvPreferences.cpp:763 clientgui/sg_DlgPreferences.cpp:828
+#: clientgui/DlgAdvPreferences.cpp:749 clientgui/sg_DlgPreferences.cpp:832
 msgid "Start time must be different from end time"
 msgstr "Thời gian bắt đầu phải khác với thời gian kết thúc"
 
-#: clientgui/DlgAdvPreferences.cpp:764
+#: clientgui/DlgAdvPreferences.cpp:750
 msgid "Number must be between 0 and 10"
 msgstr "Con số phải nằm trong khoảng từ 0 đến 10"
 
-#: clientgui/DlgAdvPreferences.cpp:765 clientgui/sg_DlgPreferences.cpp:829
+#: clientgui/DlgAdvPreferences.cpp:751 clientgui/sg_DlgPreferences.cpp:833
 msgid "Number must be between 0 and 100"
 msgstr "Con số phải nằm trong khoảng từ 0 đến 100"
 
-#: clientgui/DlgAdvPreferences.cpp:766
+#: clientgui/DlgAdvPreferences.cpp:752
 msgid "Number must be between 1 and 100"
 msgstr "Con số phải nằm trong khoảng từ 1 đến 100"
 
-#: clientgui/DlgAdvPreferences.cpp:767
+#: clientgui/DlgAdvPreferences.cpp:753
 msgid ""
 "Suspend when no mouse or keyboard input needs to be greater than 'in use' "
 "mouse or keyboard input."
 msgstr "Tạm ngưng khi không cần đầu vào chuột hoặc bàn phím nào lớn hơn đầu vào chuột hoặc bàn phím 'đang sử dụng'."
 
-#: clientgui/DlgAdvPreferences.cpp:1060 clientgui/sg_DlgPreferences.cpp:900
+#: clientgui/DlgAdvPreferences.cpp:1046 clientgui/sg_DlgPreferences.cpp:904
 msgid "invalid input value detected"
 msgstr "giá trị đầu vào không hợp lệ bị phát hiện"
 
-#: clientgui/DlgAdvPreferences.cpp:1072 clientgui/sg_DlgPreferences.cpp:912
+#: clientgui/DlgAdvPreferences.cpp:1058 clientgui/sg_DlgPreferences.cpp:916
 msgid "Validation Error"
 msgstr "Lỗi xác nhận"
 
-#: clientgui/DlgAdvPreferences.cpp:1267 clientgui/sg_DlgPreferences.cpp:1246
+#: clientgui/DlgAdvPreferences.cpp:1253 clientgui/sg_DlgPreferences.cpp:1250
 msgid ""
 "Changing to use the local preferences defined on this page. This will "
 "override your web-based preferences, even if you subsequently make changes "
 "there. Do you want to proceed?"
 msgstr "Thay đổi để sử dụng các tùy chọn cục bộ được hoạch định trên trang này. Điều này sẽ ghi đè các tùy chọn trên nền tảng web của bạn, ngay cả khi bạn thực hiện các thay đổi ở đó sau đó. Bạn có muốn tiếp tục không?"
 
-#: clientgui/DlgAdvPreferences.cpp:1271 clientgui/DlgAdvPreferences.cpp:1312
-#: clientgui/WizardAttach.cpp:573 clientgui/sg_DlgPreferences.cpp:1238
-#: clientgui/sg_DlgPreferences.cpp:1250
+#: clientgui/DlgAdvPreferences.cpp:1257 clientgui/DlgAdvPreferences.cpp:1298
+#: clientgui/WizardAttach.cpp:573 clientgui/sg_DlgPreferences.cpp:1242
+#: clientgui/sg_DlgPreferences.cpp:1254
 msgid "Confirmation"
 msgstr "Xác nhận"
 
-#: clientgui/DlgAdvPreferences.cpp:1311
+#: clientgui/DlgAdvPreferences.cpp:1297
 msgid "Discard local preferences and use web-based preferences?"
 msgstr "Bỏ tùy chọn cục bộ và sử dụng tùy chọn dựa trên web?"
 
@@ -1785,12 +1789,12 @@ msgstr "'%s' đã có trong danh sách rồi."
 msgid "Add Exclusive App"
 msgstr "Thêm ứng dụng riêng biệt"
 
-#: clientgui/DlgExitMessage.cpp:84
+#: clientgui/DlgExitMessage.cpp:86
 #, c-format
 msgid "%s - Exit Confirmation"
 msgstr "%s - Xác nhận thoát"
 
-#: clientgui/DlgExitMessage.cpp:132
+#: clientgui/DlgExitMessage.cpp:144
 #, c-format
 msgid ""
 "You have requested to exit the %s,\n"
@@ -1801,7 +1805,7 @@ msgid ""
 "choose from the following options:"
 msgstr "Bạn đã yêu cầu thoát ra khỏi %s.\nđiều này cho phép bạn xem và quản lý\ncác nhiệm vụ đang chạy trên máy của bạn.\n\nhoặc nếu bạn cũng muôn dừng các nhiệm vụ lại,\nchọn ra từ trong những lựa chọn sau:"
 
-#: clientgui/DlgExitMessage.cpp:138
+#: clientgui/DlgExitMessage.cpp:150
 #, c-format
 msgid ""
 "This will shut down %s and its tasks until the\n"
@@ -1812,7 +1816,7 @@ msgid ""
 "tasks at the times you selected in your preferences."
 msgstr "Điều này sẽ tắt %s và các phần việc của nó cho tới khi\n%s chạy lại.\n\nHầu hết trường hợp, sẽ tốt hơn khi chỉ đóng cửa sổ %s\nhơn là thoát ứng dụng; điều đó sẽ cho phép %s chạy\ncác phần việc vào những thời điểm bạn lựa trong tuỳ chọn."
 
-#: clientgui/DlgExitMessage.cpp:146
+#: clientgui/DlgExitMessage.cpp:158
 #, c-format
 msgid ""
 "This will shut down %s and its tasks until either the\n"
@@ -1823,16 +1827,16 @@ msgid ""
 "tasks at the times you selected in your preferences."
 msgstr "Điều này sẽ tắt %s và các phần việc của nó cho tới khi hoặc\n%s hoặc trình bảo vệ màn hình %s chạy lại.\n\nHầu hết trường hợp, sẽ tốt hơn khi chỉ đóng cửa sổ %s\nhơn là thoát ứng dụng; điều đó sẽ cho phép %s chạy\ncác phần việc vào những thời điểm bạn lựa trong tuỳ chọn."
 
-#: clientgui/DlgExitMessage.cpp:165
+#: clientgui/DlgExitMessage.cpp:176
 #, c-format
 msgid "Stop running tasks when exiting the %s"
 msgstr "Dừng chạy các nhiệm vụ khi đang thoát ra %s"
 
-#: clientgui/DlgExitMessage.cpp:177
+#: clientgui/DlgExitMessage.cpp:187
 msgid "Remember this decision and do not show this dialog."
 msgstr "Nhớ quyết định này và không hiện hộp thoại này."
 
-#: clientgui/DlgGenericMessage.cpp:112
+#: clientgui/DlgGenericMessage.cpp:119
 msgid "Don't show this dialog again."
 msgstr "Không hiển thị lại hộp thoại này."
 
@@ -2012,108 +2016,116 @@ msgstr "Lên lịch trình ưu tiên"
 msgid "CPU"
 msgstr "CPU"
 
-#: clientgui/DlgItemProperties.cpp:353
+#: clientgui/DlgItemProperties.cpp:359
 msgid "Duration correction factor"
 msgstr "Hệ số hiệu chỉnh thời lượng"
 
-#: clientgui/DlgItemProperties.cpp:361
+#: clientgui/DlgItemProperties.cpp:367
 msgid "Last scheduler reply"
 msgstr "Hồi âm cuối cùng của lịch trình"
 
-#: clientgui/DlgItemProperties.cpp:371
+#: clientgui/DlgItemProperties.cpp:377
 msgid "Properties of task "
 msgstr "Thuộc tính của nhiệm vụ"
 
-#: clientgui/DlgItemProperties.cpp:383 clientgui/ViewWork.cpp:288
+#: clientgui/DlgItemProperties.cpp:389 clientgui/ViewWork.cpp:288
 msgid "Application"
 msgstr "Ứng dụng"
 
-#: clientgui/DlgItemProperties.cpp:384 clientgui/ViewWork.cpp:289
+#: clientgui/DlgItemProperties.cpp:390 clientgui/ViewWork.cpp:289
 msgid "Name"
 msgstr "Tên"
 
-#: clientgui/DlgItemProperties.cpp:385
+#: clientgui/DlgItemProperties.cpp:391
 msgid "State"
 msgstr "Trạng thái"
 
-#: clientgui/DlgItemProperties.cpp:388
+#: clientgui/DlgItemProperties.cpp:394
 msgid "Received"
 msgstr "Đã nhận"
 
-#: clientgui/DlgItemProperties.cpp:391
+#: clientgui/DlgItemProperties.cpp:397
 msgid "Report deadline"
 msgstr "Báo cáo hạn chót"
 
-#: clientgui/DlgItemProperties.cpp:393
+#: clientgui/DlgItemProperties.cpp:399
 msgid "Resources"
 msgstr "Nguồn tài nguyên"
 
-#: clientgui/DlgItemProperties.cpp:396
+#: clientgui/DlgItemProperties.cpp:402
 msgid "Estimated computation size"
 msgstr "Ước chừng kích thước tính toán"
 
-#: clientgui/DlgItemProperties.cpp:411
+#: clientgui/DlgItemProperties.cpp:417
 msgid "Keywords"
 msgstr "Từ khóa"
 
-#: clientgui/DlgItemProperties.cpp:417 clientgui/DlgItemProperties.cpp:444
+#: clientgui/DlgItemProperties.cpp:423 clientgui/DlgItemProperties.cpp:450
 msgid "CPU time"
 msgstr "Thời lượng CPU"
 
-#: clientgui/DlgItemProperties.cpp:418
+#: clientgui/DlgItemProperties.cpp:424
 msgid "CPU time since checkpoint"
 msgstr "Thời lượng CPU kể từ điểm kiểm tra"
 
-#: clientgui/DlgItemProperties.cpp:420 clientgui/DlgItemProperties.cpp:445
+#: clientgui/DlgItemProperties.cpp:426 clientgui/DlgItemProperties.cpp:451
 msgid "Elapsed time"
 msgstr "Thời lượng đã qua"
 
-#: clientgui/DlgItemProperties.cpp:422
+#: clientgui/DlgItemProperties.cpp:428
 msgid "Estimated time remaining"
 msgstr "Thời lượng ước tính còn lại"
 
-#: clientgui/DlgItemProperties.cpp:423
+#: clientgui/DlgItemProperties.cpp:429
 msgid "Fraction done"
 msgstr "Phần lượng đã xong"
 
-#: clientgui/DlgItemProperties.cpp:424
+#: clientgui/DlgItemProperties.cpp:430
 msgid "Virtual memory size"
 msgstr "Kích thước bộ nhớ ảo"
 
-#: clientgui/DlgItemProperties.cpp:425
+#: clientgui/DlgItemProperties.cpp:431
 msgid "Working set size"
 msgstr "Kích thước set làm việc"
 
-#: clientgui/DlgItemProperties.cpp:427
+#: clientgui/DlgItemProperties.cpp:433
 msgid "Directory"
 msgstr "Thư mục"
 
-#: clientgui/DlgItemProperties.cpp:430
+#: clientgui/DlgItemProperties.cpp:436
 msgid "Process ID"
 msgstr "ID xử lý"
 
-#: clientgui/DlgItemProperties.cpp:436 clientgui/DlgItemProperties.cpp:438
-#: clientgui/DlgItemProperties.cpp:440
+#: clientgui/DlgItemProperties.cpp:442 clientgui/DlgItemProperties.cpp:444
+#: clientgui/DlgItemProperties.cpp:446
 msgid "Progress rate"
 msgstr "Tiến độ"
 
-#: clientgui/DlgItemProperties.cpp:436
+#: clientgui/DlgItemProperties.cpp:442
 msgid "per hour"
 msgstr "trên một giờ"
 
-#: clientgui/DlgItemProperties.cpp:438
+#: clientgui/DlgItemProperties.cpp:444
 msgid "per minute"
 msgstr "trên một phút"
 
-#: clientgui/DlgItemProperties.cpp:440
+#: clientgui/DlgItemProperties.cpp:446
 msgid "per second"
 msgstr "trên một giây"
 
-#: clientgui/DlgItemProperties.cpp:448
+#: clientgui/DlgItemProperties.cpp:454
 msgid "Executable"
 msgstr "Có thể thực thi"
 
-#: clientgui/DlgItemProperties.cpp:513 clientgui/ViewWork.cpp:1276
+#: clientgui/DlgItemProperties.cpp:455
+msgid "Application Name"
+msgstr ""
+
+#: clientgui/DlgItemProperties.cpp:456
+msgid "Plan Class"
+msgstr ""
+
+#: clientgui/DlgItemProperties.cpp:521 clientgui/ViewWork.cpp:1276
 #: clientgui/sg_TaskPanel.cpp:824
 msgid "Local: "
 msgstr "Tại cục bộ:"
@@ -2250,36 +2262,36 @@ msgstr "Cấu hình máy chủ SOCKS Proxy"
 msgid "SOCKS Proxy"
 msgstr "SOCKS Proxy"
 
-#: clientgui/DlgOptions.cpp:648
+#: clientgui/DlgOptions.cpp:646
 msgid "always"
 msgstr "luôn luôn"
 
-#: clientgui/DlgOptions.cpp:649
+#: clientgui/DlgOptions.cpp:647
 msgid "1 hour"
 msgstr "1 giờ"
 
-#: clientgui/DlgOptions.cpp:650
+#: clientgui/DlgOptions.cpp:648
 msgid "6 hours"
 msgstr "6 giờ"
 
-#: clientgui/DlgOptions.cpp:651
+#: clientgui/DlgOptions.cpp:649
 msgid "1 day"
 msgstr "1 ngày"
 
-#: clientgui/DlgOptions.cpp:652
+#: clientgui/DlgOptions.cpp:650
 msgid "1 week"
 msgstr "1 tuần"
 
-#: clientgui/DlgOptions.cpp:653
+#: clientgui/DlgOptions.cpp:651
 msgid "never"
 msgstr "không bao giờ"
 
-#: clientgui/DlgOptions.cpp:768
+#: clientgui/DlgOptions.cpp:771
 #, c-format
 msgid "%s - Language Selection"
 msgstr "%s - Chọn lựa ngôn ngữ"
 
-#: clientgui/DlgOptions.cpp:775
+#: clientgui/DlgOptions.cpp:778
 #, c-format
 msgid ""
 "The %s's language has been changed.  In order for this change to take "
@@ -2505,210 +2517,220 @@ msgstr ""
 msgid "Your tasks"
 msgstr ""
 
-#: clientgui/MainDocument.cpp:1296
+#: clientgui/MainDocument.cpp:1297
 msgid "Version Update"
 msgstr "Cập nhật phiên bản"
 
-#: clientgui/MainDocument.cpp:1305
+#: clientgui/MainDocument.cpp:1307
 #, c-format
-msgid "A new version of %s is available. You can download it here: %s"
-msgstr "Một phiên bản mới của %s đã khả dụng rùi đó. Bạn có thể tải nó về ở đây nè: %s"
+msgid ""
+"A new version of %s is available.\n"
+"You can download it here: %s"
+msgstr ""
 
-#: clientgui/MainDocument.cpp:1308
+#: clientgui/MainDocument.cpp:1311
 #, c-format
 msgid "There is no new version of %s available for download."
 msgstr "Chẳng có phiên bản nào mới của %s để mà tải về cả."
 
-#: clientgui/MainDocument.cpp:1312
+#: clientgui/MainDocument.cpp:1315
 #, c-format
 msgid "%s is not connected to the client"
 msgstr "%s không được kết nối tới máy khách"
 
-#: clientgui/MainDocument.cpp:1975
+#: clientgui/MainDocument.cpp:1322
+msgid "Go to download page"
+msgstr ""
+
+#: clientgui/MainDocument.cpp:1323
+msgid "Close"
+msgstr "Đóng"
+
+#: clientgui/MainDocument.cpp:1987
 msgid "Missing application"
 msgstr "Ứng dụng đang thiếu"
 
-#: clientgui/MainDocument.cpp:1976
+#: clientgui/MainDocument.cpp:1988
 msgid ""
 "Please download and install the CoRD application from "
 "http://cord.sourceforge.net"
 msgstr "Vui lòng tải về và cài đặt ứng dụng CoRD từ trang web http://cord.sourceforge.net nhé"
 
-#: clientgui/MainDocument.cpp:2584
+#: clientgui/MainDocument.cpp:2596
 msgid "on batteries"
 msgstr "chạy pin"
 
-#: clientgui/MainDocument.cpp:2585
+#: clientgui/MainDocument.cpp:2597
 msgid "computer is in use"
 msgstr "máy tính đang được sử dụng"
 
-#: clientgui/MainDocument.cpp:2586
+#: clientgui/MainDocument.cpp:2598
 msgid "user request"
 msgstr "yêu cầu người dùng"
 
-#: clientgui/MainDocument.cpp:2587
+#: clientgui/MainDocument.cpp:2599
 msgid "time of day"
 msgstr "thời gian trong ngày"
 
-#: clientgui/MainDocument.cpp:2588
+#: clientgui/MainDocument.cpp:2600
 msgid "CPU benchmarks in progress"
 msgstr "Đánh giá điểm chuẩn CPU benchmarks đang tiến hành"
 
-#: clientgui/MainDocument.cpp:2589
+#: clientgui/MainDocument.cpp:2601
 msgid "need disk space - check preferences"
 msgstr "cần không gian ổ đĩa - kiểm tra tuỳ chọn"
 
-#: clientgui/MainDocument.cpp:2590
+#: clientgui/MainDocument.cpp:2602
 msgid "computer is not in use"
 msgstr "máy tính đang không được sử dụng"
 
-#: clientgui/MainDocument.cpp:2591
+#: clientgui/MainDocument.cpp:2603
 msgid "starting up"
 msgstr "đang khởi động"
 
-#: clientgui/MainDocument.cpp:2592
+#: clientgui/MainDocument.cpp:2604
 msgid "an exclusive app is running"
 msgstr "một ứng dụng riêng biệt đang chạy"
 
-#: clientgui/MainDocument.cpp:2593
+#: clientgui/MainDocument.cpp:2605
 msgid "CPU is busy"
 msgstr "CPU đang bận"
 
-#: clientgui/MainDocument.cpp:2594
+#: clientgui/MainDocument.cpp:2606
 msgid "network bandwidth limit exceeded"
 msgstr "đã vượt quá giới hạn băng thông mạng"
 
-#: clientgui/MainDocument.cpp:2595
+#: clientgui/MainDocument.cpp:2607
 msgid "requested by operating system"
 msgstr "được yêu cầu bởi hệ điều hành"
 
-#: clientgui/MainDocument.cpp:2597
+#: clientgui/MainDocument.cpp:2609
 msgid "unknown reason"
 msgstr "nguyên nhân không xác định"
 
-#: clientgui/MainDocument.cpp:2619
+#: clientgui/MainDocument.cpp:2631
 msgid "GPU missing, "
 msgstr "GPU thiếu,"
 
-#: clientgui/MainDocument.cpp:2626
+#: clientgui/MainDocument.cpp:2638
 msgid "New"
 msgstr "Mới tươm"
 
-#: clientgui/MainDocument.cpp:2630
+#: clientgui/MainDocument.cpp:2642
 msgid "Download failed"
 msgstr "Tải về đã thất bại"
 
-#: clientgui/MainDocument.cpp:2632
+#: clientgui/MainDocument.cpp:2644
 msgid "Downloading"
 msgstr "Đang tải về"
 
-#: clientgui/MainDocument.cpp:2634 clientgui/MainDocument.cpp:2693
+#: clientgui/MainDocument.cpp:2646 clientgui/MainDocument.cpp:2705
 msgid " (suspended - "
 msgstr "(đang tạm ngưng-"
 
-#: clientgui/MainDocument.cpp:2642
+#: clientgui/MainDocument.cpp:2654
 msgid "Project suspended by user"
 msgstr "Dự án đã được tạm ngưng bởi người dùng"
 
-#: clientgui/MainDocument.cpp:2644
+#: clientgui/MainDocument.cpp:2656
 msgid "Task suspended by user"
 msgstr "Nhiệm vụ đã được tạm ngưng bởi người dùng"
 
 #. an NCI process can be running even though computation is suspended
 #. (because of <dont_suspend_nci>
-#: clientgui/MainDocument.cpp:2649
+#: clientgui/MainDocument.cpp:2661
 msgid "Suspended - "
 msgstr "Đã tạm ngưng -"
 
-#: clientgui/MainDocument.cpp:2652
+#: clientgui/MainDocument.cpp:2664
 msgid "GPU suspended - "
 msgstr "GPU đã được tạm ngưng -"
 
-#: clientgui/MainDocument.cpp:2656
+#: clientgui/MainDocument.cpp:2668
 msgid "Waiting for memory"
 msgstr "Đang chờ bộ nhớ"
 
-#: clientgui/MainDocument.cpp:2658
+#: clientgui/MainDocument.cpp:2670
 msgid "Waiting for shared memory"
 msgstr "Đang đợi bộ nhớ được chia sẻ"
 
-#: clientgui/MainDocument.cpp:2660
+#: clientgui/MainDocument.cpp:2672
 msgid "Running"
 msgstr "Đang chạy"
 
-#: clientgui/MainDocument.cpp:2662
+#: clientgui/MainDocument.cpp:2674
 msgid " (non-CPU-intensive)"
 msgstr "(không-ép-việc-CPU)"
 
-#: clientgui/MainDocument.cpp:2665
+#: clientgui/MainDocument.cpp:2677
 msgid "Waiting to run"
 msgstr "Đang chờ để chạy"
 
-#: clientgui/MainDocument.cpp:2667 clientgui/MainDocument.cpp:2670
+#: clientgui/MainDocument.cpp:2679 clientgui/MainDocument.cpp:2682
 msgid "Ready to start"
 msgstr "Sẵn sàng bắt đầu"
 
-#: clientgui/MainDocument.cpp:2674
+#: clientgui/MainDocument.cpp:2686
 msgid "Postponed: "
 msgstr "Đã trì hoãn:"
 
-#: clientgui/MainDocument.cpp:2677
+#: clientgui/MainDocument.cpp:2689
 msgid "Postponed"
 msgstr "Đã trì hoãn"
 
-#: clientgui/MainDocument.cpp:2681
+#: clientgui/MainDocument.cpp:2693
 msgid "Waiting for network access"
 msgstr "Đang đợi truy cập mạng"
 
-#: clientgui/MainDocument.cpp:2685
+#: clientgui/MainDocument.cpp:2697
 msgid "Computation error"
 msgstr "Lỗi tính toán"
 
-#: clientgui/MainDocument.cpp:2689
+#: clientgui/MainDocument.cpp:2701
 msgid "Upload failed"
 msgstr "Tải lên đã thất bại"
 
-#: clientgui/MainDocument.cpp:2691
+#: clientgui/MainDocument.cpp:2703
 msgid "Uploading"
 msgstr "Đang tải lên"
 
-#: clientgui/MainDocument.cpp:2702
+#: clientgui/MainDocument.cpp:2714
 msgid "Aborted by user"
 msgstr "Bị đình chỉ bởi người dùng"
 
-#: clientgui/MainDocument.cpp:2705
+#: clientgui/MainDocument.cpp:2717
 msgid "Aborted by project"
 msgstr "Bị đình chỉ bởi dự án"
 
-#: clientgui/MainDocument.cpp:2708
+#: clientgui/MainDocument.cpp:2720
 msgid "Aborted: not started by deadline"
 msgstr "Bị đình chỉ: đã không bắt đầu trước thời hạn"
 
-#: clientgui/MainDocument.cpp:2711
+#: clientgui/MainDocument.cpp:2723
 msgid "Aborted: task disk limit exceeded"
 msgstr "Bị đình chỉ: đã vượt quá giới hạn dung lượng ổ đĩa cho nhiệm vụ"
 
-#: clientgui/MainDocument.cpp:2714
+#: clientgui/MainDocument.cpp:2726
 msgid "Aborted: run time limit exceeded"
 msgstr "Bị đình chỉ: đã vượt quá giới hạn thời gian chạy"
 
-#: clientgui/MainDocument.cpp:2717
+#: clientgui/MainDocument.cpp:2729
 msgid "Aborted: memory limit exceeded"
 msgstr "Bị đình chỉ: vượt quá giới hạn bộ nhớ"
 
-#: clientgui/MainDocument.cpp:2720
+#: clientgui/MainDocument.cpp:2732
 msgid "Aborted"
 msgstr "Đã bị đình chỉ"
 
-#: clientgui/MainDocument.cpp:2725
+#: clientgui/MainDocument.cpp:2737
 msgid "Acknowledged"
 msgstr "Đã được công nhận"
 
-#: clientgui/MainDocument.cpp:2727
+#: clientgui/MainDocument.cpp:2739
 msgid "Ready to report"
 msgstr "Sẵn sàng báo cáo"
 
-#: clientgui/MainDocument.cpp:2729
+#: clientgui/MainDocument.cpp:2741
 #, c-format
 msgid "Error: invalid state '%d'"
 msgstr "Lỗi: trạng thái không hợp lệ '%d'"
@@ -2772,86 +2794,90 @@ msgstr "Để chọn một dự án, hãy nhấp vào tên của nó hoặc nh�
 msgid "Categories:"
 msgstr "Phân loại:"
 
-#: clientgui/ProjectInfoPage.cpp:271 clientgui/sg_ProjectPanel.cpp:90
+#: clientgui/ProjectInfoPage.cpp:297 clientgui/sg_ProjectPanel.cpp:90
 msgid "Projects:"
 msgstr "Các dự án:"
 
-#: clientgui/ProjectInfoPage.cpp:283
+#: clientgui/ProjectInfoPage.cpp:310
 msgid "Project details"
 msgstr "Các chi tiết dự án"
 
-#: clientgui/ProjectInfoPage.cpp:293
+#: clientgui/ProjectInfoPage.cpp:320
 msgid "Research area:"
 msgstr "Mảng nghiên cứu:"
 
-#: clientgui/ProjectInfoPage.cpp:303
+#: clientgui/ProjectInfoPage.cpp:330
 msgid "Organization:"
 msgstr "Tổ chức:"
 
-#: clientgui/ProjectInfoPage.cpp:313
+#: clientgui/ProjectInfoPage.cpp:340
 msgid "Web site:"
 msgstr "Trang web:"
 
-#: clientgui/ProjectInfoPage.cpp:324
+#: clientgui/ProjectInfoPage.cpp:351
 msgid "Supported systems:"
 msgstr "Các hệ thống được hỗ trợ:"
 
-#: clientgui/ProjectInfoPage.cpp:331
+#: clientgui/ProjectInfoPage.cpp:358
 msgid "Supports Microsoft Windows"
 msgstr "Hỗ trợ Microsoft Windows"
 
-#: clientgui/ProjectInfoPage.cpp:335
+#: clientgui/ProjectInfoPage.cpp:362
 msgid "Supports Mac OS X"
 msgstr "Hỗ trợ Mac OS X"
 
-#: clientgui/ProjectInfoPage.cpp:339
+#: clientgui/ProjectInfoPage.cpp:366
 msgid "Supports Linux on Intel"
 msgstr "Hỗ trợ Linux chạy trên Intel"
 
-#: clientgui/ProjectInfoPage.cpp:343
+#: clientgui/ProjectInfoPage.cpp:370
 msgid "Supports Android"
 msgstr "Hỗ trợ Android"
 
-#: clientgui/ProjectInfoPage.cpp:347
+#: clientgui/ProjectInfoPage.cpp:374
 msgid "Supports FreeBSD"
 msgstr "Hỗ trợ FreeBSD"
 
-#: clientgui/ProjectInfoPage.cpp:351
+#: clientgui/ProjectInfoPage.cpp:378
 msgid "Supports Linux on ARM (e.g. Raspberry Pi)"
 msgstr "Hỗ trợ Linux chạy trên ARM (ví dụ như Raspberry Pi)"
 
-#: clientgui/ProjectInfoPage.cpp:355
+#: clientgui/ProjectInfoPage.cpp:382
 msgid "Supports NVIDIA GPUs"
 msgstr "Hỗ trợ NVIDIA GPUs"
 
-#: clientgui/ProjectInfoPage.cpp:359
+#: clientgui/ProjectInfoPage.cpp:386
 msgid "Supports AMD GPUs"
 msgstr "Hỗ trợ AMD GPUs"
 
-#: clientgui/ProjectInfoPage.cpp:363
+#: clientgui/ProjectInfoPage.cpp:390
 msgid "Supports Intel GPUs"
 msgstr "Hỗ trợ Intel GPUs"
 
-#: clientgui/ProjectInfoPage.cpp:367
+#: clientgui/ProjectInfoPage.cpp:394
 msgid "Supports VirtualBox"
 msgstr "Hỗ trợ VirtualBox"
 
-#: clientgui/ProjectInfoPage.cpp:377
+#: clientgui/ProjectInfoPage.cpp:404
 msgid "Project URL:"
 msgstr "Địa chỉ URL của dự án:"
 
-#: clientgui/ProjectInfoPage.cpp:520 clientgui/ProjectInfoPage.cpp:754
-#: clientgui/ProjectInfoPage.cpp:758
+#. Populate the list control with the list of project names that belong to
+#. either the specific
+#. category or all of them.
+#. cycle through all projects
+#: clientgui/ProjectInfoPage.cpp:551 clientgui/ProjectInfoPage.cpp:803
+#: clientgui/ProjectInfoPage.cpp:807
 msgid "All"
 msgstr "Tất cả"
 
-#: clientgui/ProjectInfoPage.cpp:803
+#: clientgui/ProjectInfoPage.cpp:852
 msgid ""
 "This project may not have work for your type of computer.  Do you want to "
 "add it anyway?"
 msgstr "Dự án này có thể không hoạt động cho loại máy tính của bạn. Dù sao thì bạn có muốn thêm nó không?"
 
-#: clientgui/ProjectInfoPage.cpp:862
+#: clientgui/ProjectInfoPage.cpp:889
 msgid "You already added this project. Please choose a different project."
 msgstr "Bạn đã thêm dự án này rồi cơ mà. Vui lòng chọn một dự án khác đi nhé."
 
@@ -3294,23 +3320,23 @@ msgstr "Sử dụng ổ đĩa bởi các dự án BOINC"
 msgid "no projects: 0 bytes used"
 msgstr "không có dự án nào cả: 0 bytes đã sử dụng"
 
-#: clientgui/ViewResources.cpp:263
+#: clientgui/ViewResources.cpp:264
 msgid "used by BOINC: "
 msgstr "sử dụng bởi BOINC:"
 
-#: clientgui/ViewResources.cpp:274
+#: clientgui/ViewResources.cpp:275
 msgid "free, available to BOINC: "
 msgstr "trống, khả dụng cho BOINC:"
 
-#: clientgui/ViewResources.cpp:282
+#: clientgui/ViewResources.cpp:283
 msgid "free, not available to BOINC: "
 msgstr "trống, không khả dụng cho BOINC:"
 
-#: clientgui/ViewResources.cpp:292
+#: clientgui/ViewResources.cpp:293
 msgid "free: "
 msgstr "trống:"
 
-#: clientgui/ViewResources.cpp:301
+#: clientgui/ViewResources.cpp:302
 msgid "used by other programs: "
 msgstr "sử dụng bởi các chương trình khác:"
 
@@ -3697,7 +3723,7 @@ msgstr "Mở một cửa sổ ra để xem thông báo từ các dự án hoặc
 msgid "Get help with %s"
 msgstr "Nhận trợ giúp với %s"
 
-#: clientgui/sg_DlgMessages.cpp:459
+#: clientgui/sg_DlgMessages.cpp:463
 #, c-format
 msgid "%s - Notices"
 msgstr "%s - Thông báo"
@@ -3729,12 +3755,12 @@ msgstr "'Đang được sử dụng' có nghĩa là đầu vào input cuối cù
 msgid "GB of disk space"
 msgstr "GB của không gian ổ đĩa"
 
-#: clientgui/sg_DlgPreferences.cpp:1156
+#: clientgui/sg_DlgPreferences.cpp:1160
 #, c-format
 msgid "%s - Computing Preferences"
 msgstr "%s - Tuỳ chọn tính toán"
 
-#: clientgui/sg_DlgPreferences.cpp:1237
+#: clientgui/sg_DlgPreferences.cpp:1241
 msgid "Discard all local preferences and use web-based preferences?"
 msgstr "Loại bỏ tất cả các tùy chọn cục bộ và sử dụng các tùy chọn dựa trên web?"
 

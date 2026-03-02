@@ -1,6 +1,6 @@
 // This file is part of BOINC.
-// http://boinc.berkeley.edu
-// Copyright (C) 2023 University of California
+// https://boinc.berkeley.edu
+// Copyright (C) 2026 University of California
 //
 // BOINC is free software; you can redistribute it and/or modify it
 // under the terms of the GNU Lesser General Public License
@@ -229,8 +229,8 @@ void PROJECT_PREFS::parse() {
 }
 
 void WORK_REQ::add_no_work_message(const char* message) {
-    for (unsigned int i=0; i<no_work_messages.size(); i++) {
-        if (!strcmp(message, no_work_messages.at(i).message.c_str())){
+    for (const USER_MESSAGE& m: no_work_messages) {
+        if (!strcmp(message, m.message.c_str())){
             return;
         }
     }
@@ -264,6 +264,8 @@ void SCHEDULER_REQUEST::clear() {
     strcpy(working_global_prefs_xml, "");
     strcpy(code_sign_key, "");
     dont_send_work = false;
+    dont_use_wsl = false;
+    dont_use_docker = false;
     strcpy(client_brand, "");
     global_prefs.defaults();
     strcpy(global_prefs_source_email_hash, "");
@@ -401,6 +403,8 @@ const char* SCHEDULER_REQUEST::parse(XML_PARSER& xp) {
         if (xp.parse_double("estimated_delay", cpu_estimated_delay)) continue;
         if (xp.parse_double("duration_correction_factor", host.duration_correction_factor)) continue;
         if (xp.parse_bool("dont_send_work", dont_send_work)) continue;
+        if (xp.parse_bool("dont_use_docker", dont_use_docker)) continue;
+        if (xp.parse_bool("dont_use_wsl", dont_use_wsl)) continue;
         if (xp.match_tag("global_preferences")) {
             safe_strcpy(global_prefs_xml, "<global_preferences>\n");
             char buf[BLOB_SIZE];
@@ -463,8 +467,8 @@ const char* SCHEDULER_REQUEST::parse(XML_PARSER& xp) {
             // Shouldn't happen, but if it does bad things will happen
             //
             bool found = false;
-            for (unsigned int i=0; i<results.size(); i++) {
-                if (!strcmp(results[i].name, result.name)) {
+            for (const SCHED_DB_RESULT& r: results) {
+                if (!strcmp(r.name, result.name)) {
                     found = true;
                     break;
                 }
@@ -591,8 +595,6 @@ const char* SCHEDULER_REQUEST::parse(XML_PARSER& xp) {
 // Why not copy the request message directly?
 //
 int SCHEDULER_REQUEST::write(FILE* fout) {
-    unsigned int i;
-
     boinc::fprintf(fout,
         "<scheduler_request>\n"
         "  <authenticator>%s</authenticator>\n"
@@ -627,14 +629,14 @@ int SCHEDULER_REQUEST::write(FILE* fout) {
         is_anonymous(platforms.list[0])?"true":"false"
     );
 
-    for (i=0; i<client_app_versions.size(); i++) {
+    for (const CLIENT_APP_VERSION& cav: client_app_versions) {
         boinc::fprintf(fout,
             "  <app_version>\n"
             "    <app_name>%s</app_name>\n"
             "    <version_num>%d</version_num>\n"
             "  </app_version>\n",
-            client_app_versions[i].app_name,
-            client_app_versions[i].version_num
+            cav.app_name,
+            cav.version_num
         );
     }
 
@@ -670,7 +672,7 @@ int SCHEDULER_REQUEST::write(FILE* fout) {
         host.d_boinc_max
     );
 
-    for (i=0; i<results.size(); i++) {
+    for (const SCHED_DB_RESULT& r: results) {
         boinc::fprintf(fout,
             "  <result>\n"
             "    <name>%s</name>\n"
@@ -679,31 +681,31 @@ int SCHEDULER_REQUEST::write(FILE* fout) {
             "    <exit_status>%d</exit_status>\n"
             "    <app_version_num>%d</app_version_num>\n"
             "  </result>\n",
-            results[i].name,
-            results[i].client_state,
-            results[i].cpu_time,
-            results[i].exit_status,
-            results[i].app_version_num
+            r.name,
+            r.client_state,
+            r.cpu_time,
+            r.exit_status,
+            r.app_version_num
         );
     }
 
-    for (i=0; i<msgs_from_host.size(); i++) {
+    for (const MSG_FROM_HOST_DESC& m: msgs_from_host) {
         boinc::fprintf(fout,
             "  <msg_from_host>\n"
             "    <variety>%s</variety>\n"
             "    <msg_text>%s</msg_text>\n"
             "  </msg_from_host>\n",
-            msgs_from_host[i].variety,
-            msgs_from_host[i].msg_text.c_str()
+            m.variety,
+            m.msg_text.c_str()
         );
     }
 
-    for (i=0; i<file_infos.size(); i++) {
+    for (const FILE_INFO& fi: file_infos) {
         boinc::fprintf(fout,
             "  <file_info>\n"
             "    <name>%s</name>\n"
             "  </file_info>\n",
-            file_infos[i].name
+            fi.name
         );
         boinc::fprintf(fout, "</scheduler_request>\n");
     }
@@ -754,7 +756,6 @@ static bool have_apps_for_client() {
 }
 
 int SCHEDULER_REPLY::write(FILE* fout, SCHEDULER_REQUEST& sreq) {
-    unsigned int i;
     char buf[BLOB_SIZE];
 
     // Note: at one point we had
@@ -804,8 +805,7 @@ int SCHEDULER_REPLY::write(FILE* fout, SCHEDULER_REQUEST& sreq) {
     if (sreq.core_client_version <= 41900) {
         string msg;
         string pri = "low";
-        for (i=0; i<messages.size(); i++) {
-            USER_MESSAGE& um = messages[i];
+        for (const USER_MESSAGE& um: messages) {
             msg += um.message + string(" ");
             if (um.priority == "notice") {
                 pri = "notice";
@@ -827,8 +827,7 @@ int SCHEDULER_REPLY::write(FILE* fout, SCHEDULER_REQUEST& sreq) {
         }
     } else if (sreq.core_client_version <= 61100) {
         char prio[256];
-        for (i=0; i<messages.size(); i++) {
-            USER_MESSAGE& um = messages[i];
+        for (const USER_MESSAGE& um: messages) {
             safe_strcpy(prio, um.priority.c_str());
             if (!strcmp(prio, "notice")) {
                 strcpy(prio, "high");
@@ -840,8 +839,7 @@ int SCHEDULER_REPLY::write(FILE* fout, SCHEDULER_REQUEST& sreq) {
             );
         }
     } else {
-        for (i=0; i<messages.size(); i++) {
-            USER_MESSAGE& um = messages[i];
+        for (const USER_MESSAGE& um: messages) {
             boinc::fprintf(fout,
                 "<message priority=\"%s\">%s</message>\n",
                 um.priority.c_str(),
@@ -957,52 +955,52 @@ int SCHEDULER_REPLY::write(FILE* fout, SCHEDULER_REQUEST& sreq) {
 
     // acknowledge results
     //
-    for (i=0; i<result_acks.size(); i++) {
+    for (const string &s: result_acks) {
         boinc::fprintf(fout,
             "<result_ack>\n"
             "    <name>%s</name>\n"
             "</result_ack>\n",
-            result_acks[i].c_str()
+            s.c_str()
         );
     }
 
     // abort results
     //
-    for (i=0; i<result_aborts.size(); i++) {
+    for (const string &s: result_aborts) {
         boinc::fprintf(fout,
             "<result_abort>\n"
             "    <name>%s</name>\n"
             "</result_abort>\n",
-            result_aborts[i].c_str()
+            s.c_str()
         );
     }
 
     // abort results not started
     //
-    for (i=0; i<result_abort_if_not_starteds.size(); i++) {
+    for (const string &s: result_abort_if_not_starteds) {
         boinc::fprintf(fout,
             "<result_abort_if_not_started>\n"
             "    <name>%s</name>\n"
             "</result_abort_if_not_started>\n",
-            result_abort_if_not_starteds[i].c_str()
+            s.c_str()
         );
     }
 
-    for (i=0; i<apps.size(); i++) {
-        apps[i].write(fout);
+    for (APP &a: apps) {
+        a.write(fout);
     }
 
-    for (i=0; i<app_versions.size(); i++) {
-        app_versions[i].write(fout);
+    for (APP_VERSION &av: app_versions) {
+        av.write(fout);
     }
 
-    for (i=0; i<wus.size(); i++) {
-        boinc::fputs(wus[i].xml_doc, fout);
+    for (WORKUNIT &wu: wus) {
+        boinc::fputs(wu.xml_doc, fout);
         boinc::fputs("\n", fout);  // for old clients
     }
 
-    for (i=0; i<results.size(); i++) {
-        results[i].write_to_client(fout);
+    for (SCHED_DB_RESULT &r: results) {
+        r.write_to_client(fout);
     }
 
     if (strlen(code_sign_key)) {
@@ -1021,8 +1019,7 @@ int SCHEDULER_REPLY::write(FILE* fout, SCHEDULER_REQUEST& sreq) {
         boinc::fputs("<message_ack/>\n", fout);
     }
 
-    for (i=0; i<msgs_to_host.size(); i++) {
-        MSG_TO_HOST& md = msgs_to_host[i];
+    for (const MSG_TO_HOST& md: msgs_to_host) {
         boinc::fprintf(fout, "%s\n", md.xml);
     }
 
@@ -1030,18 +1027,22 @@ int SCHEDULER_REPLY::write(FILE* fout, SCHEDULER_REQUEST& sreq) {
         boinc::fprintf(fout, "<non_cpu_intensive/>\n");
     }
 
+    if (config.strict_memory_bound) {
+        boinc::fprintf(fout, "<strict_memory_bound/>\n");
+    }
+
     if (config.verify_files_on_app_start) {
         boinc::fprintf(fout, "<verify_files_on_app_start/>\n");
     }
 
-    for (i=0; i<file_deletes.size(); i++) {
+    for (const FILE_INFO &fi: file_deletes) {
         boinc::fprintf(fout,
             "<delete_file_info>%s</delete_file_info>\n",
-            file_deletes[i].name
+            fi.name
         );
     }
-    for (i=0; i<file_transfer_requests.size(); i++) {
-        boinc::fprintf(fout, "%s", file_transfer_requests[i].c_str());
+    for (const string &s: file_transfer_requests) {
+        boinc::fprintf(fout, "%s", s.c_str());
     }
 
     // before writing no_X_apps elements,
@@ -1065,7 +1066,7 @@ int SCHEDULER_REPLY::write(FILE* fout, SCHEDULER_REQUEST& sreq) {
 
         // write modern form.
         //
-        for (i=0; i<NPROC_TYPES; i++) {
+        for (int i=0; i<NPROC_TYPES; i++) {
             if (i>0) {
                 // skip types that the client doesn't have
                 //
@@ -1115,25 +1116,22 @@ void SCHEDULER_REPLY::set_delay(double delay) {
 
 
 void SCHEDULER_REPLY::insert_app_unique(APP& app) {
-    unsigned int i;
-    for (i=0; i<apps.size(); i++) {
-        if (app.id == apps[i].id) return;
+    for (const APP &a: apps) {
+        if (app.id == a.id) return;
     }
     apps.push_back(app);
 }
 
 void SCHEDULER_REPLY::insert_app_version_unique(APP_VERSION& av) {
-    unsigned int i;
-    for (i=0; i<app_versions.size(); i++) {
-        if (av.id == app_versions[i].id) return;
+    for (const APP_VERSION &av2: app_versions) {
+        if (av2.id == av.id) return;
     }
     app_versions.push_back(av);
 }
 
 void SCHEDULER_REPLY::insert_workunit_unique(WORKUNIT& wu) {
-    unsigned int i;
-    for (i=0; i<wus.size(); i++) {
-        if (wu.id == wus[i].id) return;
+    for (const WORKUNIT &wu2: wus) {
+        if (wu.id == wu2.id) return;
     }
     wus.push_back(wu);
 }
@@ -1146,7 +1144,7 @@ void SCHEDULER_REPLY::insert_message(const char* msg, const char* prio) {
     messages.push_back(USER_MESSAGE(msg, prio));
 }
 
-void SCHEDULER_REPLY::insert_message(USER_MESSAGE& um) {
+void SCHEDULER_REPLY::insert_message(const USER_MESSAGE& um) {
     messages.push_back(um);
 }
 
@@ -1397,6 +1395,10 @@ int HOST::parse(XML_PARSER& xp) {
         if (xp.parse_double("n_bwup", n_bwup)) continue;
         if (xp.parse_double("n_bwdown", n_bwdown)) continue;
         if (xp.parse_str("p_features", p_features, sizeof(p_features))) continue;
+        if (xp.parse_str("docker_version", docker_version, sizeof(docker_version))) continue;
+        if (xp.parse_int("docker_type", docker_type)) continue;
+        if (xp.parse_str("docker_compose_version", docker_compose_version, sizeof(docker_compose_version))) continue;
+        if (xp.parse_int("docker_compose_type", docker_compose_type)) continue;
         if (xp.parse_str("virtualbox_version", virtualbox_version, sizeof(virtualbox_version))) continue;
         if (xp.parse_bool("p_vm_extensions_disabled", p_vm_extensions_disabled)) continue;
         if (xp.match_tag("opencl_cpu_prop")) {
@@ -1404,9 +1406,8 @@ int HOST::parse(XML_PARSER& xp) {
             if (!retval) num_opencl_cpu_platforms++;
             continue;
         }
-        if (xp.parse_bool("wsl_available", wsl_available)) continue;
         if (xp.match_tag("wsl")) {
-            wsls.parse(xp);
+            wsl_distros.parse(xp);
             continue;
         }
 
@@ -1427,8 +1428,9 @@ int HOST::parse(XML_PARSER& xp) {
         if (xp.parse_string("accelerators", stemp)) continue;
 
 #if 1
-        // deprecated items
+        // deprecated items from old client versions
         //
+        if (xp.parse_int("wsl_available", x)) continue;
         if (xp.parse_string("cpu_caps", stemp)) continue;
         if (xp.parse_string("cache_l1", stemp)) continue;
         if (xp.parse_string("cache_l2", stemp)) continue;
@@ -1605,8 +1607,7 @@ void read_host_app_versions() {
 }
 
 DB_HOST_APP_VERSION* gavid_to_havp(DB_ID_TYPE gavid) {
-    for (unsigned int i=0; i<g_wreq->host_app_versions.size(); i++) {
-        DB_HOST_APP_VERSION& hav = g_wreq->host_app_versions[i];
+    for (DB_HOST_APP_VERSION& hav: g_wreq->host_app_versions) {
         if (hav.app_version_id == gavid) return &hav;
     }
     return NULL;
@@ -1639,8 +1640,7 @@ DB_HOST_APP_VERSION* BEST_APP_VERSION::host_app_version() {
 // return some HAV for which quota was exceeded
 //
 DB_HOST_APP_VERSION* quota_exceeded_version() {
-    for (unsigned int i=0; i<g_wreq->host_app_versions.size(); i++) {
-        DB_HOST_APP_VERSION& hav = g_wreq->host_app_versions[i];
+    for (DB_HOST_APP_VERSION& hav: g_wreq->host_app_versions) {
         if (hav.daily_quota_exceeded) return &hav;
     }
     return NULL;
